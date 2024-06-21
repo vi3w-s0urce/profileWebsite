@@ -7,5 +7,14 @@ body {
 }
 
 .transition-all {
-    transition-duration: 0.5s;
+    transition-duration: 0.4s;
+}
+
+.transition-colors {
+    transition-duration: 0.4s;
+}
+
+.custom-pagination .custom-bullet.swiper-pagination-bullet-active {
+    width: 32px;
+    background-color: #EAB308!important;
 }

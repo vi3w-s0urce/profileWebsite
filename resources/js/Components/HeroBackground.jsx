@@ -151,20 +151,26 @@ const HeroBackground = () => {
     }, []);
 
     return (
-        <div className="relative">
-            <div className="w-full bg-yellow-200 h-[45vh]"></div>
-            <div id="shape">
-                <img src={hero_rectangle} className="absolute top-[324px] right-[398px] w-[68px] h-[68px]" ref={rectangle}></img>
-                <img src={hero_line_white} className="absolute top-[221px] right-[300px]" ref={line_white}></img>
-                <img src={hero_blob} className="absolute top-[-84px] right-[-150px]" ref={blob}></img>
-                <img src={hero_line_yellow} className="absolute top-[289px] left-[289px]" ref={line_yellow}></img>
-                <img src={hero_dot_grid} className="absolute top-[-22px] left-[557px]" ref={dot_grid}></img>
-                <img src={hero_ellipse_outline} className="absolute top-[52px] left-[337px] w-[61px] h-[61px]" ref={ellipse_outline}></img>
-                <img src={hero_ellipse} className="absolute top-[-150px] left-[-188px]" ref={ellipse}></img>
-            </div>
-            <div id="wave">
-                <img src={hero_wave} className="absolute -z-10 bottom-[-82px] w-full h-[121px]"></img>
-                <img src={hero_wave_line} className="absolute bottom-[-102px] w-full h-[173px] overflow-hidden left-0 object-cover object-left" ref={wave_line}></img>
+        <div className="absolute w-screen -z-10">
+            <div className="relative">
+                <div className="w-full bg-yellow-200 h-[45vh]"></div>
+                <div id="shape">
+                    <img src={hero_rectangle} className="absolute top-[324px] right-[398px] w-[68px] h-[68px]" ref={rectangle}></img>
+                    <img src={hero_line_white} className="absolute top-[221px] right-[300px]" ref={line_white}></img>
+                    <img src={hero_blob} className="absolute top-[-84px] right-[-150px]" ref={blob}></img>
+                    <img src={hero_line_yellow} className="absolute top-[289px] left-[289px]" ref={line_yellow}></img>
+                    <img src={hero_dot_grid} className="absolute top-[-22px] left-[557px]" ref={dot_grid}></img>
+                    <img src={hero_ellipse_outline} className="absolute top-[52px] left-[337px] w-[61px] h-[61px]" ref={ellipse_outline}></img>
+                    <img src={hero_ellipse} className="absolute top-[-150px] left-[-188px]" ref={ellipse}></img>
+                </div>
+                <div id="wave">
+                    <img src={hero_wave} className="absolute -z-10 bottom-[-82px] w-full h-[121px]"></img>
+                    <img
+                        src={hero_wave_line}
+                        className="absolute bottom-[-102px] w-full h-[173px] overflow-hidden left-0 object-cover object-left"
+                        ref={wave_line}
+                    ></img>
+                </div>
             </div>
         </div>
     );
