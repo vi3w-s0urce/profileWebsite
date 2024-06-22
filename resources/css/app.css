@@ -18,3 +18,14 @@ body {
     width: 32px;
     background-color: #EAB308!important;
 }
+
+.berita-text-round {
+    transition: filter;
+    transition-duration: 0.4s;
+}
+
+.berita-button:hover .berita-text-round {
+    filter: invert(1) brightness(2);
+    transition: filter;
+    transition-duration: 0.4s;
+}

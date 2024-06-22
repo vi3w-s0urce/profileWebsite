@@ -7,16 +7,36 @@ import RevealText from "../Components/RevealText";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, Autoplay } from "swiper/modules";
 import "swiper/css";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowBack, IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
+import { BsDot } from "react-icons/bs";
+import { FiClock } from "react-icons/fi";
+import { FaYoutube } from "react-icons/fa";
 import { motion } from "framer-motion";
 import foto_utama from "../../assets/svg/profil/main.svg";
 import profile_ellipse_svg from "../../assets/svg/shapes/profile_ellipse.svg";
 import profile_title_svg from "../../assets/svg/shapes/profile_title.svg";
 import line_yellow_svg from "../../assets/svg/shapes/hero_line_yellow.svg";
+import berita_section_wave_svg from "../../assets/svg/shapes/berita_section_wave.svg";
+import berita_ellipes_bottom_svg from "../../assets/svg/shapes/berita_ellipse_bottom.svg";
+import berita_text_round_svg from "../../assets/svg/shapes/berita_text_round.svg";
+import berita_background_pattern_svg from "../../assets/svg/shapes/berita_background_pattern.svg";
+import berita_title_outline_svg from "../../assets/svg/shapes/berita_title_outline.svg";
+import berita_title_filled_svg from "../../assets/svg/shapes/berita_titile_filled.svg";
+import dot_brown_svg from "../../assets/svg/shapes/dot_brown.svg";
+import youtube_title_filled from "../../assets/svg/shapes/youtube_title_filled.svg";
+import youtube_title_outline from "../../assets/svg/shapes/youtube_title_outline.svg";
+import MediaSocialSection from "../Layout/MediaSocialSection";
+import Footer from "../Layout/Footer";
 
 const Beranda = () => {
     const profile_ellipse = useRef();
     const line_yellow = useRef();
+    const berita_text_round = useRef();
+    const berita_button = useRef();
+    const berita_background_pattern = useRef();
+    const dot_brown = useRef();
+
+    const berita_array = 4;
 
     useEffect(() => {
         gsap.to(profile_ellipse.current, {
@@ -38,10 +58,43 @@ const Beranda = () => {
             },
             right: "+=200px",
         });
+
+        gsap.to(dot_brown.current, {
+            scrollTrigger: {
+                trigger: dot_brown.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1,
+            },
+            bottom: "+=300px",
+        });
+
+        gsap.from(berita_background_pattern.current, {
+            scrollTrigger: {
+                trigger: berita_background_pattern.current,
+                start: "top 70%",
+            },
+            width: 0,
+            duration: 4,
+            ease: "power3.out",
+        });
+
+        setTimeout(() => {
+            gsap.to(berita_text_round.current, {
+                scrollTrigger: {
+                    trigger: berita_text_round.current,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 1,
+                },
+                rotate: "+=250",
+            });
+        }, 100);
     }, []);
 
     return (
-        <div className="h-[3000px] overflow-x-hidden">
+        <main className="overflow-hidden">
+            {/* HEADER */}
             <Header />
 
             {/* HERO */}
@@ -167,7 +220,434 @@ const Beranda = () => {
                     </div>
                 </div>
             </section>
-        </div>
+
+            {/* BERITA SECTION */}
+            <section className="relative mb-20">
+                {/* SHAPES */}
+                <img src={berita_section_wave_svg} className="absolute -z-10 w-full top-0" />
+                <img
+                    src={berita_background_pattern_svg}
+                    className="absolute -z-10 w-screen h-[1091px] inset-1/2 transform -translate-x-1/2 -translate-y-1/2 object-cover"
+                    ref={berita_background_pattern}
+                />
+                <div className="absolute h-5/6 bg-yellow-400 rounded-es-[36px] rounded-ee-[36px] -z-20 w-full bottom-0"></div>
+                <div className="absolute top-3 left-3">
+                    <img src={berita_title_outline_svg} />
+                    <img src={berita_title_filled_svg} className="absolute top-0 left-0 -z-30" />
+                </div>
+                <div
+                    className="absolute bottom-0 left-1/2 transform translate-y-1/2 -translate-x-1/2 w-[218px] h-[152px] group cursor-pointer berita-button"
+                    ref={berita_button}
+                >
+                    <IoIosArrowDown
+                        fontSize={52}
+                        className="absolute -z-10 inset-1/2 transform -translate-x-1/2 -translate-y-1/2 text-slate-800 group-hover:text-white transition-colors"
+                    />
+                    <img
+                        src={berita_text_round_svg}
+                        className="absolute -z-10 inset-1/2 -translate-x-1/2 -translate-y-1/2 rotate-45 berita-text-round"
+                        ref={berita_text_round}
+                    />
+                    <img src={berita_ellipes_bottom_svg} className="absolute -z-20 top-0 left-0" />
+                </div>
+
+                {/* CONTENT */}
+                <div className="px-32 py-24 flex flex-col items-center gap-16">
+                    <div className="flex items-center justify-center flex-col gap-2">
+                        <h2 className="text-3xl font-bold text-slate-800">Berita dan Agenda Terakhir</h2>
+                        <p className="text-xl font-medium text-slate-500 max-w-[537px] text-center">
+                            Kumpulan berita beserta beserta agenda terakhir tentang Ganefri
+                        </p>
+                    </div>
+                    <div className={`w-full grid ${berita_array == 1 ? "grid-cols-1" : berita_array > 1 ? "grid-cols-2" : null} gap-6`}>
+                        {berita_array == 1 ? (
+                            <motion.div
+                                className="group cursor-pointer"
+                                initial={{ y: 100, opacity: 0 }}
+                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                viewport={{ once: true }}
+                            >
+                                <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
+                                    <img
+                                        src="https://picsum.photos/1280/720?img=4"
+                                        className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-3">
+                                    <div className="flex gap-2 items-center">
+                                        <p className="font-semibold text-lg text-yellow-800">Agenda</p>
+                                        <BsDot fontSize={24} />
+                                        <div className="flex gap-2 items-center text-slate-500">
+                                            <FiClock fontSize={24} />
+                                            <span className="font-medium text-lg">Senin, 10 Juni 2024</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-3">
+                                        <h1 className="text-4xl text-slate-800 font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
+                                        <p className="text-lg text-slate-800 leading-6">
+                                            Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci diam
+                                            magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin turpis...
+                                        </p>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ) : berita_array == 2 ? (
+                            <>
+                                <motion.div
+                                    className="group cursor-pointer"
+                                    initial={{ y: 100, opacity: 0 }}
+                                    whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                    viewport={{ once: true }}
+                                >
+                                    <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
+                                        <img
+                                            src="https://picsum.photos/1280/720?img=4"
+                                            className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-3">
+                                        <div className="flex gap-2 items-center">
+                                            <p className="font-semibold text-lg text-yellow-800">Agenda</p>
+                                            <BsDot fontSize={24} />
+                                            <div className="flex gap-2 items-center text-slate-500">
+                                                <FiClock fontSize={24} />
+                                                <span className="font-medium text-lg">Senin, 10 Juni 2024</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <h1 className="text-4xl text-slate-800 font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
+                                            <p className="text-lg text-slate-800 leading-6">
+                                                Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci
+                                                diam magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin
+                                                turpis...
+                                            </p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                                <motion.div
+                                    className="group cursor-pointer"
+                                    initial={{ y: 100, opacity: 0 }}
+                                    whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.7 } }}
+                                    viewport={{ once: true }}
+                                >
+                                    <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
+                                        <img
+                                            src="https://picsum.photos/1280/720?img=5"
+                                            className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-3">
+                                        <div className="flex gap-2 items-center">
+                                            <p className="font-semibold text-lg text-yellow-800">Agenda</p>
+                                            <BsDot fontSize={24} />
+                                            <div className="flex gap-2 items-center text-slate-500">
+                                                <FiClock fontSize={24} />
+                                                <span className="font-medium text-lg">Senin, 10 Juni 2024</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <h1 className="text-4xl text-slate-800 font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
+                                            <p className="text-lg text-slate-800 leading-6">
+                                                Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci
+                                                diam magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin
+                                                turpis...
+                                            </p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </>
+                        ) : berita_array === 3 ? (
+                            <>
+                                <motion.div
+                                    className="group cursor-pointer"
+                                    initial={{ y: 100, opacity: 0 }}
+                                    whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                    viewport={{ once: true }}
+                                >
+                                    <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
+                                        <img
+                                            src="https://picsum.photos/1280/720?img=4"
+                                            className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-3">
+                                        <div className="flex gap-2 items-center">
+                                            <p className="font-semibold text-lg text-yellow-800">Agenda</p>
+                                            <BsDot fontSize={24} />
+                                            <div className="flex gap-2 items-center text-slate-500">
+                                                <FiClock fontSize={24} />
+                                                <span className="font-medium text-lg">Senin, 10 Juni 2024</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <h1 className="text-4xl text-slate-800 font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
+                                            <p className="text-lg text-slate-800 leading-6">
+                                                Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci
+                                                diam magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin
+                                                turpis...
+                                            </p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                                <div className="flex flex-col gap-6">
+                                    <motion.div
+                                        className="group cursor-pointer"
+                                        initial={{ y: 100, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.7 } }}
+                                        viewport={{ once: true }}
+                                    >
+                                        <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
+                                            <img
+                                                src="https://picsum.photos/1280/720?img=5"
+                                                className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <div className="flex gap-2 items-center">
+                                                <p className="font-semibold text-lg text-yellow-800">Agenda</p>
+                                                <BsDot fontSize={24} />
+                                                <div className="flex gap-2 items-center text-slate-500">
+                                                    <FiClock fontSize={24} />
+                                                    <span className="font-medium text-lg">Senin, 10 Juni 2024</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-3">
+                                                <h1 className="text-4xl text-slate-800 font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                    <motion.div
+                                        className="group cursor-pointer"
+                                        initial={{ y: 100, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.9 } }}
+                                        viewport={{ once: true }}
+                                    >
+                                        <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
+                                            <img
+                                                src="https://picsum.photos/1280/720?img=6"
+                                                className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <div className="flex gap-2 items-center">
+                                                <p className="font-semibold text-lg text-yellow-800">Agenda</p>
+                                                <BsDot fontSize={24} />
+                                                <div className="flex gap-2 items-center text-slate-500">
+                                                    <FiClock fontSize={24} />
+                                                    <span className="font-medium text-lg">Senin, 10 Juni 2024</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-3">
+                                                <h1 className="text-4xl text-slate-800 font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                </div>
+                            </>
+                        ) : berita_array === 4 ? (
+                            <>
+                                <motion.div
+                                    className="group cursor-pointer"
+                                    initial={{ y: 100, opacity: 0 }}
+                                    whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                    viewport={{ once: true }}
+                                >
+                                    <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
+                                        <img
+                                            src="https://picsum.photos/1280/720?img=4"
+                                            className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-3">
+                                        <div className="flex gap-2 items-center">
+                                            <p className="font-semibold text-lg text-yellow-800">Agenda</p>
+                                            <BsDot fontSize={24} />
+                                            <div className="flex gap-2 items-center text-slate-500">
+                                                <FiClock fontSize={24} />
+                                                <span className="font-medium text-lg">Senin, 10 Juni 2024</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <h1 className="text-4xl text-slate-800 font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
+                                            <p className="text-lg text-slate-800 leading-6">
+                                                Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci
+                                                diam magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin
+                                                turpis...
+                                            </p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                                <div className="flex flex-col gap-6">
+                                    <motion.div
+                                        className="group cursor-pointer"
+                                        initial={{ y: 100, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.7 } }}
+                                        viewport={{ once: true }}
+                                    >
+                                        <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
+                                            <img
+                                                src="https://picsum.photos/1280/720?img=5"
+                                                className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <div className="flex gap-2 items-center">
+                                                <p className="font-semibold text-lg text-yellow-800">Agenda</p>
+                                                <BsDot fontSize={24} />
+                                                <div className="flex gap-2 items-center text-slate-500">
+                                                    <FiClock fontSize={24} />
+                                                    <span className="font-medium text-lg">Senin, 10 Juni 2024</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-3">
+                                                <h1 className="text-4xl text-slate-800 font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                    <div className="grid grid-cols-2 gap-6">
+                                        <motion.div
+                                            className="group cursor-pointer"
+                                            initial={{ y: 100, opacity: 0 }}
+                                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                            viewport={{ once: true }}
+                                        >
+                                            <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
+                                                <img
+                                                    src="https://picsum.photos/1280/720?img=6"
+                                                    className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-3">
+                                                <div className="flex gap-2 items-center">
+                                                    <p className="font-semibold text-lg text-yellow-800">Agenda</p>
+                                                    <BsDot fontSize={24} />
+                                                    <div className="flex gap-2 items-center text-slate-500">
+                                                        <FiClock fontSize={24} />
+                                                        <span className="font-medium text-lg">Senin, 10 Juni 2024</span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col gap-3">
+                                                    <h1 className="text-2xl text-slate-800 font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                        <motion.div
+                                            className="group cursor-pointer"
+                                            initial={{ y: 100, opacity: 0 }}
+                                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.6 } }}
+                                            viewport={{ once: true }}
+                                        >
+                                            <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
+                                                <img
+                                                    src="https://picsum.photos/1280/720?img=7"
+                                                    className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-3">
+                                                <div className="flex gap-2 items-center">
+                                                    <p className="font-semibold text-lg text-yellow-800">Agenda</p>
+                                                    <BsDot fontSize={24} />
+                                                    <div className="flex gap-2 items-center text-slate-500">
+                                                        <FiClock fontSize={24} />
+                                                        <span className="font-medium text-lg">Senin, 10 Juni 2024</span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col gap-3">
+                                                    <h1 className="text-2xl text-slate-800 font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    </div>
+                                </div>
+                            </>
+                        ) : null}
+                    </div>
+                </div>
+            </section>
+
+            {/* YOUTUBE OVERLAY */}
+            <section className="relative">
+                {/* SHAPES */}
+                <img src={dot_brown_svg} alt="dot_brown" className="absolute bottom-[8px] right-[-11px] -z-10" ref={dot_brown} />
+                <img src={youtube_title_filled} alt="dot_brown" className="absolute top-3 left-3 -z-10" />
+                <img src={youtube_title_outline} alt="dot_brown" className="absolute top-3 left-3" />
+
+                {/* CONTENT */}
+                <div className="px-32 py-24">
+                    <div className="bg-yellow-400 w-full flex items-center p-16 rounded-3xl gap-6">
+                        <div className="w-1/2 overflow-hidden border-yellow-600 rounded-2xl border-2">
+                            <iframe
+                                src="https://www.youtube.com/embed/Px_XYlEMqxs?si=cYdSA18LNWs0m8dD"
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerPolicy="strict-origin-when-cross-origin"
+                                allowFullScreen
+                                className="w-full h-[425px]"
+                            ></iframe>
+                        </div>
+                        <div className="w-1/2 flex flex-col">
+                            <motion.a
+                                href="youtube.com"
+                                className="text-slate-800 flex gap-3 items-center border-b-2 py-4 border-yellow-500 hover:text-white transition-colors"
+                                initial={{ x: 100, opacity: 0 }}
+                                whileInView={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                viewport={{ once: true }}
+                            >
+                                <FaYoutube fontSize={48} />
+                                <span className="text-xl font-bold">Lorem ipsum dolor sit amet consectetur. Dignissim sed</span>
+                            </motion.a>
+                            <motion.a
+                                href="youtube.com"
+                                className="text-slate-800 flex gap-3 items-center border-b-2 py-4 border-yellow-500 hover:text-white transition-colors"
+                                initial={{ x: 100, opacity: 0 }}
+                                whileInView={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                viewport={{ once: true }}
+                            >
+                                <FaYoutube fontSize={48} />
+                                <span className="text-xl font-bold">Lorem ipsum dolor sit amet consectetur. Dignissim sed</span>
+                            </motion.a>
+                            <motion.a
+                                href="youtube.com"
+                                className="text-slate-800 flex gap-3 items-center border-b-2 py-4 border-yellow-500 hover:text-white transition-colors"
+                                initial={{ x: 100, opacity: 0 }}
+                                whileInView={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                viewport={{ once: true }}
+                            >
+                                <FaYoutube fontSize={48} />
+                                <span className="text-xl font-bold">Lorem ipsum dolor sit amet consectetur. Dignissim sed</span>
+                            </motion.a>
+                            <motion.a
+                                href="youtube.com"
+                                className="text-slate-800 flex gap-3 items-center border-b-2 py-4 border-yellow-500 hover:text-white transition-colors"
+                                initial={{ x: 100, opacity: 0 }}
+                                whileInView={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                viewport={{ once: true }}
+                            >
+                                <FaYoutube fontSize={48} />
+                                <span className="text-xl font-bold">Lorem ipsum dolor sit amet consectetur. Dignissim sed</span>
+                            </motion.a>
+                            <motion.a
+                                href="youtube.com"
+                                className="text-slate-800 flex gap-3 items-center border-b-2 py-4 border-yellow-500 hover:text-white transition-colors"
+                                initial={{ x: 100, opacity: 0 }}
+                                whileInView={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                viewport={{ once: true }}
+                            >
+                                <FaYoutube fontSize={48} />
+                                <span className="text-xl font-bold">Lorem ipsum dolor sit amet consectetur. Dignissim sed</span>
+                            </motion.a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* MEDIA SOCTIAL SECTION */}
+            <MediaSocialSection />
+
+            {/* FOOTER */}
+            <Footer />
+        </main>
     );
 };
 

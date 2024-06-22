@@ -84,7 +84,7 @@ const RevealText = ({ children, className = "", delay = 0, bottom = 100, scroll 
     }, []);
 
     return (
-        <p className={className} style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)" }} ref={text}>
+        <p className={`${className} pb-[3px]`} style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)" }} ref={text}>
             {children}
         </p>
     );

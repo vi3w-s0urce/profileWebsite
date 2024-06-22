@@ -1,6 +1,7 @@
 import { Link } from "@inertiajs/react";
 import logo_hitam from "../../assets/svg/logo_hitam.svg";
 import { MdOutlineEmail } from "react-icons/md";
+import route from "ziggy-js";
 
 const Header = () => {
     return (
@@ -9,10 +10,10 @@ const Header = () => {
                 <img src={logo_hitam}></img>
             </Link>
             <div className="flex gap-8">
-                <Link href="#" className="text-xl text-slate-400 font-semibold">
+                <Link href={route('Beranda')} className="text-xl text-slate-400 font-semibold">
                     Beranda
                 </Link>
-                <Link href="#" className="text-xl text-slate-400 font-semibold">
+                <Link href={route('Profil')} className="text-xl text-slate-400 font-semibold">
                     Profil
                 </Link>
                 <Link href="#" className="text-xl text-slate-400 font-semibold">
