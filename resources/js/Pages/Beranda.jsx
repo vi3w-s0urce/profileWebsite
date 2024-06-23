@@ -21,7 +21,7 @@ import berita_ellipes_bottom_svg from "../../assets/svg/shapes/berita_ellipse_bo
 import berita_text_round_svg from "../../assets/svg/shapes/berita_text_round.svg";
 import berita_background_pattern_svg from "../../assets/svg/shapes/berita_background_pattern.svg";
 import berita_title_outline_svg from "../../assets/svg/shapes/berita_title_outline.svg";
-import berita_title_filled_svg from "../../assets/svg/shapes/berita_titile_filled.svg";
+import berita_title_filled_svg from "../../assets/svg/shapes/berita_title_filled.svg";
 import dot_brown_svg from "../../assets/svg/shapes/dot_brown.svg";
 import youtube_title_filled from "../../assets/svg/shapes/youtube_title_filled.svg";
 import youtube_title_outline from "../../assets/svg/shapes/youtube_title_outline.svg";
@@ -93,7 +93,7 @@ const Beranda = () => {
     }, []);
 
     return (
-        <main className="overflow-hidden">
+        <main className="main overflow-hidden">
             {/* HEADER */}
             <Header />
 

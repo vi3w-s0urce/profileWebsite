@@ -16,7 +16,7 @@ const Header = () => {
                 <Link href={route('Profil')} className="text-xl text-slate-400 font-semibold">
                     Profil
                 </Link>
-                <Link href="#" className="text-xl text-slate-400 font-semibold">
+                <Link href={route('Berita')} className="text-xl text-slate-400 font-semibold">
                     Berita & Agenda
                 </Link>
             </div>
