@@ -14,3 +14,7 @@ Route::get('/profil', function () {
 Route::get('/berita', function () {
     return Inertia::render('Berita');
 })->name('Berita');
+
+Route::get('/kontak', function () {
+    return Inertia::render('Kontak');
+})->name('Kontak');

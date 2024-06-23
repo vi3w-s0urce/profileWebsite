@@ -21,7 +21,7 @@ const Header = () => {
                 </Link>
             </div>
             <Link
-                href="#"
+                href={route('Kontak')}
                 className="text-lg font-semibold text-yellow-500 flex items-center gap-2 px-6 py-3 border-2 border-yellow-500 rounded-xl hover:bg-yellow-500 hover:text-white transition-all"
             >
                 <MdOutlineEmail className="text-2xl" />
