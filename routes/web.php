@@ -18,3 +18,7 @@ Route::get('/berita', function () {
 Route::get('/kontak', function () {
     return Inertia::render('Kontak');
 })->name('Kontak');
+
+Route::get('/show-berita', function () {
+    return Inertia::render('ShowBerita');
+})->name('ShowBerita');

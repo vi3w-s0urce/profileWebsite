@@ -55,9 +55,9 @@ const Berita = () => {
             {/* MAIN CONTENT */}
             <section className="relative px-32 py-24">
                 {/* SHAPES */}
-                <img src={berita_title_filled} alt="berita_title" className="absolute top-3 left-3 -z-10"/>
-                <img src={dot_brown_svg} alt="dot_brows" className="absolute top-[600px] right-0 -z-10" ref={dot_brown}/>
-                <img src={line_pattern_svg} alt="line_pattern" className="absolute top-[1226px] left-[-200px] -z-10" ref={line_pattern}/>
+                <img src={berita_title_filled} alt="berita_title" className="absolute top-3 left-3 -z-10" />
+                <img src={dot_brown_svg} alt="dot_brows" className="absolute top-[600px] right-0 -z-10" ref={dot_brown} />
+                <img src={line_pattern_svg} alt="line_pattern" className="absolute top-[1226px] left-[-200px] -z-10" ref={line_pattern} />
 
                 <div className="grid grid-cols-3 gap-16">
                     <motion.div

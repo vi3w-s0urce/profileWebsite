@@ -99,7 +99,7 @@ const Profil = () => {
                 trigger: container.current,
                 scrub: 1,
                 start: "top top",
-                markers: true,
+                // markers: true,
                 animation: tl2,
             });
         }, []);

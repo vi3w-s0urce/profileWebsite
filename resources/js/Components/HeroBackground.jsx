@@ -151,7 +151,7 @@ const HeroBackground = () => {
     }, []);
 
     return (
-        <div className="absolute w-screen -z-10">
+        <div className="absolute w-screen -z-20">
             <div className="relative">
                 <div className="w-full bg-yellow-200 h-[45vh]"></div>
                 <div id="shape">
