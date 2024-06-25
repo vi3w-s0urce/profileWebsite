@@ -27,8 +27,13 @@ import youtube_title_filled from "../../assets/svg/shapes/youtube_title_filled.s
 import youtube_title_outline from "../../assets/svg/shapes/youtube_title_outline.svg";
 import MediaSocialSection from "../Layout/MediaSocialSection";
 import Footer from "../Layout/Footer";
+import { Head } from '@inertiajs/react'
+import { useDispatch } from "react-redux";
+import { setCurrentRoute } from '../Redux/slice';
+import { useMediaQuery } from "react-responsive";
 
 const Beranda = () => {
+    const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
     const profile_ellipse = useRef();
     const line_yellow = useRef();
     const berita_text_round = useRef();
@@ -38,7 +43,11 @@ const Beranda = () => {
 
     const berita_array = 4;
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
+        dispatch(setCurrentRoute('Beranda'));
+
         gsap.to(profile_ellipse.current, {
             scrollTrigger: {
                 trigger: profile_ellipse.current,
@@ -89,11 +98,16 @@ const Beranda = () => {
                 },
                 rotate: "+=250",
             });
-        }, 100);
+        }, 500);
     }, []);
 
     return (
         <main className="main overflow-hidden">
+            {/* TITLE */}
+            <Head>
+                <title>Ganefri</title>
+            </Head>
+
             {/* HEADER */}
             <Header />
 

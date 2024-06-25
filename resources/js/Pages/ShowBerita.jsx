@@ -18,8 +18,15 @@ import gsap from "gsap";
 import RevealText from "../Components/RevealText";
 import { IoIosArrowForward } from "react-icons/io";
 import Footer from "../Layout/Footer";
+import { Head, Link } from "@inertiajs/react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Scrollbar, Autoplay } from "swiper/modules";
+import { useMediaQuery } from "react-responsive";
+import "swiper/css";
 
 const ShowBerita = () => {
+    const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
+
     const dot_yellow = useRef();
     const ellipse_outline_yellow = useRef();
     const box_yellow = useRef();
@@ -64,7 +71,6 @@ const ShowBerita = () => {
                 rotate: "-=180",
             });
 
-
             gsap.from(line_yellow.current, {
                 scrollTrigger: {
                     trigger: line_yellow.current,
@@ -72,7 +78,7 @@ const ShowBerita = () => {
                 },
                 width: 0,
                 duration: 2,
-                delay: 0.5,
+                delay: 0.2,
                 ease: "power3.out",
             });
 
@@ -83,9 +89,8 @@ const ShowBerita = () => {
                     end: "bottom 20%",
                     scrub: 1,
                 },
-                
             });
-            
+
             gsap.to(blob_yellow.current, {
                 scrollTrigger: {
                     trigger: blob_yellow.current,
@@ -137,6 +142,11 @@ const ShowBerita = () => {
 
     return (
         <main className="main overflow-hidden">
+            {/* TITLE */}
+            <Head>
+                <title>Show Berita</title>
+            </Head>
+
             {/* HEADER */}
             <Header />
 
@@ -144,34 +154,56 @@ const ShowBerita = () => {
             <section className="relative">
                 {/* SHAPES */}
                 <HeroBackground />
-                <img src={dot_yellow_svg} alt="dot_yellow" className="absolute top-[720px] right-[500px] -z-10" ref={dot_yellow} />
-                <img src={ellipse_outline_yellow_svg} alt="ellipse" className="absolute top-[1200px] left-[-62px] -z-10" ref={ellipse_outline_yellow} />
-                <img src={box_yellow_svg} alt="box_yellow" className="absolute top-[1700px] right-[12px] -z-10" ref={box_yellow} />
-                <img src={line_yellow_svg} alt="line_yellow" className="absolute bottom-8 left-1/2 -translate-x-1/2 -z-10 object-cover w-[168px] h-[23px]" ref={line_yellow} />
+                {!isMobile && <img src={dot_yellow_svg} alt="dot_yellow" className="absolute top-[720px] right-[500px] -z-10" ref={dot_yellow} />}
+                <img
+                    src={ellipse_outline_yellow_svg}
+                    alt="ellipse"
+                    className={`absolute -z-10 ${isMobile ? "top-[800px] left-[-62px]" : "top-[1200px] left-[-62px]"}`}
+                    ref={ellipse_outline_yellow}
+                />
+                <img
+                    src={box_yellow_svg}
+                    alt="box_yellow"
+                    className={`absolute -z-10 ${isMobile ? "top-[1500px] right-[-30px]" : "top-[1700px] right-[12px] "}`}
+                    ref={box_yellow}
+                />
+                <img
+                    src={line_yellow_svg}
+                    alt="line_yellow"
+                    className={`absolute left-1/2 -translate-x-1/2 -z-10 object-cover ${
+                        isMobile ? "bottom-[-26px] w-[168px] h-[23px]" : "bottom-8 w-[168px] h-[23px]"
+                    }`}
+                    ref={line_yellow}
+                />
 
-                <div className="relative flex flex-col w-full px-32 py-24 gap-8">
-                    <div className="w-full flex flex-col gap-8 items-center justify-center">
+                <div className={`relative flex flex-col w-full ${isMobile ? "px-4 py-8 gap-3" : "px-32 py-24 gap-8"}`}>
+                    <div className={`w-full flex flex-col items-center justify-center ${isMobile ? "gap-3" : "gap-8"}`}>
                         <motion.div
-                            className="w-[1382px] h-[777px] overflow-hidden rounded-3xl group shadow-2xl"
+                            className={`overflow-hidden rounded-3xl group shadow-2xl ${isMobile ? "w-full h-[184px]" : "w-[1382px] h-[777px]"}`}
                             initial={{ y: 100, opacity: 0 }}
                             whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
                             viewport={{ once: true }}
                         >
                             <img src={berita_4_img} className="w-full h-full object-cover group-hover:scale-[1.1] transition-all" alt="berita" />
                         </motion.div>
-                        <div className="flex gap-2 items-center">
-                            <p className="font-semibold text-lg text-yellow-800">Agenda</p>
+                        <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
+                            <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>Agenda</p>
                             <BsDot fontSize={24} />
                             <div className="flex gap-2 items-center text-slate-500">
-                                <FiClock fontSize={24} />
-                                <span className="font-medium text-lg">Senin, 10 Juni 2024</span>
+                                <FiClock fontSize={18} />
+                                <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>Senin, 10 Juni 2024</span>
                             </div>
                         </div>
                     </div>
-                    <RevealText className="font-bold text-5xl text-slate-800 text-center" scroll={true} stagger={0.01}>
+                    <RevealText
+                        className={`font-bold text-slate-800 text-center ${isMobile ? "text-2xl" : "text-5xl"}`}
+                        scroll={true}
+                        type="words"
+                        stagger={0.05}
+                    >
                         Lorem ipsum dolor sit amet consectetur. Potenti quis nibh et eros nec donec.
                     </RevealText>
-                    <RevealText className="text-2xl" scroll={true} type="words" stagger={0.003}>
+                    <RevealText className={`${isMobile ? "text-base" : "text-2xl"}`} scroll={true} type="words" stagger={0.003}>
                         Lorem ipsum dolor sit amet consectetur. In feugiat hendrerit ullamcorper nibh sed. Nam posuere cras varius habitasse. Aliquam
                         massa quis adipiscing in sollicitudin. Magna sed at magna egestas consequat nunc sed. Etiam mollis et sed fermentum faucibus
                         adipiscing ultrices. Faucibus bibendum sit adipiscing et iaculis. Etiam magna tristique orci massa vitae arcu aliquam a.
@@ -197,105 +229,266 @@ const ShowBerita = () => {
             </section>
 
             {/* BERITA LAIN SECTION */}
-            <section className="relative">
+            <section className={`relative ${isMobile && "mt-12"}`}>
                 {/* SHAPES */}
-                <img src={line_pattern_svg} alt="line_pattern" className="absolute bottom-[150px] left-[-200px] -z-10" ref={line_pattern}/>
-                <img src={blob_yellow_svg} alt="blob_yellow" className="absolute top-0 right-[-200px] rotate-90 -z-10" ref={blob_yellow}/>
+                {!isMobile && (
+                    <>
+                        <img src={line_pattern_svg} alt="line_pattern" className="absolute bottom-[150px] left-[-200px] -z-10" ref={line_pattern} />
+                        <img src={blob_yellow_svg} alt="blob_yellow" className="absolute top-0 right-[-200px] rotate-90 -z-10" ref={blob_yellow} />
+                    </>
+                )}
 
                 {/* CONTENT */}
-                <div className="px-32 py-24 flex flex-col gap-16">
-                    <div className="flex items-center gap-8">
+                <div className={`flex flex-col ${isMobile ? "py-8 px-4 gap-8" : "px-32 py-24 gap-16"}`}>
+                    <div className={`flex items-center ${isMobile ? "gap-4" : "gap-8"}`}>
                         <div>
-                            <h1 className="font-bold text-3xl">Berita & Agenda Lainnya</h1>
+                            <h1 className={`font-bold ${isMobile ? "text-base" : "text-3xl"}`}>Berita & Agenda Lainnya</h1>
                         </div>
                         <div className="flex items-center grow">
                             <div className="w-[5px] h-0 bg-yellow-200 rounded-2xl" ref={y_line}></div>
                             <div className="h-[5px] w-0 bg-yellow-200 rounded-se-2xl rounded-ee-2xl" ref={x_line}></div>
                         </div>
                     </div>
-                    <div className="grid grid-cols-3 gap-16">
-                        <motion.div
-                            className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
-                            initial={{ y: 100, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="w-full h-[288px] overflow-hidden rounded-3xl">
-                                <img src={berita_1_img} alt="berita" className="w-full h-full object-cover group-hover:scale-[1.1] transition-all" />
-                            </div>
-                            <div className="p-8">
-                                <div className="flex gap-2 items-center mb-3">
-                                    <p className="font-semibold text-sm text-yellow-800">Agenda</p>
-                                    <BsDot fontSize={24} />
-                                    <div className="flex gap-2 items-center text-slate-500">
-                                        <FiClock fontSize={18} />
-                                        <span className="font-medium text-sm">Senin, 10 Juni 2024</span>
+                    {isMobile ? (
+                        <div>
+                            <Swiper
+                                spaceBetween={50}
+                                slidesPerView={1}
+                                modules={[Autoplay]}
+                                autoplay={{ delay: 5000 }}
+                                className="h-fit w-full rounded-3xl"
+                            >
+                                <SwiperSlide>
+                                    <motion.div
+                                        className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer border-2"
+                                        initial={{ y: 100, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                                        viewport={{ once: true }}
+                                    >
+                                        <div className={`w-full overflow-hidden rounded-3xl ${isMobile ? "h-[184px]" : "h-[288px]"}`}>
+                                            <img
+                                                src={berita_1_img}
+                                                alt="berita"
+                                                className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
+                                            />
+                                        </div>
+                                        <div className={`${isMobile ? "p-6" : "p-8"}`}>
+                                            <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
+                                                <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>Agenda</p>
+                                                <BsDot fontSize={24} />
+                                                <div className="flex gap-2 items-center text-slate-500">
+                                                    <FiClock fontSize={18} />
+                                                    <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>Senin, 10 Juni 2024</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-3 mb-4">
+                                                <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
+                                                    Lorem ipsum dolor sit amet consectetur.
+                                                </h2>
+                                                <p className={`text-slate-800 ${isMobile && "text-sm"}`}>
+                                                    Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci
+                                                    diam magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit
+                                                    sollicitudin turpis...
+                                                </p>
+                                            </div>
+                                            <Link
+                                                href="#"
+                                                className={`text-yellow-500 font-semibold flex items-center gap-2 ${
+                                                    isMobile ? "text-base" : "text-lg"
+                                                }`}
+                                            >
+                                                Baca Selengkapnya <IoIosArrowForward className="group-hover:translate-x-2 transition-all" />
+                                            </Link>
+                                        </div>
+                                    </motion.div>
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <motion.div
+                                        className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer border-2"
+                                        initial={{ y: 100, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                                        viewport={{ once: true }}
+                                    >
+                                        <div className={`w-full overflow-hidden rounded-3xl ${isMobile ? "h-[184px]" : "h-[288px]"}`}>
+                                            <img
+                                                src={berita_1_img}
+                                                alt="berita"
+                                                className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
+                                            />
+                                        </div>
+                                        <div className={`${isMobile ? "p-6" : "p-8"}`}>
+                                            <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
+                                                <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>Agenda</p>
+                                                <BsDot fontSize={24} />
+                                                <div className="flex gap-2 items-center text-slate-500">
+                                                    <FiClock fontSize={18} />
+                                                    <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>Senin, 10 Juni 2024</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-3 mb-4">
+                                                <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
+                                                    Lorem ipsum dolor sit amet consectetur.
+                                                </h2>
+                                                <p className={`text-slate-800 ${isMobile && "text-sm"}`}>
+                                                    Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci
+                                                    diam magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit
+                                                    sollicitudin turpis...
+                                                </p>
+                                            </div>
+                                            <Link
+                                                href="#"
+                                                className={`text-yellow-500 font-semibold flex items-center gap-2 ${
+                                                    isMobile ? "text-base" : "text-lg"
+                                                }`}
+                                            >
+                                                Baca Selengkapnya <IoIosArrowForward className="group-hover:translate-x-2 transition-all" />
+                                            </Link>
+                                        </div>
+                                    </motion.div>
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <motion.div
+                                        className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer border-2"
+                                        initial={{ y: 100, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                                        viewport={{ once: true }}
+                                    >
+                                        <div className={`w-full overflow-hidden rounded-3xl ${isMobile ? "h-[184px]" : "h-[288px]"}`}>
+                                            <img
+                                                src={berita_1_img}
+                                                alt="berita"
+                                                className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
+                                            />
+                                        </div>
+                                        <div className={`${isMobile ? "p-6" : "p-8"}`}>
+                                            <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
+                                                <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>Agenda</p>
+                                                <BsDot fontSize={24} />
+                                                <div className="flex gap-2 items-center text-slate-500">
+                                                    <FiClock fontSize={18} />
+                                                    <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>Senin, 10 Juni 2024</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-3 mb-4">
+                                                <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
+                                                    Lorem ipsum dolor sit amet consectetur.
+                                                </h2>
+                                                <p className={`text-slate-800 ${isMobile && "text-sm"}`}>
+                                                    Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci
+                                                    diam magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit
+                                                    sollicitudin turpis...
+                                                </p>
+                                            </div>
+                                            <Link
+                                                href="#"
+                                                className={`text-yellow-500 font-semibold flex items-center gap-2 ${
+                                                    isMobile ? "text-base" : "text-lg"
+                                                }`}
+                                            >
+                                                Baca Selengkapnya <IoIosArrowForward className="group-hover:translate-x-2 transition-all" />
+                                            </Link>
+                                        </div>
+                                    </motion.div>
+                                </SwiperSlide>
+                            </Swiper>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-3 gap-16">
+                            <motion.div
+                                className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
+                                initial={{ y: 100, opacity: 0 }}
+                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                                viewport={{ once: true }}
+                            >
+                                <div className="w-full h-[288px] overflow-hidden rounded-3xl">
+                                    <img
+                                        src={berita_1_img}
+                                        alt="berita"
+                                        className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
+                                    />
+                                </div>
+                                <div className="p-8">
+                                    <div className="flex gap-2 items-center mb-3">
+                                        <p className="font-semibold text-sm text-yellow-800">Agenda</p>
+                                        <BsDot fontSize={24} />
+                                        <div className="flex gap-2 items-center text-slate-500">
+                                            <FiClock fontSize={18} />
+                                            <span className="font-medium text-sm">Senin, 10 Juni 2024</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-3">
+                                        <h2 className="text-2xl font-bold text-slate-800">Lorem ipsum dolor sit amet consectetur.</h2>
+                                        <p className="text-slate-800">
+                                            Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci diam
+                                            magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin turpis...
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-3">
-                                    <h2 className="text-2xl font-bold text-slate-800">Lorem ipsum dolor sit amet consectetur.</h2>
-                                    <p className="text-slate-800">
-                                        Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci diam magna
-                                        sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin turpis...
-                                    </p>
+                            </motion.div>
+                            <motion.div
+                                className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
+                                initial={{ y: 100, opacity: 0 }}
+                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                                viewport={{ once: true }}
+                            >
+                                <div className="w-full h-[288px] overflow-hidden rounded-3xl">
+                                    <img
+                                        src={berita_2_img}
+                                        alt="berita"
+                                        className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
+                                    />
                                 </div>
-                            </div>
-                        </motion.div>
-                        <motion.div
-                            className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
-                            initial={{ y: 100, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="w-full h-[288px] overflow-hidden rounded-3xl">
-                                <img src={berita_2_img} alt="berita" className="w-full h-full object-cover group-hover:scale-[1.1] transition-all" />
-                            </div>
-                            <div className="p-8">
-                                <div className="flex gap-2 items-center mb-3">
-                                    <p className="font-semibold text-sm text-yellow-800">Agenda</p>
-                                    <BsDot fontSize={24} />
-                                    <div className="flex gap-2 items-center text-slate-500">
-                                        <FiClock fontSize={18} />
-                                        <span className="font-medium text-sm">Senin, 10 Juni 2024</span>
+                                <div className="p-8">
+                                    <div className="flex gap-2 items-center mb-3">
+                                        <p className="font-semibold text-sm text-yellow-800">Agenda</p>
+                                        <BsDot fontSize={24} />
+                                        <div className="flex gap-2 items-center text-slate-500">
+                                            <FiClock fontSize={18} />
+                                            <span className="font-medium text-sm">Senin, 10 Juni 2024</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-3">
+                                        <h2 className="text-2xl font-bold text-slate-800">Lorem ipsum dolor sit amet consectetur.</h2>
+                                        <p className="text-slate-800">
+                                            Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci diam
+                                            magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin turpis...
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-3">
-                                    <h2 className="text-2xl font-bold text-slate-800">Lorem ipsum dolor sit amet consectetur.</h2>
-                                    <p className="text-slate-800">
-                                        Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci diam magna
-                                        sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin turpis...
-                                    </p>
+                            </motion.div>
+                            <motion.div
+                                className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
+                                initial={{ y: 100, opacity: 0 }}
+                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                                viewport={{ once: true }}
+                            >
+                                <div className="w-full h-[288px] overflow-hidden rounded-3xl">
+                                    <img
+                                        src={berita_3_img}
+                                        alt="berita"
+                                        className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
+                                    />
                                 </div>
-                            </div>
-                        </motion.div>
-                        <motion.div
-                            className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
-                            initial={{ y: 100, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="w-full h-[288px] overflow-hidden rounded-3xl">
-                                <img src={berita_3_img} alt="berita" className="w-full h-full object-cover group-hover:scale-[1.1] transition-all" />
-                            </div>
-                            <div className="p-8">
-                                <div className="flex gap-2 items-center mb-3">
-                                    <p className="font-semibold text-sm text-yellow-800">Agenda</p>
-                                    <BsDot fontSize={24} />
-                                    <div className="flex gap-2 items-center text-slate-500">
-                                        <FiClock fontSize={18} />
-                                        <span className="font-medium text-sm">Senin, 10 Juni 2024</span>
+                                <div className="p-8">
+                                    <div className="flex gap-2 items-center mb-3">
+                                        <p className="font-semibold text-sm text-yellow-800">Agenda</p>
+                                        <BsDot fontSize={24} />
+                                        <div className="flex gap-2 items-center text-slate-500">
+                                            <FiClock fontSize={18} />
+                                            <span className="font-medium text-sm">Senin, 10 Juni 2024</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-3">
+                                        <h2 className="text-2xl font-bold text-slate-800">Lorem ipsum dolor sit amet consectetur.</h2>
+                                        <p className="text-slate-800">
+                                            Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci diam
+                                            magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin turpis...
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-3">
-                                    <h2 className="text-2xl font-bold text-slate-800">Lorem ipsum dolor sit amet consectetur.</h2>
-                                    <p className="text-slate-800">
-                                        Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci diam magna
-                                        sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin turpis...
-                                    </p>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
+                            </motion.div>
+                        </div>
+                    )}
                     <div className="flex items-center gap-8">
                         <div className="flex items-center grow justify-end">
                             <div className="h-[5px] w-0 bg-yellow-200 rounded-ss-2xl rounded-es-2xl" ref={x_line_2}></div>
@@ -303,7 +496,7 @@ const ShowBerita = () => {
                         </div>
                         <div>
                             <div className="text-white bg-yellow-400 w-fit flex items-center gap-3 py-3 px-6 rounded-2xl cursor-pointer hover:bg-yellow-500 transition-colors group">
-                                <span className="font-bold text-lg">Selengkapnya</span>
+                                <span className={`font-bold ${isMobile ? "text-xs" : "text-lg"}`}>Selengkapnya</span>
                                 <IoIosArrowForward style={{ fontSize: "24px" }} className="group-hover:translate-x-2 transition-all" />
                             </div>
                         </div>

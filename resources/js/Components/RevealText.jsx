@@ -2,10 +2,11 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import SplitType from "split-type";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useMediaQuery } from "react-responsive";
 
-const RevealText = ({ children, className = "", delay = 0, bottom = 100, scroll = false, type = "chars", stagger = 0.05 }) => {
+const RevealText = ({ children, className = "", delay = 0, bottom = 100, scroll = false, type = "chars", stagger = 0.05, style = null }) => {
     const text = useRef();
-
+    
     useEffect(() => {
         const textSplit = SplitType.create(text.current, type === 'chars' ? { types: "chars" } : type === 'words' ? { types: "words" } : null );
 
@@ -83,8 +84,14 @@ const RevealText = ({ children, className = "", delay = 0, bottom = 100, scroll 
         }
     }, []);
 
+    const defaultStyle = {
+        clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)", 
+    };
+
+    const combinedStyle = { ...defaultStyle, ...style };
+
     return (
-        <p className={`${className} pb-[3px]`} style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)" }} ref={text}>
+        <p className={`${className} pb-[3px]`} style={combinedStyle} ref={text}>
             {children}
         </p>
     );

@@ -30,6 +30,9 @@ import ellipse_gradient_yellow_svg from "../../assets/svg/shapes/ellipse_gradien
 import { MdOutlineSchool, MdOutlineWorkOutline, MdPeopleOutline } from "react-icons/md";
 import { ScrollTrigger } from "gsap/all";
 import Footer from "../Layout/Footer";
+import { Head } from "@inertiajs/react";
+import { useDispatch } from "react-redux";
+import { setCurrentRoute } from '../Redux/slice';
 
 const Profil = () => {
     const profile_ellipse = useRef();
@@ -56,7 +59,12 @@ const Profil = () => {
 
     const [riwayatSection, setRiwayatSection] = useState(0);
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
+
+        dispatch(setCurrentRoute('Profil'));
+
         gsap.to(profile_ellipse.current, {
             scrollTrigger: {
                 trigger: profile_ellipse.current,
@@ -260,6 +268,11 @@ const Profil = () => {
 
     return (
         <main className="main overflow-hidden">
+            {/* TITLE */}
+            <Head>
+                <title>Profil Lengkap</title>
+            </Head>
+
             {/* HEADER */}
             <Header />
 
