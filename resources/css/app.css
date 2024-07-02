@@ -33,3 +33,108 @@ body {
     transition: filter;
     transition-duration: 0.4s;
 }
+
+.react-select__indicator-separator {
+    display: none!important;
+}
+
+.react-select__value-container {
+    padding: 0!important;
+}
+
+.react-select__input-container {
+    margin: 0!important;
+    padding: 0!important;
+}
+
+.react-select__indicator {
+    padding: 0!important;
+}
+
+.react-select__control  {
+    height: fit-content!important;
+    padding: 10px 16px;
+    border: 2px solid #94A3B8!important;
+    border-radius: 12px!important;
+    width: 100%!important;
+    background-color: #f1f5f9!important;
+}
+
+.react-select__control--is--focused {
+    border: 2px solid #EAB308!important;
+}
+
+.checkbox-container {
+    position: relative;
+}
+
+.checkbox-native {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #94a3b8;
+    border-radius: 8px;
+    transition: background-color 0.5s;
+}
+
+.checkbox-container input:checked ~ .checkbox-custom {
+    background-color: #fef08a;
+    border: 2px solid #facc15;
+}
+
+.wrapperClassName {
+    border: solid 2px #E2E8F0!important;
+    border-radius: 0.75rem;
+}
+
+.toolbarClassName {
+    margin: 0!important;
+    padding: 12px 16px!important;
+    border: none!important;
+    border-top-right-radius: 0.75rem!important;
+    border-top-left-radius: 0.75rem!important;
+    border-bottom: solid 2px #E2E8F0!important;
+    background-color: #f1f5f9!important;
+    display: flex!important;
+    justify-content: center!important;;
+    gap: 16px!important;
+}
+
+.editorClassName {
+    margin: 0!important;
+    padding: 12px 16px!important;
+    min-height: 180px;
+}
+
+.rdw-inline-wrapper, .rdw-text-align-wrapper, .rdw-list-wrapper, .rdw-link-wrapper, .rdw-history-wrapper {
+    gap: 8px;
+}
+
+.rdw-option-wrapper {
+    padding: 8px!important;
+    margin: 0!important;
+    box-sizing: content-box!important;
+    border-radius: 12px!important;
+}
+
+.rdw-option-wrapper:hover {
+    border: solid 1px #cbd5e1!important;
+}
+
+.rdw-option-active {
+    background-color: #fefce8!important;
+}
+
+.rdw-dropdown-wrapper {
+    padding: 4px!important;
+    margin: 0!important;
+    box-sizing: content-box!important;
+    border-radius: 12px!important;
+}
+
+.login-card {
+    box-shadow: 24px 24px #fde68a;
+}

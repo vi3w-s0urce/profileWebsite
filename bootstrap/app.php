@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             HandleInertiaRequests::class,
             'cors' => \App\Http\Middleware\Cors::class,
+            \App\Http\Middleware\ForceHttps::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

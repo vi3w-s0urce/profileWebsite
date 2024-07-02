@@ -47,7 +47,7 @@ const Header = () => {
     };
 
     return (
-        <div className={`relative z-50 bg-white flex justify-between items-center border-b-2 ${isMobile ? "p-4" : "px-32 py-8"}`}>
+        <div className={`relative z-50 bg-white flex justify-between items-center border-b-2 border-yellow-200 ${isMobile ? "p-4" : "px-32 py-8"}`}>
             <Link href={route("Beranda")} className="relative z-[60]">
                 <img src={logo_hitam}></img>
             </Link>
@@ -67,7 +67,7 @@ const Header = () => {
                                 initial={{ left: "-101%" }}
                                 animate={{ left: 0 }}
                                 exit={{ left: "-100%" }}
-                                transition={{ duration: 1, ease: "easeInOut" }}
+                                transition={{ duration: 0.5, ease: "easeInOut" }}
                             >
                                 <div className="flex flex-col gap-8 items-center">
                                     <Link
@@ -95,15 +95,6 @@ const Header = () => {
                                         Berita & Agenda
                                     </Link>
                                 </div>
-                                <Link
-                                    href={route("Kontak")}
-                                    className={`text-lg font-semibold flex items-center gap-2 px-6 py-3 border-2 rounded-xl border-yellow-500 transition-colors ${
-                                        currentRoute == "Kontak" ? "bg-yellow-500 text-white" : "text-yellow-500 hover:bg-yellow-500 hover:text-white"
-                                    }`}
-                                >
-                                    <MdOutlineEmail className="text-2xl" />
-                                    Kontak
-                                </Link>
                             </motion.div>
                         ) : null}
                     </AnimatePresence>
@@ -136,15 +127,6 @@ const Header = () => {
                             Berita & Agenda
                         </Link>
                     </div>
-                    <Link
-                        href={route("Kontak")}
-                        className={`text-lg font-semibold flex items-center gap-2 px-6 py-3 border-2 rounded-xl border-yellow-500 transition-colors ${
-                            currentRoute == "Kontak" ? "bg-yellow-500 text-white" : "text-yellow-500 hover:bg-yellow-500 hover:text-white"
-                        }`}
-                    >
-                        <MdOutlineEmail className="text-2xl" />
-                        Kontak
-                    </Link>
                 </>
             )}
         </div>

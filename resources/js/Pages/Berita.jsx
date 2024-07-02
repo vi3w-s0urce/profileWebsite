@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import { setCurrentRoute } from "../Redux/slice";
 import { useMediaQuery } from "react-responsive";
 import { IoArrowForward } from "react-icons/io5";
+import BackToTopButton from "../Components/BackToTopButton";
 
 const Berita = () => {
     const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
@@ -32,6 +33,8 @@ const Berita = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+
         dispatch(setCurrentRoute("Berita"));
 
         gsap.to(dot_brown.current, {
@@ -343,6 +346,9 @@ const Berita = () => {
 
             {/* FOOTER */}
             <Footer />
+
+            {/* BACK TO TOP BUTTON */}
+            <BackToTopButton />
         </main>
     );
 };

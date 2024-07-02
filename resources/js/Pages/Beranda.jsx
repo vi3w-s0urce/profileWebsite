@@ -29,10 +29,12 @@ import youtube_title_filled from "../../assets/svg/shapes/youtube_title_filled.s
 import youtube_title_outline from "../../assets/svg/shapes/youtube_title_outline.svg";
 import MediaSocialSection from "../Layout/MediaSocialSection";
 import Footer from "../Layout/Footer";
-import { Head } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import { useDispatch } from "react-redux";
 import { setCurrentRoute } from "../Redux/slice";
 import { useMediaQuery } from "react-responsive";
+import BackToTopButton from "../Components/BackToTopButton";
+import route from "ziggy-js";
 
 const Beranda = () => {
     const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
@@ -48,6 +50,8 @@ const Beranda = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+
         dispatch(setCurrentRoute("Beranda"));
 
         gsap.to(profile_ellipse.current, {
@@ -269,16 +273,18 @@ const Beranda = () => {
                             hingga 2024 dan menjabat Ketua Majelis Rektor Perguruan Tinggi Negeri Indonesia periode 2022–2024. Ia tercatat sebagai
                             Ketua Badan Pembina Universitas Bung Hatta.
                         </RevealText>
-                        <motion.div
-                            className="text-white bg-yellow-400 w-fit flex items-center gap-3 py-3 px-6 rounded-2xl cursor-pointer hover:bg-yellow-500 transition-colors group"
-                            initial={{ x: -50, opacity: 0 }}
-                            whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <span className={`font-bold ${isMobile ? "text-sm" : "text-lg"}`}>Selengkapnya</span>
-                            <IoIosArrowForward style={{ fontSize: "24px" }} className="group-hover:translate-x-2 transition-all" />
-                        </motion.div>
+                        <Link href={route("Profil")} preserveScroll={false}>
+                            <motion.div
+                                className="text-white bg-yellow-400 w-fit flex items-center gap-3 py-3 px-6 rounded-2xl cursor-pointer hover:bg-yellow-500 transition-colors group"
+                                initial={{ x: -50, opacity: 0 }}
+                                whileInView={{ x: 0, opacity: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <span className={`font-bold ${isMobile ? "text-sm" : "text-lg"}`}>Selengkapnya</span>
+                                <IoIosArrowForward style={{ fontSize: "24px" }} className="group-hover:translate-x-2 transition-all" />
+                            </motion.div>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -288,8 +294,8 @@ const Beranda = () => {
                 {/* SHAPES */}
                 {isMobile ? (
                     <>
-                    <img src={berita_section_wave_mobile_svg} className={`absolute -z-10 w-full top-0`} />
-                    <img
+                        <img src={berita_section_wave_mobile_svg} className={`absolute -z-10 w-full top-0`} />
+                        <img
                             src={berita_background_pattern_mobile_svg}
                             className="absolute -z-10 w-[120%] h-[800px] inset-1/2 transform -translate-x-1/2 -translate-y-1/2 object-cover"
                             ref={berita_background_pattern}
@@ -308,7 +314,9 @@ const Beranda = () => {
                 <div className="absolute h-5/6 bg-yellow-400 rounded-es-[36px] rounded-ee-[36px] -z-20 w-full bottom-0"></div>
                 <img src={berita_title_outline_svg} className={`absolute -z-10 ${isMobile ? "top-1 left-1 w-[258px] h-[112px]" : "top-3 left-3"}`} />
                 <img src={berita_title_filled_svg} className={`absolute -z-30 ${isMobile ? "top-1 left-1 w-[258px] h-[112px]" : "top-3 left-3"}`} />
-                <div
+                <Link
+                    href={route("Berita")}
+                    preserveScroll={false}
                     className="absolute scale-[0.8] bottom-0 left-1/2 transform translate-y-1/2 -translate-x-1/2 w-[218px] h-[152px] group cursor-pointer berita-button"
                     ref={berita_button}
                 >
@@ -322,7 +330,7 @@ const Beranda = () => {
                         ref={berita_text_round}
                     />
                     <img src={berita_ellipes_bottom_svg} className="absolute -z-20 top-0 left-0" />
-                </div>
+                </Link>
 
                 {/* CONTENT */}
                 <div className={`flex flex-col items-center ${isMobile ? "px-4 py-8 gap-8 pb-16" : "px-32 py-24 gap-16"}`}>
@@ -809,73 +817,106 @@ const Beranda = () => {
             {/* YOUTUBE OVERLAY */}
             <section className="relative">
                 {/* SHAPES */}
-                <img src={dot_brown_svg} alt="dot_brown" className={`absolute -z-10 ${isMobile ? 'w-[146px] h-[120px] bottom-[-50px] right-[-11px]' : 'bottom-[8px] right-[-11px]'}`} ref={dot_brown} />
-                <img src={youtube_title_filled} alt="dot_brown" className={`absolute -z-10 ${isMobile ? 'w-[245px] h-[59px] top-1 left-1' : 'top-3 left-3'}`} />
-                <img src={youtube_title_outline} alt="dot_brown" className={`absolute ${isMobile ? 'w-[245px] h-[59px] top-1 left-1' : 'top-3 left-3'}`} />
+                <img
+                    src={dot_brown_svg}
+                    alt="dot_brown"
+                    className={`absolute -z-10 ${isMobile ? "w-[146px] h-[120px] bottom-[-50px] right-[-11px]" : "bottom-[8px] right-[-11px]"}`}
+                    ref={dot_brown}
+                />
+                <img
+                    src={youtube_title_filled}
+                    alt="dot_brown"
+                    className={`absolute -z-10 ${isMobile ? "w-[245px] h-[59px] top-1 left-1" : "top-3 left-3"}`}
+                />
+                <img
+                    src={youtube_title_outline}
+                    alt="dot_brown"
+                    className={`absolute ${isMobile ? "w-[245px] h-[59px] top-1 left-1" : "top-3 left-3"}`}
+                />
 
                 {/* CONTENT */}
-                <div className={`${isMobile ? 'px-4 py-8' : 'px-32 py-24' }`}>
-                    <div className={`bg-yellow-400 w-full flex items-center rounded-3xl ${isMobile ? 'flex-col p-6 gap-3' : 'p-16 gap-6'}`}>
-                        <div className={`overflow-hidden border-yellow-600 rounded-2xl border-2 ${isMobile ? 'w-full' : 'w-1/2'}`}>
+                <div className={`${isMobile ? "px-4 py-8" : "px-32 py-24"}`}>
+                    <div className={`bg-yellow-400 w-full flex items-center rounded-3xl ${isMobile ? "flex-col p-6 gap-3" : "p-16 gap-6"}`}>
+                        <div className={`overflow-hidden border-yellow-600 rounded-2xl border-2 ${isMobile ? "w-full" : "w-1/2"}`}>
                             <iframe
                                 src="https://www.youtube.com/embed/Px_XYlEMqxs?si=cYdSA18LNWs0m8dD"
                                 title="YouTube video player"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 referrerPolicy="strict-origin-when-cross-origin"
                                 allowFullScreen
-                                className={`w-full ${isMobile ? 'h-[200px]' : 'h-[425px]'}`}
+                                className={`w-full ${isMobile ? "h-[200px]" : "h-[425px]"}`}
                             ></iframe>
                         </div>
-                        <div className={`w-1/2 flex flex-col ${isMobile ? 'w-full' : 'w-1/2'}`}>
+                        <div className={`w-1/2 flex flex-col ${isMobile ? "w-full" : "w-1/2"}`}>
                             <motion.a
                                 href="youtube.com"
-                                className={`text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors ${isMobile ? 'py-2' : 'py-4'}`}
+                                className={`text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors ${
+                                    isMobile ? "py-2" : "py-4"
+                                }`}
                                 initial={{ x: 100, opacity: 0 }}
                                 whileInView={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
                                 viewport={{ once: true }}
                             >
                                 <FaYoutube fontSize={isMobile ? 32 : 48} />
-                                <span className={`font-bold ${isMobile ? 'text-xs' : 'text-xl'}`}>Lorem ipsum dolor sit amet consectetur. Dignissim sed</span>
+                                <span className={`font-bold ${isMobile ? "text-xs" : "text-xl"}`}>
+                                    Lorem ipsum dolor sit amet consectetur. Dignissim sed
+                                </span>
                             </motion.a>
                             <motion.a
                                 href="youtube.com"
-                                className={`text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors ${isMobile ? 'py-2' : 'py-4'}`}
+                                className={`text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors ${
+                                    isMobile ? "py-2" : "py-4"
+                                }`}
                                 initial={{ x: 100, opacity: 0 }}
                                 whileInView={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
                                 viewport={{ once: true }}
                             >
                                 <FaYoutube fontSize={isMobile ? 32 : 48} />
-                                <span className={`font-bold ${isMobile ? 'text-xs' : 'text-xl'}`}>Lorem ipsum dolor sit amet consectetur. Dignissim sed</span>
+                                <span className={`font-bold ${isMobile ? "text-xs" : "text-xl"}`}>
+                                    Lorem ipsum dolor sit amet consectetur. Dignissim sed
+                                </span>
                             </motion.a>
                             <motion.a
                                 href="youtube.com"
-                                className={`text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors ${isMobile ? 'py-2' : 'py-4'}`}
+                                className={`text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors ${
+                                    isMobile ? "py-2" : "py-4"
+                                }`}
                                 initial={{ x: 100, opacity: 0 }}
                                 whileInView={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
                                 viewport={{ once: true }}
                             >
                                 <FaYoutube fontSize={isMobile ? 32 : 48} />
-                                <span className={`font-bold ${isMobile ? 'text-xs' : 'text-xl'}`}>Lorem ipsum dolor sit amet consectetur. Dignissim sed</span>
+                                <span className={`font-bold ${isMobile ? "text-xs" : "text-xl"}`}>
+                                    Lorem ipsum dolor sit amet consectetur. Dignissim sed
+                                </span>
                             </motion.a>
                             <motion.a
                                 href="youtube.com"
-                                className={`text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors ${isMobile ? 'py-2' : 'py-4'}`}
+                                className={`text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors ${
+                                    isMobile ? "py-2" : "py-4"
+                                }`}
                                 initial={{ x: 100, opacity: 0 }}
                                 whileInView={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
                                 viewport={{ once: true }}
                             >
                                 <FaYoutube fontSize={isMobile ? 32 : 48} />
-                                <span className={`font-bold ${isMobile ? 'text-xs' : 'text-xl'}`}>Lorem ipsum dolor sit amet consectetur. Dignissim sed</span>
+                                <span className={`font-bold ${isMobile ? "text-xs" : "text-xl"}`}>
+                                    Lorem ipsum dolor sit amet consectetur. Dignissim sed
+                                </span>
                             </motion.a>
                             <motion.a
                                 href="youtube.com"
-                                className={`text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors ${isMobile ? 'py-2' : 'py-4'}`}
+                                className={`text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors ${
+                                    isMobile ? "py-2" : "py-4"
+                                }`}
                                 initial={{ x: 100, opacity: 0 }}
                                 whileInView={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
                                 viewport={{ once: true }}
                             >
                                 <FaYoutube fontSize={isMobile ? 32 : 48} />
-                                <span className={`font-bold ${isMobile ? 'text-xs' : 'text-xl'}`}>Lorem ipsum dolor sit amet consectetur. Dignissim sed</span>
+                                <span className={`font-bold ${isMobile ? "text-xs" : "text-xl"}`}>
+                                    Lorem ipsum dolor sit amet consectetur. Dignissim sed
+                                </span>
                             </motion.a>
                         </div>
                     </div>
@@ -887,6 +928,9 @@ const Beranda = () => {
 
             {/* FOOTER */}
             <Footer />
+
+            {/* BACK TO TOP BUTTON */}
+            <BackToTopButton />
         </main>
     );
 };

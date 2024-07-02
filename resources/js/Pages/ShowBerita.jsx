@@ -23,6 +23,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, Autoplay } from "swiper/modules";
 import { useMediaQuery } from "react-responsive";
 import "swiper/css";
+import BackToTopButton from "../Components/BackToTopButton";
 
 const ShowBerita = () => {
     const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
@@ -39,6 +40,8 @@ const ShowBerita = () => {
     const x_line_2 = useRef();
 
     useEffect(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+
         setTimeout(() => {
             gsap.to(dot_yellow.current, {
                 scrollTrigger: {
@@ -506,6 +509,9 @@ const ShowBerita = () => {
 
             {/* FOOTER */}
             <Footer />
+
+            {/* BACK TO TOP BUTTON */}
+            <BackToTopButton />
         </main>
     );
 };

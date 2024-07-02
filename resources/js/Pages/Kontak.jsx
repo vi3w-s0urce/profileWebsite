@@ -20,6 +20,7 @@ import { Head } from "@inertiajs/react";
 import { useDispatch } from "react-redux";
 import { setCurrentRoute } from "../Redux/slice";
 import { useMediaQuery } from "react-responsive";
+import BackToTopButton from "../Components/BackToTopButton";
 
 const Kontak = () => {
     const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
@@ -244,6 +245,9 @@ const Kontak = () => {
 
             {/* FOOTER */}
             <Footer />
+
+            {/* BACK TO TOP BUTTON */}
+            <BackToTopButton />
         </main>
     );
 };
