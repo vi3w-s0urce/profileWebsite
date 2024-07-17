@@ -10,12 +10,24 @@ import { GoPeople } from "react-icons/go";
 import { LuClock4 } from "react-icons/lu";
 import { setCurrentRoute } from "../../Redux/slice";
 import { useDispatch } from "react-redux";
+import { usePage } from "@inertiajs/react";
+import toast, { Toaster } from "react-hot-toast";
+import { MdToday } from "react-icons/md";
 
-const Dashboard = () => {
+const Dashboard = ({ viewsToday, uniqueVisitors, totalVisitors, topViewsPages, topViewsBerita, statsWeeks, monthlyVisitors, topDevices }) => {
+    const { flash } = usePage().props;
+
+    useEffect(() => {
+        const { success, error, info } = flash;
+        if (success) toast.success(success);
+        if (error) toast.error(error);
+        if (info) toast(info);
+    }, [flash]);
+
     const arrowStatsMenu = useRef();
 
     const [isStatsMenuOpen, setIsStatsMenuOpen] = useState(false);
-    const [statsOption, setStatsOption] = useState("day");
+    const [statsOption, setStatsOption] = useState("daily");
 
     const dispatch = useDispatch();
 
@@ -46,23 +58,79 @@ const Dashboard = () => {
         });
     };
 
-    const dataStats = {
-        labels: ["January", "February", "March", "April", "May", "June"],
+    let dataStatsBulanIni = [];
+    for (const key in monthlyVisitors) {
+        if (monthlyVisitors.hasOwnProperty(key)) {
+            dataStatsBulanIni.push(monthlyVisitors[key]);
+        }
+    }
+
+    console.log(dataStatsBulanIni);
+
+    let dataStatsMingguIni = [0, 0, 0, 0, 0, 0, 0];
+    for (let i = 0; i < statsWeeks.length; i++) {
+        dataStatsMingguIni[dataStatsMingguIni.length - statsWeeks.length + i] = statsWeeks[i].screenPageViews;
+    }
+    
+    const setDateInWeek = (decreement) => {
+        let currentDate = new Date();
+        currentDate.setDate(currentDate.getDate() - decreement);
+        return currentDate.toLocaleDateString("id-ID", {
+            weekday: "long",
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+        });
+    }
+
+    const dataStatsMonthly = {
+        labels: [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ],
         datasets: [
             {
                 backgroundColor: "#facc15",
                 borderColor: "#facc15",
-                data: [0, 10, 5, 2, 20, 30, 45],
+                data: dataStatsBulanIni,
             },
         ],
     };
 
+    const dataStatsDaily = {
+        labels: [
+            setDateInWeek(6),
+            setDateInWeek(5),
+            setDateInWeek(4),
+            setDateInWeek(3),
+            setDateInWeek(2),
+            setDateInWeek(1),
+            setDateInWeek(0),
+        ],
+        datasets: [
+            {
+                backgroundColor: "#facc15",
+                borderColor: "#facc15",
+                data: dataStatsMingguIni,
+            },
+        ],
+    };
+
+    let labelDevices = [];
+    topDevices.forEach(element => {
+        labelDevices.push(element.operatingSystem);
+    });
+
+    let dataDevicesStats = [];
+    topDevices.forEach(element => {
+        dataDevicesStats.push(element.screenPageViews);
+    });
+
     const dataDevice = {
-        labels: ["Desktop", "Tablet", "Mobile"],
+        labels: labelDevices,
         datasets: [
             {
                 label: "Device Usage",
-                data: [123, 23, 90],
+                data: dataDevicesStats,
                 backgroundColor: ["#facc15", "#a16207", "#422006"],
             },
         ],
@@ -70,6 +138,8 @@ const Dashboard = () => {
 
     return (
         <main className="ml-[300px] bg-slate-100 min-h-screen p-12">
+            <Toaster />
+
             {/* SIDEBAR */}
             <AdminSidebar />
 
@@ -84,13 +154,7 @@ const Dashboard = () => {
                                 onClick={() => handleStatsMenuOpen()}
                             >
                                 <span className="text-lg font-semibold">
-                                    {statsOption == "day"
-                                        ? "Hari Ini"
-                                        : statsOption == "week"
-                                        ? "Minggu Ini"
-                                        : statsOption == "month"
-                                        ? "Bulan Ini"
-                                        : null}
+                                    {statsOption == "daily" ? "Harian" : statsOption == "monthly" ? "Bulanan" : null}
                                 </span>
                                 <div ref={arrowStatsMenu}>
                                     <IoIosArrowDown fontSize={24} />
@@ -105,28 +169,20 @@ const Dashboard = () => {
                                         exit={{ height: 0 }}
                                         transition={{ duration: 0.5 }}
                                     >
-                                        {statsOption != "day" && (
+                                        {statsOption != "daily" && (
                                             <div
                                                 className="px-4 py-3 text-lg font-semibold w-full hover:bg-slate-200 transition-colors cursor-pointer"
-                                                onClick={() => changeStatsOption("day")}
+                                                onClick={() => changeStatsOption("daily")}
                                             >
-                                                Hari Ini
+                                                Harian
                                             </div>
                                         )}
-                                        {statsOption != "week" && (
+                                        {statsOption != "monthly" && (
                                             <div
                                                 className="px-4 py-3 text-lg font-semibold w-full hover:bg-slate-200 transition-colors cursor-pointer"
-                                                onClick={() => changeStatsOption("week")}
+                                                onClick={() => changeStatsOption("monthly")}
                                             >
-                                                Minggu Ini
-                                            </div>
-                                        )}
-                                        {statsOption != "month" && (
-                                            <div
-                                                className="px-4 py-3 text-lg font-semibold w-full hover:bg-slate-200 transition-colors cursor-pointer"
-                                                onClick={() => changeStatsOption("month")}
-                                            >
-                                                Bulan Ini
+                                                Bulanan
                                             </div>
                                         )}
                                     </motion.div>
@@ -135,7 +191,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <Bar
-                        data={dataStats}
+                        data={statsOption == 'daily' ? dataStatsDaily : statsOption == 'monthly' ? dataStatsMonthly : null }
                         options={{
                             animation: {
                                 duration: 2000,
@@ -153,7 +209,7 @@ const Dashboard = () => {
                 </div>
 
                 {/* PERSENTASE PENGUNJUNG */}
-                <div className="col-span-2 bg-white p-8 rounded-3xl shadow-lg flex flex-col items-center">
+                <div className="col-span-2 bg-white p-8 rounded-3xl shadow-lg flex flex-col items-center justify-around">
                     <h1 className="font-bold text-3xl text-slate-800 mb-12">Persentase Pengunjung</h1>
                     <div className="w-[320px] h-[320px] mb-8">
                         <Doughnut
@@ -161,7 +217,7 @@ const Dashboard = () => {
                             options={{
                                 plugins: {
                                     legend: {
-                                        display: false,
+                                        // display: false,
                                     },
                                 },
                                 animation: {
@@ -170,42 +226,37 @@ const Dashboard = () => {
                             }}
                         />
                     </div>
-                    <div className="flex flex-wrap gap-8">
-                        <div className="flex items-center gap-3">
-                            <div className="w-[16px] h-[16px] bg-yellow-400 rounded-full" />
-                            <span className="font-medium text-slate-800">Desktop</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="w-[16px] h-[16px] bg-yellow-700 rounded-full" />
-                            <span className="font-medium text-slate-800">Tablet</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="w-[16px] h-[16px] bg-yellow-950 rounded-full" />
-                            <span className="font-medium text-slate-800">Mobile</span>
-                        </div>
-                    </div>
                 </div>
 
                 {/* INFORMASI TAMBAHAN */}
                 <div className="col-span-2 bg-white p-8 rounded-3xl shadow-lg flex items-center justify-center gap-4">
+                    <MdToday fontSize={82} className="text-yellow-400" />
+                    <div>
+                        <h1 className="text-4xl font-bold text-yellow-900 mb-1">{viewsToday}</h1>
+                        <p className="text-slate-500">
+                            Jumlah Pengunjungan Hari Ini <br /> (
+                            {new Date().toLocaleDateString("id-ID", {
+                                weekday: "long",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            })}
+                            )
+                        </p>
+                    </div>
+                </div>
+                <div className="col-span-2 bg-white p-8 rounded-3xl shadow-lg flex items-center justify-center gap-4">
                     <FiEye fontSize={82} className="text-yellow-400" />
                     <div>
-                        <h1 className="text-4xl font-bold text-yellow-900 mb-1">722</h1>
+                        <h1 className="text-4xl font-bold text-yellow-900 mb-1">{totalVisitors}</h1>
                         <p className="text-slate-500">Total Pengunjungan</p>
                     </div>
                 </div>
                 <div className="col-span-2 bg-white p-8 rounded-3xl shadow-lg flex items-center justify-center gap-4">
                     <GoPeople fontSize={82} className="text-yellow-400" />
                     <div>
-                        <h1 className="text-4xl font-bold text-yellow-900 mb-1">117</h1>
+                        <h1 className="text-4xl font-bold text-yellow-900 mb-1">{uniqueVisitors}</h1>
                         <p className="text-slate-500">Jumlah Pengunjung</p>
-                    </div>
-                </div>
-                <div className="col-span-2 bg-white p-8 rounded-3xl shadow-lg flex items-center justify-center gap-4">
-                    <LuClock4 fontSize={82} className="text-yellow-400" />
-                    <div>
-                        <h1 className="text-4xl font-bold text-yellow-900 mb-1">2 Menit</h1>
-                        <p className="text-slate-500">Rata Rata Durasi Pengunjungan</p>
                     </div>
                 </div>
 
@@ -218,30 +269,12 @@ const Dashboard = () => {
                             <p className="font-semibold text-slate-500">Jumlah Pengunjungan</p>
                         </div>
                         <div className="flex flex-col gap-3">
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
+                            {topViewsPages.map((item, index) => (
+                                <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg" key={index}>
+                                    <p className="font-medium text-slate-800">{item.pageTitle}</p>
+                                    <p className="font-semibold text-yellow-900">{item.screenPageViews}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -254,30 +287,12 @@ const Dashboard = () => {
                             <p className="font-semibold text-slate-500">Jumlah Pengunjungan</p>
                         </div>
                         <div className="flex flex-col gap-3">
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
-                            <div className="flex px-3 py-2 items-center justify-between bg-slate-100 rounded-lg">
-                                <p className="font-medium text-slate-800">/</p>
-                                <p className="font-semibold text-yellow-900">324</p>
-                            </div>
+                            {topViewsBerita.map((item, index) => (
+                                <div className="flex px-4 py-2 items-center justify-between bg-slate-100 rounded-lg">
+                                    <p className="font-medium text-slate-800 w-full max-w-[80%]">{item.judul}</p>
+                                    <p className="font-semibold text-yellow-900">{item.pengunjung}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>

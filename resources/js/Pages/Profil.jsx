@@ -36,8 +36,12 @@ import { useDispatch } from "react-redux";
 import { setCurrentRoute } from "../Redux/slice";
 import { useMediaQuery } from "react-responsive";
 import BackToTopButton from "../Components/BackToTopButton";
+import { Fancybox as NativeFancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import { TbAward } from "react-icons/tb";
+import ReactGA from "react-ga4";
 
-const Profil = () => {
+const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_pekerjaan_db, riwayat_organisasi_db, penghargaan_db }) => {
     const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
 
     const profile_ellipse = useRef();
@@ -67,7 +71,7 @@ const Profil = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: 'Profil' });
 
         dispatch(setCurrentRoute("Profil"));
 
@@ -189,13 +193,13 @@ const Profil = () => {
                     .fromTo(riwayat_organization.current, { opacity: 0, scale: 0.5, x: -100 }, { opacity: 1, scale: 1, x: 0, duration: 1 })
                     .fromTo(riwayat_organization.current, { opacity: 1, scale: 1, x: 0 }, { opacity: 0, scale: 0.5, x: 100, duration: 1, delay: 1 });
 
-                    ScrollTrigger.create({
-                        trigger: container.current,
-                        pin: container.current,
-                        scrub: 1,
-                        end: "200%",
-                        animation: riwayat_timeline,
-                    });
+                ScrollTrigger.create({
+                    trigger: container.current,
+                    pin: container.current,
+                    scrub: 1,
+                    end: "200%",
+                    animation: riwayat_timeline,
+                });
             } else {
                 const riwayat_timeline = gsap.timeline();
                 riwayat_timeline
@@ -238,13 +242,13 @@ const Profil = () => {
                     .fromTo(riwayat_organization.current, { opacity: 0, scale: 0.5, y: 250 }, { opacity: 1, scale: 1, y: 0, duration: 1 })
                     .fromTo(riwayat_organization.current, { opacity: 1, scale: 1, y: 0 }, { opacity: 0, scale: 0.5, y: -250, duration: 1, delay: 1 });
 
-                    ScrollTrigger.create({
-                        trigger: container.current,
-                        pin: container.current,
-                        scrub: 1,
-                        end: "200%",
-                        animation: riwayat_timeline,
-                    });
+                ScrollTrigger.create({
+                    trigger: container.current,
+                    pin: container.current,
+                    scrub: 1,
+                    end: "200%",
+                    animation: riwayat_timeline,
+                });
             }
 
             const blob_anim = gsap.to(riwayat_blob.current, { rotate: -90 });
@@ -323,6 +327,31 @@ const Profil = () => {
         }, 200);
     }, []);
 
+    const penghargaanContainerRef = useRef(null);
+    const [scrollOpen, setScrollOpen] = useState(true);
+
+    useEffect(() => {
+        const container = penghargaanContainerRef.current;
+
+        NativeFancybox.bind(container);
+    }, []);
+
+    useEffect(() => {
+        if (scrollOpen) {
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            setScrollOpen(false);
+        }
+    }, [scrollOpen]);
+
+    const formatText = (text) => {
+        return text.split("\n").map((line, index) => (
+            <>
+                {line}
+                <br />
+            </>
+        ));
+    };
+
     return (
         <main className="main overflow-hidden">
             {/* TITLE */}
@@ -353,13 +382,23 @@ const Profil = () => {
 
                 {/* CONTENT */}
                 <div className={`flex items-center ${isMobile ? "px-4 py-8 flex-col gap-4" : "px-32 py-24 gap-44"}`}>
-                    <motion.img
-                        src={foto_utama}
-                        className={`${isMobile ? "w-[258px] h-[305px]" : "w-[366px] h-[433px]"}`}
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1, transition: { duration: 0.5, delay: 0.5, ease: "backInOut" } }}
-                        viewport={{ once: true }}
-                    />
+                    {profil_1_db.gambar ? (
+                        <motion.img
+                            src={"/storage/profilImages/" + profil_1_db.gambar}
+                            className={`object-cover rounded-2xl shadow-2xl ${isMobile ? "w-full h-[200px]" : "h-[433px] w-[679px]"}`}
+                            initial={{ y: 100, opacity: 0 }}
+                            whileInView={{ y: 0, opacity: 1, transition: { duration: 1, delay: 0.5 } }}
+                            viewport={{ once: true }}
+                        />
+                    ) : (
+                        <motion.img
+                            src={"/storage/profilImages/default_1.svg"}
+                            className={`object-cover ${isMobile ? "w-[258px] h-[305px]" : "w-[366px] h-[433px]"}`}
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            whileInView={{ scale: 1, opacity: 1, transition: { duration: 0.5, delay: 0.5, ease: "backInOut" } }}
+                            viewport={{ once: true }}
+                        />
+                    )}
                     <div className="flex flex-col">
                         <RevealText
                             className={`font-semibold text-slate-400 ${isMobile ? "text-base mb-1" : "text-2xl mb-3"}`}
@@ -384,10 +423,7 @@ const Profil = () => {
                             stagger={0.01}
                             bottom={50}
                         >
-                            Prof. Drs. H. Ganefri, M.Pd., Ph.D. gelar Datuak Djunjungan Nan Bagadiang (lahir 17 Desember 1963) adalah seorang dosen,
-                            pengajar, dan akademisi teknik Indonesia. Ia merupakan Rektor Universitas Negeri Padang (UNP) dua periode sejak 2016
-                            hingga 2024 dan menjabat Ketua Majelis Rektor Perguruan Tinggi Negeri Indonesia periode 2022–2024. Ia tercatat sebagai
-                            Ketua Badan Pembina Universitas Bung Hatta.
+                            {formatText(profil_1_db.deskripsi)}
                         </RevealText>
                     </div>
                 </div>
@@ -417,29 +453,17 @@ const Profil = () => {
                 <div className={`items-center gap-44 ${isMobile ? "px-4 py-8 flex-col" : "px-32 py-24 flex"}`}>
                     <div>
                         <RevealText
-                            className={`font-medium text-slate-800 ${isMobile ? "text-sm mb-5" : "text-lg mb-8"}`}
+                            className={`font-medium text-slate-800 whitespace-pre-wrap ${isMobile ? "text-sm mb-5" : "text-lg mb-8"}`}
                             type="words"
                             scroll={true}
                             stagger={0.01}
                             bottom={50}
                         >
-                            Ganefri terlahir sebagai anak ketiga dari empat bersaudara. Saat berusia 5 tahun, ia telah menjadi yatim. Beruntung saat
-                            itu, pepatah Minangkabau, "anak dipangku kamanakan dibimbiang" masih kental dijalankan di kampung halamannya, Payakumbuh.
-                            <br />
-                            <br />
-                            Saat kelas IV SD, ia meninggalkan Payakumbuh dan pergi merantau ke Tanjung Pinang, Kepulauan Riau untuk melanjutkan
-                            sekolah bersama etek-nya. Sedari dulu, orang tua di kampungnya telah menanamkan budaya pendidikan adalah hal utama bagi
-                            anak, “Biarlah kurang makan asal anak sekolah”.
-                            <br />
-                            <br />
-                            Ganefri menyelesaikan pendidikan SD (1976) dan SMP Belakang Padang (1980) di Batam. Ia lalu menyelesaikan pendidikan SLTA
-                            di Tanjung Pinang (1983). Ia menyelesaikan studi S1 Pendidikan Elektro dari IKIP Padang (1988) dan S2 Pendidikan Teknik
-                            dan Kejuruan dari IKIP Yogyakarta (1996). Ia berhasil menamatkan studi S3 Pendidikan Teknikal Vokational dari UKM Malaysia
-                            (2011).
+                            {formatText(profil_2_db.deskripsi)}
                         </RevealText>
                     </div>
                     <motion.img
-                        src={profil_1_img}
+                        src={profil_2_db.gambar ? "/storage/profilImages/" + profil_2_db.gambar : "/storage/profilImages/default_2.jpg"}
                         className={`object-cover rounded-2xl shadow-2xl ${isMobile ? "w-full h-[200px]" : "h-[433px] w-[679px]"}`}
                         initial={{ y: 100, opacity: 0 }}
                         whileInView={{ y: 0, opacity: 1, transition: { duration: 1, delay: 0.5 } }}
@@ -574,24 +598,9 @@ const Profil = () => {
                                             </span>
                                         </h1>
                                         <ol className={`list-disc flex flex-col ${isMobile ? "ms-4 gap-1" : "ms-7 gap-2"}`}>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                SD Belakang Padang (1976)
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                SMP Belakang Padang  (1980)
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                SLTA Tanjung Pinang (1983)
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                S1 Pendidikan Elektro dari IKIP Padang (1988)
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                S2 Pendidikan Teknik dan Kejuruan dari IKIP Yogyakarta (1996)
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                S3 Pendidikan Teknikal Vokational dari UKM Malaysia  (2011)
-                                            </li>
+                                            {riwayat_pendidikan_db.list.map((item, index) => (
+                                                <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>{item}</li>
+                                            ))}
                                         </ol>
                                     </motion.div>
                                 ) : null}
@@ -612,27 +621,9 @@ const Profil = () => {
                                             </span>
                                         </h1>
                                         <ol className={`list-disc flex flex-col ${isMobile ? "ms-4 gap-1" : "ms-7 gap-2"}`}>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Dosen Pembimbing di IKIP Padang(kini Universitas Negeri Padang) sejak 1989
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Kepala Laboratorium Komputer Fakultas Teknik (FT) IKIP Padang (1992 – 1997)
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                SLTA Tanjung Pinang (1983)
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Sekretaris Jurusan Teknik Elektro FT UNP (1999 – 2004)
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Pembantu Dekan II FT UNP (2004 - 2007)
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Dekan FT UNP (2007 - 2014)
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Rektor Universitas Negeri Padang (2012 - 2024)
-                                            </li>
+                                            {riwayat_pekerjaan_db.list.map((item, index) => (
+                                                <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>{item}</li>
+                                            ))}
                                         </ol>
                                     </motion.div>
                                 ) : null}
@@ -657,31 +648,9 @@ const Profil = () => {
                                                 isMobile ? "list-inside gap-1 overflow-y-auto max-h-[30vh]" : "ms-7 gap-2"
                                             }`}
                                         >
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Ketua III Lembaga Karate-Do Indonesia (LEMKARI) Sumatera Barat pada 2006–2010
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Sekretaris Jenderal Ikatan Alumni FT UNP pada 2004–2009
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Sekjen Ikatan Alumni UNP selama dua periode, 2009–2014 dan 2014–2018
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Ketua Umum Asosiasi Pendidikan Teknologi Kejuruan Indonesia (APTEKINDO) pada 2008 sampai sekarang
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Ketua Umum Pengprov Keluarga Olahraga Tarung Drajat (Kodrat) Sumatera Barat 2013–2017 dan 2017–2021
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Koordinator Bidang Usaha Dewan Pimpinan Pusat (DPP) Ikatan Sarjana Pendidikan Indonesia (ISPI) masa
-                                                bakti 2014–2019
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Ketua Tanfidziyah Pengurus Wilayah Nahdlatul Ulama (PWNU) Sumatera Barat masa khidmat 2019–2024
-                                            </li>
-                                            <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>
-                                                Pembina Ikatan Ahli Informatika Indonesia DPW Sumatera Barat periode 2019–2022
-                                            </li>
+                                            {riwayat_organisasi_db.list.map((item, index) => (
+                                                <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>{item}</li>
+                                            ))}
                                         </ol>
                                     </motion.div>
                                 ) : null}
@@ -695,54 +664,68 @@ const Profil = () => {
             <section className="relative">
                 {/* SHAPES */}
                 <img src={penghargaan_wave_svg} alt="wave" className="absolute top-0 left-0 -z-10" />
-                <img src={penghargaan_title_filled_svg} alt="wave" className={`absolute -z-20 ${isMobile ? 'top-1 left-1 w-[337px] h-[49px]' : 'top-3 left-3'}`} />
-                <img src={penghargaan_title_outline_svg} alt="wave" className={`absolute -z-10 ${isMobile ? 'top-1 left-1 w-[337px] h-[49px]' : 'top-3 left-3'}`} />
+                <img
+                    src={penghargaan_title_filled_svg}
+                    alt="wave"
+                    className={`absolute -z-20 ${isMobile ? "top-1 left-1 w-[337px] h-[49px]" : "top-3 left-3"}`}
+                />
+                <img
+                    src={penghargaan_title_outline_svg}
+                    alt="wave"
+                    className={`absolute -z-10 ${isMobile ? "top-1 left-1 w-[337px] h-[49px]" : "top-3 left-3"}`}
+                />
                 <img
                     src={ellipse_gradient_yellow_svg}
                     alt="wave"
-                    className={`absolute -z-10 ${isMobile ? 'w-[214px] h-[214px] bottom-[-50px] right-[-50px]' : 'bottom-[-255px] right-[-428px]'}`}
+                    className={`absolute -z-10 ${isMobile ? "w-[214px] h-[214px] bottom-[-50px] right-[-50px]" : "bottom-[-255px] right-[-428px]"}`}
                     ref={ellipse_gradient_yellow}
                 />
 
                 {/* CONTENT */}
-                <div className={`flex flex-col items-center ${isMobile ? 'px-4 py-8 gap-8' : 'px-32 py-24 gap-16'}`}>
+                <div className={`flex flex-col items-center ${isMobile ? "px-4 py-8 gap-8" : "px-32 py-24 gap-16"}`}>
                     <div className="flex items-center justify-center flex-col gap-2">
-                        <h2 className={`font-bold text-center text-slate-800 ${isMobile ? 'text-xl' : 'text-3xl'}`}>Penghargaan Yang di Raih Ganefri</h2>
-                        <p className={`font-medium text-slate-500 max-w-[450px] text-center ${isMobile ? 'text-sm' : 'text-xl'}`}>
+                        <h2 className={`font-bold text-center text-slate-800 ${isMobile ? "text-xl" : "text-3xl"}`}>
+                            Penghargaan Yang di Raih Ganefri
+                        </h2>
+                        <p className={`font-medium text-slate-500 max-w-[450px] text-center ${isMobile ? "text-sm" : "text-xl"}`}>
                             Sejumlah penghargaan yang berhasil di Terima oleh Ganefri
                         </p>
                     </div>
-                    <div className={`flex flex-wrap items-center justify-center ${isMobile ? 'gap-8 flex-col items-center' : 'gap-16'}`}>
-                        <motion.div
-                            className="flex flex-col items-center gap-4 group"
-                            initial={{ y: 100, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.3 } }}
-                            viewport={{ once: true }}
-                        >
-                            <div className={`rounded-3xl overflow-hidden ${isMobile ? 'w-full h-[192px]' : 'w-[597px] h-[336px]'}`}>
-                                <img
-                                    src={penghargaan_1_img}
-                                    alt="penghargaan"
-                                    className="w-full h-full object-cover group-hover:scale-[1.2] transition-all"
-                                />
+                    <div
+                        ref={penghargaanContainerRef}
+                        className={`flex flex-wrap items-center justify-center ${isMobile ? "gap-8 flex-col items-center" : "gap-16"}`}
+                    >
+                        {penghargaan_db.list != 0 ? (
+                            <>
+                                {penghargaan_db.list.map((item, index) => (
+                                    <motion.a
+                                        data-fancybox="penghargaan"
+                                        href={"/storage/penghargaanImages/" + item.gambar}
+                                        data-caption={item.judul + ': ' + item.deskripsi}
+                                        className="flex flex-col items-center gap-4 group"
+                                        initial={{ y: 100, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.3 } }}
+                                        viewport={{ once: true }}
+                                    >
+                                        <div className={`rounded-3xl overflow-hidden ${isMobile ? "w-full h-[192px]" : "w-[597px] h-[336px]"}`}>
+                                            <img
+                                                src={"/storage/penghargaanImages/" + item.gambar}
+                                                alt="penghargaan"
+                                                className="w-full h-full object-cover group-hover:scale-[1.2] transition-all"
+                                            />
+                                        </div>
+                                        <p className={`text-center font-medium text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
+                                            {item.judul}
+                                        </p>
+                                    </motion.a>
+                                ))}
+                            </>
+                        ) : (
+                            <div className={`bg-slate-300 rounded-3xl flex flex-col items-center justify-center ${isMobile ? "w-full h-[192px]" : "w-[597px] h-[336px]"}`}>
+                                <TbAward fontSize={112} className="text-slate-500 text-center" />
+                                <p className="text-center text-xl mt-4 font-semibold text-slate-500">Penghargaan belum ditambahkan</p>
                             </div>
-                            <p className={`text-center font-medium text-slate-800 ${isMobile ? 'text-xl' : 'text-2xl'}`}>Certified Lorem Ipsum Mantap, 2024</p>
-                        </motion.div>
-                        <motion.div
-                            className="flex flex-col items-center gap-4 group"
-                            initial={{ y: 100, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.3 } }}
-                            viewport={{ once: true }}
-                        >
-                            <div className={`rounded-3xl overflow-hidden ${isMobile ? 'w-full h-[192px]' : 'w-[597px] h-[336px]'}`}>
-                                <img
-                                    src={penghargaan_2_img}
-                                    alt="penghargaan"
-                                    className="w-full h-full object-cover group-hover:scale-[1.2] transition-all"
-                                />
-                            </div>
-                            <p className={`text-center font-medium text-slate-800 ${isMobile ? 'text-xl' : 'text-2xl'}`}>Certified Lorem Ipsum Mantap, 2024</p>
-                        </motion.div>
+                        )}
                     </div>
                 </div>
             </section>

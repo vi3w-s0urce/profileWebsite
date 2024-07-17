@@ -6,9 +6,11 @@ import { FaYoutube } from "react-icons/fa";
 import logo_putih from "../../assets/svg/logo_putih.svg";
 import { Link } from "@inertiajs/react";
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useMediaQuery } from "react-responsive";
+import route from "ziggy-js";
+import axios from "axios";
 
 const Footer = () => {
     const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
@@ -40,6 +42,21 @@ const Footer = () => {
         }, 100);
     }, []);
 
+    const [msDb, setMsDb] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(route("getMsDb")); // Ganti dengan URL API Anda
+                setMsDb(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <footer
             className={`relative bg-gradient-to-br from-yellow-400 to-yellow-600 flex flex-col items-center ${
@@ -52,64 +69,62 @@ const Footer = () => {
                 </Link>
                 {!isMobile ? (
                     <div className="flex items-center gap-8">
-                        <Link href="#" ref={(el) => (media_social.current[0] = el)}>
+                        <a href={msDb && msDb[0].link} ref={(el) => (media_social.current[0] = el)} className={`${ msDb && !msDb[0].isVisible && "hidden"}`}>
                             <FaFacebook fontSize={46} className="text-white hover:text-yellow-900 transition-colors" />
-                        </Link>
-                        <Link href="#" ref={(el) => (media_social.current[1] = el)}>
+                        </a>
+                        <a href={msDb && msDb[1].link} ref={(el) => (media_social.current[1] = el)} className={`${ msDb && !msDb[1].isVisible && "hidden"}`}>
                             <RiInstagramFill fontSize={46} className="text-white hover:text-yellow-900 transition-colors" />
-                        </Link>
-                        <Link href="#" ref={(el) => (media_social.current[2] = el)}>
+                        </a>
+                        <a href={msDb && msDb[2].link} ref={(el) => (media_social.current[2] = el)} className={`${ msDb && !msDb[2].isVisible && "hidden"}`}>
                             <BsTwitterX fontSize={46} className="text-white hover:text-yellow-900 transition-colors" />
-                        </Link>
-                        <Link href="#" ref={(el) => (media_social.current[3] = el)}>
+                        </a>
+                        <a href={`mailto:${msDb && msDb[3].email}`} ref={(el) => (media_social.current[3] = el)} className={`${ msDb && !msDb[3].isVisible && "hidden"}`}>
                             <MdEmail fontSize={46} className="text-white hover:text-yellow-900 transition-colors" />
-                        </Link>
-                        <Link href="#" ref={(el) => (media_social.current[4] = el)}>
+                        </a>
+                        <a href={msDb && msDb[4].link} ref={(el) => (media_social.current[4] = el)} className={`${ msDb && !msDb[4].isVisible && "hidden"}`}>
                             <FaYoutube fontSize={46} className="text-white hover:text-yellow-900 transition-colors" />
-                        </Link>
+                        </a>
                     </div>
                 ) : null}
+                {/* MENU */}
                 <div className="flex flex-col items-end gap-2">
-                    <Link src="#" className={`font-semibold text-white hover:text-yellow-900 transition-colors ${isMobile ? "text-xs" : "text-xl"}`}>
+                    <Link
+                        href={route("Beranda")}
+                        className={`font-semibold text-white hover:text-yellow-900 transition-colors ${isMobile ? "text-xs" : "text-xl"}`}
+                    >
                         Beranda
                     </Link>
                     <Link
-                        src="#"
+                        href={route("Profil")}
                         className={`text-xl font-semibold text-white hover:text-yellow-900 transition-colors ${isMobile ? "text-xs" : "text-xl"}`}
                     >
-                        Profile
+                        Profil
                     </Link>
                     <Link
-                        src="#"
+                        href={route("Berita")}
                         className={`text-xl font-semibold text-white hover:text-yellow-900 transition-colors ${isMobile ? "text-xs" : "text-xl"}`}
                     >
                         Berita & Agenda
                     </Link>
-                    <Link
-                        src="#"
-                        className={`text-xl font-semibold text-white hover:text-yellow-900 transition-colors ${isMobile ? "text-xs" : "text-xl"}`}
-                    >
-                        Kontak
-                    </Link>
                 </div>
             </div>
             {isMobile ? (
-                <div className="flex items-center w-full justify-between">
-                    <Link href="#" ref={(el) => (media_social.current[0] = el)}>
+                <div className="flex items-center w-full justify-center gap-8">
+                    <a href={msDb && msDb[0].link} ref={(el) => (media_social.current[0] = el)} className={`${ msDb && !msDb[0].isVisible && "hidden"}`}>
                         <FaFacebook fontSize={16} className="text-white hover:text-yellow-900 transition-colors" />
-                    </Link>
-                    <Link href="#" ref={(el) => (media_social.current[1] = el)}>
+                    </a>
+                    <a href={msDb && msDb[1].link} ref={(el) => (media_social.current[1] = el)} className={`${ msDb && !msDb[1].isVisible && "hidden"}`}>
                         <RiInstagramFill fontSize={16} className="text-white hover:text-yellow-900 transition-colors" />
-                    </Link>
-                    <Link href="#" ref={(el) => (media_social.current[2] = el)}>
+                    </a>
+                    <a href={msDb && msDb[2].link} ref={(el) => (media_social.current[2] = el)} className={`${ msDb && !msDb[2].isVisible && "hidden"}`}>
                         <BsTwitterX fontSize={16} className="text-white hover:text-yellow-900 transition-colors" />
-                    </Link>
-                    <Link href="#" ref={(el) => (media_social.current[3] = el)}>
+                    </a>
+                    <a href={`mailto:${msDb && msDb[3].email}`} ref={(el) => (media_social.current[3] = el)} className={`${ msDb && !msDb[3].isVisible && "hidden"}`}>
                         <MdEmail fontSize={16} className="text-white hover:text-yellow-900 transition-colors" />
-                    </Link>
-                    <Link href="#" ref={(el) => (media_social.current[4] = el)}>
+                    </a>
+                    <a href={msDb && msDb[4].link} ref={(el) => (media_social.current[4] = el)} className={`${ msDb && !msDb[4].isVisible && "hidden"}`}>
                         <FaYoutube fontSize={16} className="text-white hover:text-yellow-900 transition-colors" />
-                    </Link>
+                    </a>
                 </div>
             ) : null}
             <motion.div
@@ -128,26 +143,27 @@ const Footer = () => {
                         <img
                             src="https://seeklogo.com/images/S/sampoerna-mild-logo-92AE43FE45-seeklogo.com.png"
                             alt="sampoerna"
-                            className={`object-contain ${isMobile ? "w-4" : "w-8" }`}
+                            className={`object-contain ${isMobile ? "w-4" : "w-8"}`}
                         />
-                        <img src="https://seeklogo.com/images/C/camel-logo-08A6AE9608-seeklogo.com.png" alt="camel"
-                        className={`object-contain ${isMobile ? "w-4" : "w-8" }`}
-
+                        <img
+                            src="https://seeklogo.com/images/C/camel-logo-08A6AE9608-seeklogo.com.png"
+                            alt="camel"
+                            className={`object-contain ${isMobile ? "w-4" : "w-8"}`}
                         />
                         <img
                             src="https://seeklogo.com/images/G/gudang-garam-filter-logo-CB3A42FF9A-seeklogo.com.png"
                             alt="surya"
-                            className={`object-contain ${isMobile ? "w-4" : "w-8" }`}
+                            className={`object-contain ${isMobile ? "w-4" : "w-8"}`}
                         />
                         <img
                             src="https://seeklogo.com/images/L/lucky-strike-logo-E087C394A4-seeklogo.com.png"
                             alt="lucky_strike"
-                            className={`object-contain ${isMobile ? "w-4" : "w-8" }`}
+                            className={`object-contain ${isMobile ? "w-4" : "w-8"}`}
                         />
                         <img
                             src="https://seeklogo.com/images/D/djarum-super-logo-788BD92761-seeklogo.com.png"
                             alt="djarum"
-                            className={`object-contain ${isMobile ? "w-4" : "w-8" }`}
+                            className={`object-contain ${isMobile ? "w-4" : "w-8"}`}
                         />
                     </span>{" "}
                     by Mike

@@ -6,12 +6,15 @@ import path from "path";
 
 export default defineConfig({
     plugins: [
-        react(),
         laravel({
-            input: ["resources/css/app.css", "resources/js/app.jsx"],
+            input: "resources/js/app.jsx",
             refresh: true,
         }),
+        react(),
     ],
+    optimizeDeps: {
+        exclude: ["@yoopta/headings"],
+    },
     define: {
         global: "window",
     },

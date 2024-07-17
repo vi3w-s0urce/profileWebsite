@@ -7,7 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { FiSave } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { setCurrentRoute } from "../../../Redux/slice";
-import { TbX } from "react-icons/tb";
+import { TbEditCircle, TbX } from "react-icons/tb";
 import toast, { Toaster } from "react-hot-toast";
 import YooptaEditor, { createYooptaEditor } from "@yoopta/editor";
 import Paragraph from "@yoopta/paragraph";
@@ -19,7 +19,7 @@ import LinkTool, { DefaultLinkToolRender } from "@yoopta/link-tool";
 import Link from "@yoopta/link";
 import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from "@yoopta/marks";
 
-const BeritaCreateAdmin = () => {
+const BeritaEditAdmin = ({ berita }) => {
     const { flash } = usePage().props;
 
     useEffect(() => {
@@ -39,10 +39,10 @@ const BeritaCreateAdmin = () => {
     const [contentLine, setContentLine] = useState(0);
 
     const formBerita = useForm({
-        judul: "",
-        kategori: "",
+        judul: berita.judul,
+        kategori: berita.kategori,
         gambar: null,
-        content: null,
+        content: JSON.parse(berita.content),
     });
 
     const handleImageChange = (e) => {
@@ -50,7 +50,10 @@ const BeritaCreateAdmin = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                formBerita.setData("gambar", file);
+                formBerita.setData((prevState) => ({
+                    ...prevState,
+                    gambar: file
+                }));
                 setSelectedImage(reader.result);
             };
             reader.readAsDataURL(file);
@@ -99,13 +102,11 @@ const BeritaCreateAdmin = () => {
         e.preventDefault();
         if (contentLine < 2) {
             toast.error("Isi Berita Minimal 2 block!");
-        } else if (!selectedImage) {
-            toast.error("Gambar harus diisi!");
         } else {
-            formBerita.post(route("BeritaStoreAdmin"));
+            formBerita.post(route("BeritaUpdateAdmin", { id: berita._id }));
         }
     };
-
+    
     return (
         <main className="ml-[300px] bg-slate-100 min-h-screen p-12">
             <Toaster />
@@ -117,7 +118,7 @@ const BeritaCreateAdmin = () => {
                 <InertiaLink href={route("BeritaIndexAdmin")} className="p-2 text-slate-500 hover:bg-slate-200 rounded-lg transition-colors">
                     <IoIosArrowBack fontSize={32} />
                 </InertiaLink>
-                <h1 className="font-bold text-3xl text-slate-800">Buat Berita / Agenda Baru</h1>
+                <h1 className="font-bold text-3xl text-slate-800">Edit Berita / Agenda</h1>
             </div>
             <div className="grid grid-cols-6 gap-8">
                 <form className="col-span-6 bg-white rounded-3xl shadow-lg px-8 py-6 flex flex-col gap-4" onSubmit={handleOnSubmit}>
@@ -132,6 +133,7 @@ const BeritaCreateAdmin = () => {
                                 placeholder="Masukkan judul berita / agenda"
                                 id="judul"
                                 onChange={(e) => formBerita.setData("judul", e.target.value)}
+                                value={formBerita.data.judul}
                                 required
                             />
                         </div>
@@ -145,6 +147,7 @@ const BeritaCreateAdmin = () => {
                                 options={kategoriOptions}
                                 placeholder="Pilih Kategori"
                                 onChange={(selected) => formBerita.setData("kategori", selected && selected.value)}
+                                value={kategoriOptions.find((option) => option.value === formBerita.data.kategori)}
                                 required
                             />
                         </div>
@@ -156,27 +159,37 @@ const BeritaCreateAdmin = () => {
                                 <div className="absolute h-full w-full bg-black bg-opacity-10 hidden place-content-center group-hover:grid">
                                     <TbX
                                         className="text-red-500 cursor-pointer p-2 hover:bg-red-200 rounded-xl"
-                                        onClick={() => setSelectedImage(null)}
+                                        onClick={() => {
+                                            setSelectedImage(null);
+                                            formBerita.setData('gambar', null);
+                                        }}
                                         fontSize={82}
                                     />
                                 </div>
                                 <img src={selectedImage} alt="gambar" className="h-full object-cover" />
                             </div>
                         ) : (
-                            <label className="h-[240px] border-2 border-slate-400 flex flex-col items-center justify-center gap-3 rounded-xl cursor-pointer bg-slate-100 grow">
-                                <GoImage fontSize={64} className="text-slate-500" />
-                                <div className="flex flex-col items-center">
-                                    <span className="font-semibold text-slate-500">Masukkan Gambar</span>
-                                    <span className="text-slate-500 text-sm">*Disarankan gambar dengan rasio 16:9</span>
+                            <label className="relative max-h-[512px] border-2 border-slate-400 flex flex-col items-center justify-center gap-3 rounded-xl cursor-pointer bg-slate-100 grow group">
+                                <div className="absolute h-full w-full bg-white bg-opacity-20 hidden place-content-center group-hover:grid">
+                                    <TbEditCircle className="text-yellow-500 cursor-pointer p-2 hover:bg-yellow-200 rounded-xl" fontSize={82} />
                                 </div>
-                                <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" required />
+                                <img src={"/storage/beritaImages/" + berita.path_gambar} alt="gambar" className="h-full object-cover" />
+
+                                <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                             </label>
                         )}
                     </div>
                     <div>
                         <p className="mb-3 text-slate-800 font-medium">Content</p>
                         <div className="border-2 border-slate-400 rounded-xl min-h-[200px] px-14 py-4">
-                            <YooptaEditor editor={editor} plugins={plugins} tools={TOOLS} marks={MARKS} placeholder="Tuliskan Isi Berita..." />
+                            <YooptaEditor
+                                editor={editor}
+                                plugins={plugins}
+                                tools={TOOLS}
+                                marks={MARKS}
+                                placeholder="Tuliskan Isi Berita..."
+                                value={formBerita.data.content}
+                            />
                         </div>
                     </div>
                     <div className="flex justify-end">
@@ -184,7 +197,7 @@ const BeritaCreateAdmin = () => {
                             type="submit"
                             className="flex items-center justify-center gap-3 px-4 py-3 bg-green-400 border-2 border-green-200 rounded-xl font-semibold text-white hover:bg-green-500 transition-colors"
                         >
-                            Buat Berita <FiSave fontSize={24} />
+                            Edit Berita <FiSave fontSize={24} />
                         </button>
                     </div>
                 </form>
@@ -193,4 +206,4 @@ const BeritaCreateAdmin = () => {
     );
 };
 
-export default BeritaCreateAdmin;
+export default BeritaEditAdmin;

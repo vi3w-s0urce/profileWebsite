@@ -9,11 +9,13 @@ import ms_title_svg from "../../assets/svg/shapes/ms_title.svg";
 import box_twin_svg from "../../assets/svg/shapes/box_twin.svg";
 import line_pattern_svg from "../../assets/svg/shapes/line_pattern.svg";
 import ellipse_outline_svg from "../../assets/svg/shapes/ellipse_outline_yellow.svg";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useMediaQuery } from "react-responsive";
+import { router } from "@inertiajs/react";
+import axios from "axios";
 
-const MediaSocialSection = () => {
+const MediaSocialSection = ({ ms_db }) => {
     const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
 
     const box_twin = useRef();
@@ -62,18 +64,38 @@ const MediaSocialSection = () => {
     return (
         <section className="relative">
             {/* SHAPES */}
-            <img src={ms_title_svg} alt="title" className={`absolute -z-20 ${isMobile ? 'w-[184px] h-[118px] top-1 left-1' : 'top-3 left-3'}`} />
-            <img src={box_twin_svg} alt="box_twin" className={`absolute ${isMobile ? 'w-[147px] h-[156px] bottom-[-100px] right-[-100px]' : 'bottom-[-100px] right-[-200px]'}`} ref={box_twin} />
-            <img src={line_pattern_svg} alt="line_pattern" className={`absolute -z-10 ${isMobile ? 'w-[131px] h-[50px] bottom-[71px] left-[-100px]' : 'bottom-[77px] left-[-200px]'}`} ref={line_pattern} />
-            <img src={ellipse_outline_svg} alt="ellipse" className={`absolute -z-10 ${isMobile ? 'w-[112px] h-[112px] top-[-24px] right-[12px]' : 'top-[-44px] left-[250px]'}`} ref={ellipse_outline} />
+            <img src={ms_title_svg} alt="title" className={`absolute -z-20 ${isMobile ? "w-[184px] h-[118px] top-1 left-1" : "top-3 left-3"}`} />
+            <img
+                src={box_twin_svg}
+                alt="box_twin"
+                className={`absolute ${isMobile ? "w-[147px] h-[156px] bottom-[-100px] right-[-100px]" : "bottom-[-100px] right-[-200px]"}`}
+                ref={box_twin}
+            />
+            <img
+                src={line_pattern_svg}
+                alt="line_pattern"
+                className={`absolute -z-10 ${isMobile ? "w-[131px] h-[50px] bottom-[71px] left-[-100px]" : "bottom-[77px] left-[-200px]"}`}
+                ref={line_pattern}
+            />
+            <img
+                src={ellipse_outline_svg}
+                alt="ellipse"
+                className={`absolute -z-10 ${isMobile ? "w-[112px] h-[112px] top-[-24px] right-[12px]" : "top-[-44px] left-[250px]"}`}
+                ref={ellipse_outline}
+            />
 
             {/* CONTENT */}
             <div className={`${isMobile ? "px-4 py-8" : "px-32 py-24"}`}>
-                <div className={`w-full flex ${isMobile ? "gap-8 flex-col" : "gap-x-96 gap-y-16 justify-around flex-wrap"}`}>
-                    <motion.a className={`flex items-center group ${isMobile ? "mx-auto" : "mx-6"}`} href="#">
+                <div className={`w-full flex ${isMobile ? "gap-8 flex-col" : "gap-x-72 gap-y-16 justify-around flex-wrap"}`}>
+                    <motion.a
+                        className={`flex items-center group ${isMobile ? "mx-auto" : "mx-6"} ${!ms_db[0].isVisible ? "hidden" : "flex"}`}
+                        href={ms_db[0].link}
+                    >
                         <FaFacebook
                             fontSize={isMobile ? 52 : 112}
-                            className={`text-slate-300 group-hover:text-yellow-400 transition-all ${isMobile ? "-mx-6 group-hover:mx-2" : "-mx-12 group-hover:mx-4"}`}
+                            className={`text-slate-300 group-hover:text-yellow-400 transition-all ${
+                                isMobile ? "-mx-6 group-hover:mx-2" : "-mx-12 group-hover:mx-4"
+                            }`}
                         />
                         <div className={`flex flex-col ${isMobile ? "gap-0" : "gap-1"}`}>
                             <RevealText className={`font-bold text-yellow-900 ${isMobile ? "text-xl" : "text-4xl"}`} scroll={true}>
@@ -85,14 +107,19 @@ const MediaSocialSection = () => {
                                 scroll={true}
                                 delay={0.2}
                             >
-                                Ganefri Ganteng
+                                {ms_db[0].nama}
                             </RevealText>
                         </div>
                     </motion.a>
-                    <motion.a className={`flex items-center group ${isMobile ? "mx-auto" : "mx-6"}`} href="#">
+                    <motion.a
+                        className={`flex items-center group ${isMobile ? "mx-auto" : "mx-6"} ${!ms_db[1].isVisible ? "hidden" : "flex"}`}
+                        href={ms_db[1].link}
+                    >
                         <RiInstagramFill
                             fontSize={isMobile ? 52 : 112}
-                            className={`text-slate-300 group-hover:text-yellow-400 transition-all ${isMobile ? "-mx-6 group-hover:mx-2" : "-mx-12 group-hover:mx-4"}`}
+                            className={`text-slate-300 group-hover:text-yellow-400 transition-all ${
+                                isMobile ? "-mx-6 group-hover:mx-2" : "-mx-12 group-hover:mx-4"
+                            }`}
                         />
                         <div className={`flex flex-col ${isMobile ? "gap-0" : "gap-1"}`}>
                             <RevealText className={`font-bold text-yellow-900 ${isMobile ? "text-xl" : "text-4xl"}`} scroll={true}>
@@ -104,14 +131,19 @@ const MediaSocialSection = () => {
                                 scroll={true}
                                 delay={0.2}
                             >
-                                @itss.ganefri
+                                {ms_db[1].nama}
                             </RevealText>
                         </div>
                     </motion.a>
-                    <motion.a className={`flex items-center group ${isMobile ? "mx-auto" : "mx-6"}`} href="#">
+                    <motion.a
+                        className={`flex items-center group ${isMobile ? "mx-auto" : "mx-6"} ${!ms_db[2].isVisible ? "hidden" : "flex"}`}
+                        href={ms_db[2].link}
+                    >
                         <BsTwitterX
                             fontSize={isMobile ? 52 : 112}
-                            className={`text-slate-300 group-hover:text-yellow-400 transition-all ${isMobile ? "-mx-6 group-hover:mx-2" : "-mx-12 group-hover:mx-4"}`}
+                            className={`text-slate-300 group-hover:text-yellow-400 transition-all ${
+                                isMobile ? "-mx-6 group-hover:mx-2" : "-mx-12 group-hover:mx-4"
+                            }`}
                         />
                         <div className={`flex flex-col ${isMobile ? "gap-0" : "gap-1"}`}>
                             <RevealText className={`font-bold text-yellow-900 ${isMobile ? "text-xl" : "text-4xl"}`} scroll={true}>
@@ -123,14 +155,19 @@ const MediaSocialSection = () => {
                                 scroll={true}
                                 delay={0.2}
                             >
-                                @ganefriii
+                                {ms_db[2].nama}
                             </RevealText>
                         </div>
                     </motion.a>
-                    <motion.a className={`flex items-center group ${isMobile ? "mx-auto" : "mx-6"}`} href="#">
+                    <motion.a
+                        className={`flex items-center group ${isMobile ? "mx-auto" : "mx-6"} ${!ms_db[3].isVisible ? "hidden" : "flex"}`}
+                        href={"mailto:" + ms_db[3].email}
+                    >
                         <MdEmail
                             fontSize={isMobile ? 52 : 112}
-                            className={`text-slate-300 group-hover:text-yellow-400 transition-all ${isMobile ? "-mx-6 group-hover:mx-2" : "-mx-12 group-hover:mx-4"}`}
+                            className={`text-slate-300 group-hover:text-yellow-400 transition-all ${
+                                isMobile ? "-mx-6 group-hover:mx-2" : "-mx-12 group-hover:mx-4"
+                            }`}
                         />
                         <div className={`flex flex-col ${isMobile ? "gap-0" : "gap-1"}`}>
                             <RevealText className={`font-bold text-yellow-900 ${isMobile ? "text-xl" : "text-4xl"}`} scroll={true}>
@@ -142,14 +179,19 @@ const MediaSocialSection = () => {
                                 scroll={true}
                                 delay={0.2}
                             >
-                                loremipsum@gmail.com
+                                {ms_db[3].email}
                             </RevealText>
                         </div>
                     </motion.a>
-                    <motion.a className={`flex items-center group ${isMobile ? "mx-auto" : "mx-6"}`} href="#">
+                    <motion.a
+                        className={`flex items-center group ${isMobile ? "mx-auto" : "mx-6"} ${!ms_db[4].isVisible ? "hidden" : "flex"}`}
+                        href={ms_db[4].link}
+                    >
                         <FaYoutube
                             fontSize={isMobile ? 52 : 112}
-                            className={`text-slate-300 group-hover:text-yellow-400 transition-all ${isMobile ? "-mx-6 group-hover:mx-2" : "-mx-12 group-hover:mx-4"}`}
+                            className={`text-slate-300 group-hover:text-yellow-400 transition-all ${
+                                isMobile ? "-mx-6 group-hover:mx-2" : "-mx-12 group-hover:mx-4"
+                            }`}
                         />
                         <div className={`flex flex-col ${isMobile ? "gap-0" : "gap-1"}`}>
                             <RevealText className={`font-bold text-yellow-900 ${isMobile ? "text-xl" : "text-4xl"}`} scroll={true}>
@@ -161,7 +203,7 @@ const MediaSocialSection = () => {
                                 scroll={true}
                                 delay={0.2}
                             >
-                                Ganefri Mantab
+                                {ms_db[4].nama}
                             </RevealText>
                         </div>
                     </motion.a>

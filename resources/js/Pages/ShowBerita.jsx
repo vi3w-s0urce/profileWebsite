@@ -13,19 +13,33 @@ import line_yellow_svg from "../../assets/svg/shapes/hero_line_yellow.svg";
 import box_yellow_svg from "../../assets/svg/shapes/hero_rectangle.svg";
 import line_pattern_svg from "../../assets/svg/shapes/line_pattern.svg";
 import blob_yellow_svg from "../../assets/svg/shapes/blob_yellow_line.svg";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import RevealText from "../Components/RevealText";
 import { IoIosArrowForward } from "react-icons/io";
 import Footer from "../Layout/Footer";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link as InertiaLink } from "@inertiajs/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, Autoplay } from "swiper/modules";
 import { useMediaQuery } from "react-responsive";
 import "swiper/css";
 import BackToTopButton from "../Components/BackToTopButton";
+import { html } from "@yoopta/exports";
+import { useMemo } from "react";
+import YooptaEditor, { createYooptaEditor } from "@yoopta/editor";
+import Paragraph from "@yoopta/paragraph";
+import { HeadingOne, HeadingTwo, HeadingThree } from "@yoopta/headings";
+import { NumberedList, BulletedList } from "@yoopta/lists";
+import { Bold, Italic, CodeMark, Underline, Strike, Highlight } from "@yoopta/marks";
+import Link from "@yoopta/link";
+import ActionMenuList, { DefaultActionMenuRender } from "@yoopta/action-menu-list";
+import Toolbar, { DefaultToolbarRender } from "@yoopta/toolbar";
+import LinkTool, { DefaultLinkToolRender } from "@yoopta/link-tool";
+import route from "ziggy-js";
+import ReactGA from "react-ga4";
 
-const ShowBerita = () => {
+
+const ShowBerita = ({ berita, beritaLainnya }) => {
     const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
 
     const dot_yellow = useRef();
@@ -40,7 +54,9 @@ const ShowBerita = () => {
     const x_line_2 = useRef();
 
     useEffect(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: berita.judul });
+
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
 
         setTimeout(() => {
             gsap.to(dot_yellow.current, {
@@ -80,9 +96,9 @@ const ShowBerita = () => {
                     start: "top 80%",
                 },
                 width: 0,
-                duration: 2,
+                duration: 5,
                 delay: 0.2,
-                ease: "power3.out",
+                ease: "power2.out",
             });
 
             gsap.to(line_pattern.current, {
@@ -143,11 +159,45 @@ const ShowBerita = () => {
         }, 100);
     }, []);
 
+    const [beritaContent, setBeritaContent] = useState(JSON.parse(berita.content));
+
+    const editor = useMemo(() => createYooptaEditor(), []);
+    const plugins = [Paragraph, HeadingOne, HeadingTwo, HeadingThree, NumberedList, BulletedList, Link];
+    const MARKS = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
+    const TOOLS = {
+        ActionMenu: {
+            render: DefaultActionMenuRender,
+            tool: ActionMenuList,
+        },
+        Toolbar: {
+            render: DefaultToolbarRender,
+            tool: Toolbar,
+        },
+        LinkTool: {
+            render: DefaultLinkToolRender,
+            tool: LinkTool,
+        },
+    };
+
+    const convertContent = (content) => {
+        const json = JSON.parse(content);
+
+        let plainText = "";
+
+        Object.values(json)[0].value[0].children[0].text;
+
+        Object.values(json).forEach((element) => {
+            plainText += element.value[0].children[0].text + " ";
+        });
+
+        return plainText.length > 180 ? plainText.substring(0, 180) + "..." : plainText;
+    };
+
     return (
         <main className="main overflow-hidden">
             {/* TITLE */}
             <Head>
-                <title>Show Berita</title>
+                <title>{berita.judul}</title>
             </Head>
 
             {/* HEADER */}
@@ -182,52 +232,54 @@ const ShowBerita = () => {
                 <div className={`relative flex flex-col w-full ${isMobile ? "px-4 py-8 gap-3" : "px-32 py-24 gap-8"}`}>
                     <div className={`w-full flex flex-col items-center justify-center ${isMobile ? "gap-3" : "gap-8"}`}>
                         <motion.div
-                            className={`overflow-hidden rounded-3xl group shadow-2xl ${isMobile ? "w-full h-[184px]" : "w-[1382px] h-[777px]"}`}
+                            className={`overflow-hidden rounded-3xl group shadow-2xl ${
+                                isMobile ? "w-full h-[184px]" : "max-w-[1382px] w-full h-[777px]"
+                            }`}
                             initial={{ y: 100, opacity: 0 }}
                             whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
                             viewport={{ once: true }}
                         >
-                            <img src={berita_4_img} className="w-full h-full object-cover group-hover:scale-[1.1] transition-all" alt="berita" />
+                            <img
+                                src={"/storage/beritaImages/" + berita.path_gambar}
+                                className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
+                                alt="berita"
+                            />
                         </motion.div>
                         <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
-                            <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>Agenda</p>
+                            <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>{berita.kategori}</p>
                             <BsDot fontSize={24} />
                             <div className="flex gap-2 items-center text-slate-500">
                                 <FiClock fontSize={18} />
-                                <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>Senin, 10 Juni 2024</span>
+                                <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>
+                                    {new Date(berita.tanggal).toLocaleDateString("id-ID", {
+                                        weekday: "long",
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                    })}
+                                </span>
                             </div>
                         </div>
                     </div>
-                    <RevealText
-                        className={`font-bold text-slate-800 text-center ${isMobile ? "text-2xl" : "text-5xl"}`}
-                        scroll={true}
-                        type="words"
-                        stagger={0.05}
-                    >
-                        Lorem ipsum dolor sit amet consectetur. Potenti quis nibh et eros nec donec.
-                    </RevealText>
-                    <RevealText className={`${isMobile ? "text-base" : "text-2xl"}`} scroll={true} type="words" stagger={0.003}>
-                        Lorem ipsum dolor sit amet consectetur. In feugiat hendrerit ullamcorper nibh sed. Nam posuere cras varius habitasse. Aliquam
-                        massa quis adipiscing in sollicitudin. Magna sed at magna egestas consequat nunc sed. Etiam mollis et sed fermentum faucibus
-                        adipiscing ultrices. Faucibus bibendum sit adipiscing et iaculis. Etiam magna tristique orci massa vitae arcu aliquam a.
-                        Suspendisse magnis semper eu sit in enim sed habitant. Pulvinar pellentesque ac molestie a vel dui sapien urna.
-                        <br />
-                        <br />
-                        In etiam lorem consectetur bibendum. Habitant ligula bibendum libero tempor sed nec pretium. Massa elementum nunc magna ipsum
-                        gravida quis facilisi ultricies pretium. Eu justo scelerisque vulputate at lacinia viverra curabitur. Scelerisque elit
-                        hendrerit cursus amet placerat a non in. Nulla suspendisse scelerisque rhoncus imperdiet viverra tempus non malesuada neque.
-                        Ullamcorper praesent sit eu sollicitudin turpis sit. Nec nunc quam diam egestas pulvinar malesuada.
-                        <br />
-                        <br />
-                        Nibh volutpat nunc ultrices nulla libero lectus laoreet suscipit condimentum. Ac et nascetur ut eu tellus placerat phasellus.
-                        Viverra eget consequat odio proin turpis vel lectus. Ut nunc sollicitudin tellus lacus blandit ultricies. Mauris penatibus
-                        netus scelerisque adipiscing nec accumsan nisi proin. Nibh massa euismod id feugiat neque. Orci semper volutpat eget at.
-                        Volutpat aliquet id id ac cras euismod blandit vitae velit.
-                        <br />
-                        <br />A diam tristique odio congue vestibulum risus ultricies nisi. Vestibulum fermentum congue euismod congue nulla vel
-                        vitae. Mauris netus at luctus a justo. Ornare varius rhoncus mi cras in enim placerat amet pharetra. Rhoncus non gravida eget
-                        vitae. Luctus egestas orci habitasse sagittis.
-                    </RevealText>
+                    <div className={`w-full flex flex-col ${isMobile ? 'bg-white p-3 rounded-xl bg-opacity-50 gap-4' : 'gap-12'}`}>
+                        <RevealText
+                            className={`font-bold text-slate-800 text-center ${isMobile ? "text-2xl" : "text-5xl"}`}
+                            scroll={true}
+                            type="words"
+                            stagger={0.05}
+                        >
+                            {berita.judul}
+                        </RevealText>
+                        <YooptaEditor
+                            editor={editor}
+                            plugins={plugins}
+                            marks={MARKS}
+                            tools={TOOLS}
+                            value={beritaContent}
+                            readOnly
+                            className="w-full"
+                        />
+                    </div>
                 </div>
             </section>
 
@@ -261,235 +313,110 @@ const ShowBerita = () => {
                                 autoplay={{ delay: 5000 }}
                                 className="h-fit w-full rounded-3xl"
                             >
-                                <SwiperSlide>
-                                    <motion.div
-                                        className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer border-2"
-                                        initial={{ y: 100, opacity: 0 }}
-                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
-                                        viewport={{ once: true }}
-                                    >
-                                        <div className={`w-full overflow-hidden rounded-3xl ${isMobile ? "h-[184px]" : "h-[288px]"}`}>
-                                            <img
-                                                src={berita_1_img}
-                                                alt="berita"
-                                                className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
-                                            />
-                                        </div>
-                                        <div className={`${isMobile ? "p-6" : "p-8"}`}>
-                                            <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
-                                                <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>Agenda</p>
-                                                <BsDot fontSize={24} />
-                                                <div className="flex gap-2 items-center text-slate-500">
-                                                    <FiClock fontSize={18} />
-                                                    <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>Senin, 10 Juni 2024</span>
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-col gap-3 mb-4">
-                                                <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
-                                                    Lorem ipsum dolor sit amet consectetur.
-                                                </h2>
-                                                <p className={`text-slate-800 ${isMobile && "text-sm"}`}>
-                                                    Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci
-                                                    diam magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit
-                                                    sollicitudin turpis...
-                                                </p>
-                                            </div>
-                                            <Link
-                                                href="#"
-                                                className={`text-yellow-500 font-semibold flex items-center gap-2 ${
-                                                    isMobile ? "text-base" : "text-lg"
-                                                }`}
+                                {beritaLainnya.map((item, index) => (
+                                    <SwiperSlide>
+                                        <InertiaLink href={route("BeritaRead", { slug: item.slug })} key={item._id}>
+                                            <motion.div
+                                                className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
+                                                initial={{ y: 100, opacity: 0 }}
+                                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                                                viewport={{ once: true }}
                                             >
-                                                Baca Selengkapnya <IoIosArrowForward className="group-hover:translate-x-2 transition-all" />
-                                            </Link>
-                                        </div>
-                                    </motion.div>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <motion.div
-                                        className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer border-2"
-                                        initial={{ y: 100, opacity: 0 }}
-                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
-                                        viewport={{ once: true }}
-                                    >
-                                        <div className={`w-full overflow-hidden rounded-3xl ${isMobile ? "h-[184px]" : "h-[288px]"}`}>
-                                            <img
-                                                src={berita_1_img}
-                                                alt="berita"
-                                                className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
-                                            />
-                                        </div>
-                                        <div className={`${isMobile ? "p-6" : "p-8"}`}>
-                                            <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
-                                                <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>Agenda</p>
-                                                <BsDot fontSize={24} />
-                                                <div className="flex gap-2 items-center text-slate-500">
-                                                    <FiClock fontSize={18} />
-                                                    <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>Senin, 10 Juni 2024</span>
+                                                <div className={`w-full overflow-hidden rounded-3xl ${isMobile ? "h-[184px]" : "h-[288px]"}`}>
+                                                    <img
+                                                        src={"/storage/beritaImages/" + item.path_gambar}
+                                                        alt="berita"
+                                                        className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
+                                                    />
                                                 </div>
-                                            </div>
-                                            <div className="flex flex-col gap-3 mb-4">
-                                                <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
-                                                    Lorem ipsum dolor sit amet consectetur.
-                                                </h2>
-                                                <p className={`text-slate-800 ${isMobile && "text-sm"}`}>
-                                                    Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci
-                                                    diam magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit
-                                                    sollicitudin turpis...
-                                                </p>
-                                            </div>
-                                            <Link
-                                                href="#"
-                                                className={`text-yellow-500 font-semibold flex items-center gap-2 ${
-                                                    isMobile ? "text-base" : "text-lg"
-                                                }`}
-                                            >
-                                                Baca Selengkapnya <IoIosArrowForward className="group-hover:translate-x-2 transition-all" />
-                                            </Link>
-                                        </div>
-                                    </motion.div>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <motion.div
-                                        className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer border-2"
-                                        initial={{ y: 100, opacity: 0 }}
-                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
-                                        viewport={{ once: true }}
-                                    >
-                                        <div className={`w-full overflow-hidden rounded-3xl ${isMobile ? "h-[184px]" : "h-[288px]"}`}>
-                                            <img
-                                                src={berita_1_img}
-                                                alt="berita"
-                                                className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
-                                            />
-                                        </div>
-                                        <div className={`${isMobile ? "p-6" : "p-8"}`}>
-                                            <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
-                                                <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>Agenda</p>
-                                                <BsDot fontSize={24} />
-                                                <div className="flex gap-2 items-center text-slate-500">
-                                                    <FiClock fontSize={18} />
-                                                    <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>Senin, 10 Juni 2024</span>
+                                                <div className={`${isMobile ? "p-6" : "p-8"}`}>
+                                                    <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
+                                                        <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>
+                                                            {item.kategori}
+                                                        </p>
+                                                        <BsDot fontSize={24} />
+                                                        <div className="flex gap-2 items-center text-slate-500">
+                                                            <FiClock fontSize={18} />
+                                                            <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>
+                                                                {new Date(item.tanggal).toLocaleDateString("id-ID", {
+                                                                    weekday: "long",
+                                                                    year: "numeric",
+                                                                    month: "long",
+                                                                    day: "numeric",
+                                                                })}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex flex-col gap-3 mb-4">
+                                                        <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
+                                                            {item.judul}
+                                                        </h2>
+                                                        <p className={`text-slate-800 ${isMobile && "text-sm"}`}>{convertContent(item.content)}</p>
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        className={`text-yellow-500 font-semibold flex items-center gap-2 ${
+                                                            isMobile ? "text-base" : "text-lg"
+                                                        }`}
+                                                    >
+                                                        Baca Selengkapnya <IoIosArrowForward className="group-hover:translate-x-2 transition-all" />
+                                                    </button>
                                                 </div>
-                                            </div>
-                                            <div className="flex flex-col gap-3 mb-4">
-                                                <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
-                                                    Lorem ipsum dolor sit amet consectetur.
-                                                </h2>
-                                                <p className={`text-slate-800 ${isMobile && "text-sm"}`}>
-                                                    Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci
-                                                    diam magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit
-                                                    sollicitudin turpis...
-                                                </p>
-                                            </div>
-                                            <Link
-                                                href="#"
-                                                className={`text-yellow-500 font-semibold flex items-center gap-2 ${
-                                                    isMobile ? "text-base" : "text-lg"
-                                                }`}
-                                            >
-                                                Baca Selengkapnya <IoIosArrowForward className="group-hover:translate-x-2 transition-all" />
-                                            </Link>
-                                        </div>
-                                    </motion.div>
-                                </SwiperSlide>
+                                            </motion.div>
+                                        </InertiaLink>
+                                    </SwiperSlide>
+                                ))}
                             </Swiper>
                         </div>
                     ) : (
                         <div className="grid grid-cols-3 gap-16">
-                            <motion.div
-                                className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
-                                initial={{ y: 100, opacity: 0 }}
-                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
-                                viewport={{ once: true }}
-                            >
-                                <div className="w-full h-[288px] overflow-hidden rounded-3xl">
-                                    <img
-                                        src={berita_1_img}
-                                        alt="berita"
-                                        className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
-                                    />
-                                </div>
-                                <div className="p-8">
-                                    <div className="flex gap-2 items-center mb-3">
-                                        <p className="font-semibold text-sm text-yellow-800">Agenda</p>
-                                        <BsDot fontSize={24} />
-                                        <div className="flex gap-2 items-center text-slate-500">
-                                            <FiClock fontSize={18} />
-                                            <span className="font-medium text-sm">Senin, 10 Juni 2024</span>
+                            {beritaLainnya.map((item, index) => (
+                                <InertiaLink href={route("BeritaRead", { slug: item.slug })} key={item._id}>
+                                    <motion.div
+                                        className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
+                                        initial={{ y: 100, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                                        viewport={{ once: true }}
+                                    >
+                                        <div className={`w-full overflow-hidden rounded-3xl ${isMobile ? "h-[184px]" : "h-[288px]"}`}>
+                                            <img
+                                                src={"/storage/beritaImages/" + item.path_gambar}
+                                                alt="berita"
+                                                className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
+                                            />
                                         </div>
-                                    </div>
-                                    <div className="flex flex-col gap-3">
-                                        <h2 className="text-2xl font-bold text-slate-800">Lorem ipsum dolor sit amet consectetur.</h2>
-                                        <p className="text-slate-800">
-                                            Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci diam
-                                            magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin turpis...
-                                        </p>
-                                    </div>
-                                </div>
-                            </motion.div>
-                            <motion.div
-                                className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
-                                initial={{ y: 100, opacity: 0 }}
-                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
-                                viewport={{ once: true }}
-                            >
-                                <div className="w-full h-[288px] overflow-hidden rounded-3xl">
-                                    <img
-                                        src={berita_2_img}
-                                        alt="berita"
-                                        className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
-                                    />
-                                </div>
-                                <div className="p-8">
-                                    <div className="flex gap-2 items-center mb-3">
-                                        <p className="font-semibold text-sm text-yellow-800">Agenda</p>
-                                        <BsDot fontSize={24} />
-                                        <div className="flex gap-2 items-center text-slate-500">
-                                            <FiClock fontSize={18} />
-                                            <span className="font-medium text-sm">Senin, 10 Juni 2024</span>
+                                        <div className={`${isMobile ? "p-6" : "p-8"}`}>
+                                            <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
+                                                <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>{item.kategori}</p>
+                                                <BsDot fontSize={24} />
+                                                <div className="flex gap-2 items-center text-slate-500">
+                                                    <FiClock fontSize={18} />
+                                                    <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>
+                                                        {new Date(item.tanggal).toLocaleDateString("id-ID", {
+                                                            weekday: "long",
+                                                            year: "numeric",
+                                                            month: "long",
+                                                            day: "numeric",
+                                                        })}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-3 mb-4">
+                                                <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>{item.judul}</h2>
+                                                <p className={`text-slate-800 ${isMobile && "text-sm"}`}>{convertContent(item.content)}</p>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                className={`text-yellow-500 font-semibold flex items-center gap-2 ${
+                                                    isMobile ? "text-base" : "text-lg"
+                                                }`}
+                                            >
+                                                Baca Selengkapnya <IoIosArrowForward className="group-hover:translate-x-2 transition-all" />
+                                            </button>
                                         </div>
-                                    </div>
-                                    <div className="flex flex-col gap-3">
-                                        <h2 className="text-2xl font-bold text-slate-800">Lorem ipsum dolor sit amet consectetur.</h2>
-                                        <p className="text-slate-800">
-                                            Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci diam
-                                            magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin turpis...
-                                        </p>
-                                    </div>
-                                </div>
-                            </motion.div>
-                            <motion.div
-                                className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
-                                initial={{ y: 100, opacity: 0 }}
-                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
-                                viewport={{ once: true }}
-                            >
-                                <div className="w-full h-[288px] overflow-hidden rounded-3xl">
-                                    <img
-                                        src={berita_3_img}
-                                        alt="berita"
-                                        className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
-                                    />
-                                </div>
-                                <div className="p-8">
-                                    <div className="flex gap-2 items-center mb-3">
-                                        <p className="font-semibold text-sm text-yellow-800">Agenda</p>
-                                        <BsDot fontSize={24} />
-                                        <div className="flex gap-2 items-center text-slate-500">
-                                            <FiClock fontSize={18} />
-                                            <span className="font-medium text-sm">Senin, 10 Juni 2024</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col gap-3">
-                                        <h2 className="text-2xl font-bold text-slate-800">Lorem ipsum dolor sit amet consectetur.</h2>
-                                        <p className="text-slate-800">
-                                            Lorem ipsum dolor sit amet consectetur. Nunc ultrices dictum maecenas molestie varius a. Erat orci diam
-                                            magna sed. Nibh eget amet etiam amet semper. Cursus arcu vulputate mauris blandit sollicitudin turpis...
-                                        </p>
-                                    </div>
-                                </div>
-                            </motion.div>
+                                    </motion.div>
+                                </InertiaLink>
+                            ))}
                         </div>
                     )}
                     <div className="flex items-center gap-8">
@@ -498,10 +425,13 @@ const ShowBerita = () => {
                             <div className="w-[5px] h-0 bg-yellow-200 rounded-2xl" ref={y_line_2}></div>
                         </div>
                         <div>
-                            <div className="text-white bg-yellow-400 w-fit flex items-center gap-3 py-3 px-6 rounded-2xl cursor-pointer hover:bg-yellow-500 transition-colors group">
+                            <InertiaLink
+                                href={route("Berita")}
+                                className="text-white bg-yellow-400 w-fit flex items-center gap-3 py-3 px-6 rounded-2xl cursor-pointer hover:bg-yellow-500 transition-colors group"
+                            >
                                 <span className={`font-bold ${isMobile ? "text-xs" : "text-lg"}`}>Selengkapnya</span>
                                 <IoIosArrowForward style={{ fontSize: "24px" }} className="group-hover:translate-x-2 transition-all" />
-                            </div>
+                            </InertiaLink>
                         </div>
                     </div>
                 </div>

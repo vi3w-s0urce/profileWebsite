@@ -46,8 +46,6 @@ const AdminSidebar = () => {
         }
     };
 
-    console.log(currentRoute);
-
     return (
         <nav className="fixed px-6 py-8 w-[300px] h-screen bg-yellow-400 top-0 left-0 flex flex-col justify-between">
             <div>
@@ -94,7 +92,7 @@ const AdminSidebar = () => {
                                         transition={{ duration: 0.5 }}
                                         className="overflow-hidden"
                                     >
-                                        <Link href={route("HalamanBeranda")} className="flex items-center gap-3 px-4 text-white rounded-2xl group">
+                                        <Link href={route("AdminHalamanBeranda")} className="flex items-center gap-3 px-4 text-white rounded-2xl group">
                                             <div
                                                 className={`w-[4px] h-[56px] mr-[12px] ml-[12px] ${
                                                     currentRoute == "HalamanBeranda" || currentRoute == "HalamanProfil" ? "bg-white" : "bg-yellow-500"
@@ -108,7 +106,7 @@ const AdminSidebar = () => {
                                                 Beranda
                                             </span>
                                         </Link>
-                                        <Link href={route("HalamanProfil")} className="flex items-center gap-3 px-4 text-white rounded-2xl group">
+                                        <Link href={route("AdminHalamanProfil")} className="flex items-center gap-3 px-4 text-white rounded-2xl group">
                                             <div
                                                 className={`w-[4px] h-[56px] mr-[12px] ml-[12px] rounded-ee-full rounded-es-full ${
                                                     currentRoute == "HalamanBeranda" || currentRoute == "HalamanProfil" ? "bg-white" : "bg-yellow-500"
@@ -127,7 +125,7 @@ const AdminSidebar = () => {
                             </AnimatePresence>
                         </div>
                         <Link
-                            href={route("BeritaIndex")}
+                            href={route("BeritaIndexAdmin")}
                             className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors ${
                                 currentRoute == "Berita" ? "text-yellow-400 bg-white" : "text-white rounded-2xl hover:bg-yellow-500"
                             }`}
@@ -139,11 +137,16 @@ const AdminSidebar = () => {
                 </div>
             </div>
             <div className="flex flex-col gap-4">
-                <Link href="#" className="flex items-center gap-3 px-4 py-3 text-white rounded-2xl hover:bg-yellow-500 transition-colors">
+                <Link
+                    href={route("PengaturanAdmin")}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors ${
+                        currentRoute == "PengaturanAdmin" ? "text-yellow-400 bg-white" : "text-white rounded-2xl hover:bg-yellow-500"
+                    }`}
+                >
                     <IoSettingsOutline fontSize={24} />
                     <span className="text-xl font-semibold">Pengaturan</span>
                 </Link>
-                <Link href="#" className="flex items-center gap-3 px-4 py-3 text-yellow-800 rounded-2xl hover:bg-yellow-500 transition-colors">
+                <Link href={route('LogoutAdmin')} className="flex items-center gap-3 px-4 py-3 text-yellow-800 rounded-2xl hover:bg-yellow-500 transition-colors">
                     <TbLogout2 fontSize={24} />
                     <span className="text-xl font-semibold">Keluar</span>
                 </Link>

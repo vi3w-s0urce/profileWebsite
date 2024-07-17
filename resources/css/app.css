@@ -103,38 +103,14 @@ body {
     gap: 16px!important;
 }
 
-.editorClassName {
-    margin: 0!important;
-    padding: 12px 16px!important;
-    min-height: 180px;
-}
-
-.rdw-inline-wrapper, .rdw-text-align-wrapper, .rdw-list-wrapper, .rdw-link-wrapper, .rdw-history-wrapper {
-    gap: 8px;
-}
-
-.rdw-option-wrapper {
-    padding: 8px!important;
-    margin: 0!important;
-    box-sizing: content-box!important;
-    border-radius: 12px!important;
-}
-
-.rdw-option-wrapper:hover {
-    border: solid 1px #cbd5e1!important;
-}
-
-.rdw-option-active {
-    background-color: #fefce8!important;
-}
-
-.rdw-dropdown-wrapper {
-    padding: 4px!important;
-    margin: 0!important;
-    box-sizing: content-box!important;
-    border-radius: 12px!important;
-}
-
 .login-card {
     box-shadow: 24px 24px #fde68a;
+}
+
+.yoopta-editor {
+    padding: 0!important;
+}
+
+.yoopta-editor {
+    width: 100%!important;
 }
