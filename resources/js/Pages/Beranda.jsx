@@ -10,7 +10,7 @@ import "swiper/css";
 import { IoIosArrowBack, IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { BsDot } from "react-icons/bs";
 import { FiClock } from "react-icons/fi";
-import { FaYoutube } from "react-icons/fa";
+import { FaRegNewspaper, FaYoutube } from "react-icons/fa";
 import { motion } from "framer-motion";
 import foto_utama from "../../assets/svg/profil/main.svg";
 import profile_ellipse_svg from "../../assets/svg/shapes/profile_ellipse.svg";
@@ -389,56 +389,19 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                             Kumpulan berita beserta beserta agenda terakhir tentang Ganefri
                         </p>
                     </div>
-                    <div
-                        className={`w-full grid ${
-                            !isMobile && berita_length == 1
-                                ? "grid-cols-1"
-                                : !isMobile && berita_length > 1
-                                ? "grid-cols-2"
-                                : isMobile
-                                ? "grid-cols-1"
-                                : null
-                        } gap-6`}
-                    >
-                        {!isMobile && berita_length == 1 ? (
-                            <Link href={route("BeritaRead", { slug: berita_db[0].slug })}>
-                                <motion.div
-                                    className="group cursor-pointer"
-                                    initial={{ y: 100, opacity: 0 }}
-                                    whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
-                                    viewport={{ once: true }}
-                                >
-                                    <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
-                                        <img
-                                            src={"/storage/beritaImages/" + berita_db[0].path_gambar}
-                                            className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col gap-3">
-                                        <div className="flex gap-2 items-center">
-                                            <p className="font-semibold text-lg text-yellow-800">{berita_db[0].kategori}</p>
-                                            <BsDot fontSize={24} />
-                                            <div className="flex gap-2 items-center text-slate-500">
-                                                <FiClock fontSize={24} />
-                                                <span className="font-medium text-lg">
-                                                    {new Date(berita_db[0].tanggal).toLocaleDateString("id-ID", {
-                                                        weekday: "long",
-                                                        year: "numeric",
-                                                        month: "long",
-                                                        day: "numeric",
-                                                    })}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col gap-3">
-                                            <h1 className="text-4xl text-slate-800 font-bold">{berita_db[0].judul}</h1>
-                                            <p className="text-lg text-slate-800 leading-6">{convertContent(berita_db[0].content)}</p>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            </Link>
-                        ) : !isMobile && berita_length == 2 ? (
-                            <>
+                    {berita_db.length > 0 ? (
+                        <div
+                            className={`w-full grid ${
+                                !isMobile && berita_length == 1
+                                    ? "grid-cols-1"
+                                    : !isMobile && berita_length > 1
+                                    ? "grid-cols-2"
+                                    : isMobile
+                                    ? "grid-cols-1"
+                                    : null
+                            } gap-6`}
+                        >
+                            {!isMobile && berita_length == 1 ? (
                                 <Link href={route("BeritaRead", { slug: berita_db[0].slug })}>
                                     <motion.div
                                         className="group cursor-pointer"
@@ -475,82 +438,44 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                         </div>
                                     </motion.div>
                                 </Link>
-                                <Link href={route("BeritaRead", { slug: berita_db[1].slug })}>
-                                    <motion.div
-                                        className="group cursor-pointer"
-                                        initial={{ y: 100, opacity: 0 }}
-                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.7 } }}
-                                        viewport={{ once: true }}
-                                    >
-                                        <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
-                                            <img
-                                                src={"/storage/beritaImages/" + berita_db[1].path_gambar}
-                                                className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-3">
-                                            <div className="flex gap-2 items-center">
-                                                <p className="font-semibold text-lg text-yellow-800">{berita_db[1].kategori}</p>
-                                                <BsDot fontSize={24} />
-                                                <div className="flex gap-2 items-center text-slate-500">
-                                                    <FiClock fontSize={24} />
-                                                    <span className="font-medium text-lg">
-                                                        {new Date(berita_db[1].tanggal).toLocaleDateString("id-ID", {
-                                                            weekday: "long",
-                                                            year: "numeric",
-                                                            month: "long",
-                                                            day: "numeric",
-                                                        })}
-                                                    </span>
-                                                </div>
+                            ) : !isMobile && berita_length == 2 ? (
+                                <>
+                                    <Link href={route("BeritaRead", { slug: berita_db[0].slug })}>
+                                        <motion.div
+                                            className="group cursor-pointer"
+                                            initial={{ y: 100, opacity: 0 }}
+                                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                            viewport={{ once: true }}
+                                        >
+                                            <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
+                                                <img
+                                                    src={"/storage/beritaImages/" + berita_db[0].path_gambar}
+                                                    className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                                />
                                             </div>
                                             <div className="flex flex-col gap-3">
-                                                <h1 className="text-4xl text-slate-800 font-bold">{berita_db[1].judul}</h1>
-                                                <p className="text-lg text-slate-800 leading-6">{convertContent(berita_db[1].content)}</p>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                </Link>
-                            </>
-                        ) : !isMobile && berita_length === 3 ? (
-                            <>
-                                <Link href={route("BeritaRead", { slug: berita_db[0].slug })}>
-                                    <motion.div
-                                        className="group cursor-pointer"
-                                        initial={{ y: 100, opacity: 0 }}
-                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
-                                        viewport={{ once: true }}
-                                    >
-                                        <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
-                                            <img
-                                                src={"/storage/beritaImages/" + berita_db[0].path_gambar}
-                                                className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-3">
-                                            <div className="flex gap-2 items-center">
-                                                <p className="font-semibold text-lg text-yellow-800">{berita_db[0].kategori}</p>
-                                                <BsDot fontSize={24} />
-                                                <div className="flex gap-2 items-center text-slate-500">
-                                                    <FiClock fontSize={24} />
-                                                    <span className="font-medium text-lg">
-                                                        {new Date(berita_db[0].tanggal).toLocaleDateString("id-ID", {
-                                                            weekday: "long",
-                                                            year: "numeric",
-                                                            month: "long",
-                                                            day: "numeric",
-                                                        })}
-                                                    </span>
+                                                <div className="flex gap-2 items-center">
+                                                    <p className="font-semibold text-lg text-yellow-800">{berita_db[0].kategori}</p>
+                                                    <BsDot fontSize={24} />
+                                                    <div className="flex gap-2 items-center text-slate-500">
+                                                        <FiClock fontSize={24} />
+                                                        <span className="font-medium text-lg">
+                                                            {new Date(berita_db[0].tanggal).toLocaleDateString("id-ID", {
+                                                                weekday: "long",
+                                                                year: "numeric",
+                                                                month: "long",
+                                                                day: "numeric",
+                                                            })}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col gap-3">
+                                                    <h1 className="text-4xl text-slate-800 font-bold">{berita_db[0].judul}</h1>
+                                                    <p className="text-lg text-slate-800 leading-6">{convertContent(berita_db[0].content)}</p>
                                                 </div>
                                             </div>
-                                            <div className="flex flex-col gap-3">
-                                                <h1 className="text-4xl text-slate-800 font-bold">{berita_db[0].judul}</h1>
-                                                <p className="text-lg text-slate-800 leading-6">{convertContent(berita_db[0].content)}</p>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                </Link>
-                                <div className="flex flex-col gap-6">
+                                        </motion.div>
+                                    </Link>
                                     <Link href={route("BeritaRead", { slug: berita_db[1].slug })}>
                                         <motion.div
                                             className="group cursor-pointer"
@@ -558,7 +483,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                             whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.7 } }}
                                             viewport={{ once: true }}
                                         >
-                                            <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
+                                            <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
                                                 <img
                                                     src={"/storage/beritaImages/" + berita_db[1].path_gambar}
                                                     className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
@@ -582,31 +507,35 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                 </div>
                                                 <div className="flex flex-col gap-3">
                                                     <h1 className="text-4xl text-slate-800 font-bold">{berita_db[1].judul}</h1>
+                                                    <p className="text-lg text-slate-800 leading-6">{convertContent(berita_db[1].content)}</p>
                                                 </div>
                                             </div>
                                         </motion.div>
                                     </Link>
-                                    <Link href={route("BeritaRead", { slug: berita_db[2].slug })}>
+                                </>
+                            ) : !isMobile && berita_length === 3 ? (
+                                <>
+                                    <Link href={route("BeritaRead", { slug: berita_db[0].slug })}>
                                         <motion.div
                                             className="group cursor-pointer"
                                             initial={{ y: 100, opacity: 0 }}
-                                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.9 } }}
+                                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
                                             viewport={{ once: true }}
                                         >
-                                            <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
+                                            <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
                                                 <img
-                                                    src={"/storage/beritaImages/" + berita_db[2].path_gambar}
+                                                    src={"/storage/beritaImages/" + berita_db[0].path_gambar}
                                                     className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                 />
                                             </div>
                                             <div className="flex flex-col gap-3">
                                                 <div className="flex gap-2 items-center">
-                                                    <p className="font-semibold text-lg text-yellow-800">{berita_db[2].kategori}</p>
+                                                    <p className="font-semibold text-lg text-yellow-800">{berita_db[0].kategori}</p>
                                                     <BsDot fontSize={24} />
                                                     <div className="flex gap-2 items-center text-slate-500">
                                                         <FiClock fontSize={24} />
                                                         <span className="font-medium text-lg">
-                                                            {new Date(berita_db[1].tanggal).toLocaleDateString("id-ID", {
+                                                            {new Date(berita_db[0].tanggal).toLocaleDateString("id-ID", {
                                                                 weekday: "long",
                                                                 year: "numeric",
                                                                 month: "long",
@@ -616,93 +545,53 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col gap-3">
-                                                    <h1 className="text-4xl text-slate-800 font-bold">{berita_db[2].judul}</h1>
+                                                    <h1 className="text-4xl text-slate-800 font-bold">{berita_db[0].judul}</h1>
+                                                    <p className="text-lg text-slate-800 leading-6">{convertContent(berita_db[0].content)}</p>
                                                 </div>
                                             </div>
                                         </motion.div>
                                     </Link>
-                                </div>
-                            </>
-                        ) : !isMobile && berita_length === 4 ? (
-                            <>
-                                <Link href={route("BeritaRead", { slug: berita_db[0].slug })}>
-                                    <motion.div
-                                        className="group cursor-pointer"
-                                        initial={{ y: 100, opacity: 0 }}
-                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
-                                        viewport={{ once: true }}
-                                    >
-                                        <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
-                                            <img
-                                                src={"/storage/beritaImages/" + berita_db[0].path_gambar}
-                                                className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-3">
-                                            <div className="flex gap-2 items-center">
-                                                <p className="font-semibold text-lg text-yellow-800">{berita_db[0].kategori}</p>
-                                                <BsDot fontSize={24} />
-                                                <div className="flex gap-2 items-center text-slate-500">
-                                                    <FiClock fontSize={24} />
-                                                    <span className="font-medium text-lg">
-                                                        {new Date(berita_db[0].tanggal).toLocaleDateString("id-ID", {
-                                                            weekday: "long",
-                                                            year: "numeric",
-                                                            month: "long",
-                                                            day: "numeric",
-                                                        })}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-col gap-3">
-                                                <h1 className="text-4xl text-slate-800 font-bold">{berita_db[0].judul}</h1>
-                                                <p className="text-lg text-slate-800 leading-6">{convertContent(berita_db[0].content)}</p>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                </Link>
-                                <div className="flex flex-col gap-6">
-                                    <Link href={route("BeritaRead", { slug: berita_db[1].slug })}>
-                                        <motion.div
-                                            className="group cursor-pointer"
-                                            initial={{ y: 100, opacity: 0 }}
-                                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.7 } }}
-                                            viewport={{ once: true }}
-                                        >
-                                            <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
-                                                <img
-                                                    src={"/storage/beritaImages/" + berita_db[1].path_gambar}
-                                                    className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
-                                                />
-                                            </div>
-                                            <div className="flex flex-col gap-3">
-                                                <div className="flex gap-2 items-center">
-                                                    <p className="font-semibold text-lg text-yellow-800">{berita_db[1].kategori}</p>
-                                                    <BsDot fontSize={24} />
-                                                    <div className="flex gap-2 items-center text-slate-500">
-                                                        <FiClock fontSize={24} />
-                                                        <span className="font-medium text-lg">
-                                                            {new Date(berita_db[1].tanggal).toLocaleDateString("id-ID", {
-                                                                weekday: "long",
-                                                                year: "numeric",
-                                                                month: "long",
-                                                                day: "numeric",
-                                                            })}
-                                                        </span>
-                                                    </div>
+                                    <div className="flex flex-col gap-6">
+                                        <Link href={route("BeritaRead", { slug: berita_db[1].slug })}>
+                                            <motion.div
+                                                className="group cursor-pointer"
+                                                initial={{ y: 100, opacity: 0 }}
+                                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.7 } }}
+                                                viewport={{ once: true }}
+                                            >
+                                                <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
+                                                    <img
+                                                        src={"/storage/beritaImages/" + berita_db[1].path_gambar}
+                                                        className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                                    />
                                                 </div>
                                                 <div className="flex flex-col gap-3">
-                                                    <h1 className="text-4xl text-slate-800 font-bold">{berita_db[1].judul}</h1>
+                                                    <div className="flex gap-2 items-center">
+                                                        <p className="font-semibold text-lg text-yellow-800">{berita_db[1].kategori}</p>
+                                                        <BsDot fontSize={24} />
+                                                        <div className="flex gap-2 items-center text-slate-500">
+                                                            <FiClock fontSize={24} />
+                                                            <span className="font-medium text-lg">
+                                                                {new Date(berita_db[1].tanggal).toLocaleDateString("id-ID", {
+                                                                    weekday: "long",
+                                                                    year: "numeric",
+                                                                    month: "long",
+                                                                    day: "numeric",
+                                                                })}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex flex-col gap-3">
+                                                        <h1 className="text-4xl text-slate-800 font-bold">{berita_db[1].judul}</h1>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </motion.div>
-                                    </Link>
-                                    <div className="grid grid-cols-2 gap-6">
+                                            </motion.div>
+                                        </Link>
                                         <Link href={route("BeritaRead", { slug: berita_db[2].slug })}>
                                             <motion.div
                                                 className="group cursor-pointer"
                                                 initial={{ y: 100, opacity: 0 }}
-                                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.9 } }}
                                                 viewport={{ once: true }}
                                             >
                                                 <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
@@ -718,7 +607,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                         <div className="flex gap-2 items-center text-slate-500">
                                                             <FiClock fontSize={24} />
                                                             <span className="font-medium text-lg">
-                                                                {new Date(berita_db[2].tanggal).toLocaleDateString("id-ID", {
+                                                                {new Date(berita_db[1].tanggal).toLocaleDateString("id-ID", {
                                                                     weekday: "long",
                                                                     year: "numeric",
                                                                     month: "long",
@@ -728,76 +617,73 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                         </div>
                                                     </div>
                                                     <div className="flex flex-col gap-3">
-                                                        <h1 className="text-2xl text-slate-800 font-bold">{berita_db[2].judul}</h1>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
-                                        </Link>
-                                        <Link href={route("BeritaRead", { slug: berita_db[3].slug })}>
-                                            <motion.div
-                                                className="group cursor-pointer"
-                                                initial={{ y: 100, opacity: 0 }}
-                                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.6 } }}
-                                                viewport={{ once: true }}
-                                            >
-                                                <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
-                                                    <img
-                                                        src={"/storage/beritaImages/" + berita_db[3].path_gambar}
-                                                        className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
-                                                    />
-                                                </div>
-                                                <div className="flex flex-col gap-3">
-                                                    <div className="flex gap-2 items-center">
-                                                        <p className="font-semibold text-lg text-yellow-800">{berita_db[3].kategori}</p>
-                                                        <BsDot fontSize={24} />
-                                                        <div className="flex gap-2 items-center text-slate-500">
-                                                            <FiClock fontSize={24} />
-                                                            <span className="font-medium text-lg">
-                                                                {new Date(berita_db[3].tanggal).toLocaleDateString("id-ID", {
-                                                                    weekday: "long",
-                                                                    year: "numeric",
-                                                                    month: "long",
-                                                                    day: "numeric",
-                                                                })}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex flex-col gap-3">
-                                                        <h1 className="text-2xl text-slate-800 font-bold">{berita_db[3].judul}</h1>
+                                                        <h1 className="text-4xl text-slate-800 font-bold">{berita_db[2].judul}</h1>
                                                     </div>
                                                 </div>
                                             </motion.div>
                                         </Link>
                                     </div>
-                                </div>
-                            </>
-                        ) : isMobile ? (
-                            <Swiper spaceBetween={50} slidesPerView={1} modules={[Autoplay]} autoplay={{ delay: 5000 }} className="h-fit w-full">
-                                {berita_db.map((item, index) => (
-                                    <SwiperSlide key={index}>
-                                        <Link href={route("BeritaRead", { slug: item.slug })}>
+                                </>
+                            ) : !isMobile && berita_length === 4 ? (
+                                <>
+                                    <Link href={route("BeritaRead", { slug: berita_db[0].slug })}>
+                                        <motion.div
+                                            className="group cursor-pointer"
+                                            initial={{ y: 100, opacity: 0 }}
+                                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                            viewport={{ once: true }}
+                                        >
+                                            <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
+                                                <img
+                                                    src={"/storage/beritaImages/" + berita_db[0].path_gambar}
+                                                    className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-3">
+                                                <div className="flex gap-2 items-center">
+                                                    <p className="font-semibold text-lg text-yellow-800">{berita_db[0].kategori}</p>
+                                                    <BsDot fontSize={24} />
+                                                    <div className="flex gap-2 items-center text-slate-500">
+                                                        <FiClock fontSize={24} />
+                                                        <span className="font-medium text-lg">
+                                                            {new Date(berita_db[0].tanggal).toLocaleDateString("id-ID", {
+                                                                weekday: "long",
+                                                                year: "numeric",
+                                                                month: "long",
+                                                                day: "numeric",
+                                                            })}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col gap-3">
+                                                    <h1 className="text-4xl text-slate-800 font-bold">{berita_db[0].judul}</h1>
+                                                    <p className="text-lg text-slate-800 leading-6">{convertContent(berita_db[0].content)}</p>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    </Link>
+                                    <div className="flex flex-col gap-6">
+                                        <Link href={route("BeritaRead", { slug: berita_db[1].slug })}>
                                             <motion.div
                                                 className="group cursor-pointer"
                                                 initial={{ y: 100, opacity: 0 }}
-                                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.7 } }}
                                                 viewport={{ once: true }}
                                             >
-                                                <div className="w-full h-[328px] rounded-3xl overflow-hidden mb-4">
+                                                <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
                                                     <img
-                                                        src={"/storage/beritaImages/" + item.path_gambar}
+                                                        src={"/storage/beritaImages/" + berita_db[1].path_gambar}
                                                         className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                     />
                                                 </div>
                                                 <div className="flex flex-col gap-3">
-                                                    <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
-                                                        <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>
-                                                            {item.kategori}
-                                                        </p>
+                                                    <div className="flex gap-2 items-center">
+                                                        <p className="font-semibold text-lg text-yellow-800">{berita_db[1].kategori}</p>
                                                         <BsDot fontSize={24} />
                                                         <div className="flex gap-2 items-center text-slate-500">
-                                                            <FiClock fontSize={18} />
-                                                            <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>
-                                                                {new Date(item.tanggal).toLocaleDateString("id-ID", {
+                                                            <FiClock fontSize={24} />
+                                                            <span className="font-medium text-lg">
+                                                                {new Date(berita_db[1].tanggal).toLocaleDateString("id-ID", {
                                                                     weekday: "long",
                                                                     year: "numeric",
                                                                     month: "long",
@@ -806,20 +692,145 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                             </span>
                                                         </div>
                                                     </div>
-                                                    <div className="flex flex-col gap-1 mb-4">
-                                                        <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
-                                                            {item.judul}
-                                                        </h2>
-                                                        <p className={`text-slate-800 ${isMobile && "text-sm"}`}>{convertContent(item.content)}</p>
+                                                    <div className="flex flex-col gap-3">
+                                                        <h1 className="text-4xl text-slate-800 font-bold">{berita_db[1].judul}</h1>
                                                     </div>
                                                 </div>
                                             </motion.div>
                                         </Link>
-                                    </SwiperSlide>
-                                ))}
-                            </Swiper>
-                        ) : null}
-                    </div>
+                                        <div className="grid grid-cols-2 gap-6">
+                                            <Link href={route("BeritaRead", { slug: berita_db[2].slug })}>
+                                                <motion.div
+                                                    className="group cursor-pointer"
+                                                    initial={{ y: 100, opacity: 0 }}
+                                                    whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
+                                                    viewport={{ once: true }}
+                                                >
+                                                    <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
+                                                        <img
+                                                            src={"/storage/beritaImages/" + berita_db[2].path_gambar}
+                                                            className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                                        />
+                                                    </div>
+                                                    <div className="flex flex-col gap-3">
+                                                        <div className="flex gap-2 items-center">
+                                                            <p className="font-semibold text-lg text-yellow-800">{berita_db[2].kategori}</p>
+                                                            <BsDot fontSize={24} />
+                                                            <div className="flex gap-2 items-center text-slate-500">
+                                                                <FiClock fontSize={24} />
+                                                                <span className="font-medium text-lg">
+                                                                    {new Date(berita_db[2].tanggal).toLocaleDateString("id-ID", {
+                                                                        weekday: "long",
+                                                                        year: "numeric",
+                                                                        month: "long",
+                                                                        day: "numeric",
+                                                                    })}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col gap-3">
+                                                            <h1 className="text-2xl text-slate-800 font-bold">{berita_db[2].judul}</h1>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            </Link>
+                                            <Link href={route("BeritaRead", { slug: berita_db[3].slug })}>
+                                                <motion.div
+                                                    className="group cursor-pointer"
+                                                    initial={{ y: 100, opacity: 0 }}
+                                                    whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.6 } }}
+                                                    viewport={{ once: true }}
+                                                >
+                                                    <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
+                                                        <img
+                                                            src={"/storage/beritaImages/" + berita_db[3].path_gambar}
+                                                            className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                                        />
+                                                    </div>
+                                                    <div className="flex flex-col gap-3">
+                                                        <div className="flex gap-2 items-center">
+                                                            <p className="font-semibold text-lg text-yellow-800">{berita_db[3].kategori}</p>
+                                                            <BsDot fontSize={24} />
+                                                            <div className="flex gap-2 items-center text-slate-500">
+                                                                <FiClock fontSize={24} />
+                                                                <span className="font-medium text-lg">
+                                                                    {new Date(berita_db[3].tanggal).toLocaleDateString("id-ID", {
+                                                                        weekday: "long",
+                                                                        year: "numeric",
+                                                                        month: "long",
+                                                                        day: "numeric",
+                                                                    })}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col gap-3">
+                                                            <h1 className="text-2xl text-slate-800 font-bold">{berita_db[3].judul}</h1>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : isMobile ? (
+                                <Swiper spaceBetween={50} slidesPerView={1} modules={[Autoplay]} autoplay={{ delay: 5000 }} className="h-fit w-full">
+                                    {berita_db.map((item, index) => (
+                                        <SwiperSlide key={index}>
+                                            <Link href={route("BeritaRead", { slug: item.slug })}>
+                                                <motion.div
+                                                    className="group cursor-pointer"
+                                                    initial={{ y: 100, opacity: 0 }}
+                                                    whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                                                    viewport={{ once: true }}
+                                                >
+                                                    <div className="w-full h-[328px] rounded-3xl overflow-hidden mb-4">
+                                                        <img
+                                                            src={"/storage/beritaImages/" + item.path_gambar}
+                                                            className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
+                                                        />
+                                                    </div>
+                                                    <div className="flex flex-col gap-3">
+                                                        <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
+                                                            <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>
+                                                                {item.kategori}
+                                                            </p>
+                                                            <BsDot fontSize={24} />
+                                                            <div className="flex gap-2 items-center text-slate-500">
+                                                                <FiClock fontSize={18} />
+                                                                <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>
+                                                                    {new Date(item.tanggal).toLocaleDateString("id-ID", {
+                                                                        weekday: "long",
+                                                                        year: "numeric",
+                                                                        month: "long",
+                                                                        day: "numeric",
+                                                                    })}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 mb-4">
+                                                            <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
+                                                                {item.judul}
+                                                            </h2>
+                                                            <p className={`text-slate-800 ${isMobile && "text-sm"}`}>
+                                                                {convertContent(item.content)}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            </Link>
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            ) : null}
+                        </div>
+                    ) : (
+                        <div className="px-8 py-28 flex flex-col items-center justify-center min-h-[820px]">
+                            <FaRegNewspaper fontSize={124} className="text-slate-500 mb-4" />
+                            <div>
+                                <p className="text-slate-500 font-semibold text-2xl text-center">Belum Ada Berita yang Dibuat</p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </section>
 

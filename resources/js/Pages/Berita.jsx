@@ -26,6 +26,7 @@ import BackToTopButton from "../Components/BackToTopButton";
 import route from "ziggy-js";
 import Paragraph from "@yoopta/paragraph";
 import ReactGA from "react-ga4";
+import { FaRegNewspaper } from "react-icons/fa";
 
 const Berita = ({ berita }) => {
     const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
@@ -36,7 +37,7 @@ const Berita = ({ berita }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: 'Berita' });
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: "Berita" });
 
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
 
@@ -129,90 +130,106 @@ const Berita = ({ berita }) => {
                     ref={line_pattern}
                 />
                 {isMobile && <img src={box_outline_svg} alt="box_outline" className={`absolute -z-10 left-[-80px] top-[1080px]`} />}
-
-                <div className={`grid ${isMobile ? "grid-cols-1 gap-6" : "grid-cols-3 gap-16"}`}>
-                    {currentItems.map((item) => (
-                        <Link href={route("BeritaRead", { slug: item.slug })} key={item._id}>
-                            <motion.div
-                                className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
-                                initial={{ y: 100, opacity: 0 }}
-                                whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
-                                viewport={{ once: true }}
-                            >
-                                <div className={`w-full overflow-hidden rounded-3xl ${isMobile ? "h-[184px]" : "h-[288px]"}`}>
-                                    <img
-                                        src={"/storage/beritaImages/" + item.path_gambar}
-                                        alt="berita"
-                                        className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
-                                    />
-                                </div>
-                                <div className={`${isMobile ? "p-6" : "p-8"}`}>
-                                    <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
-                                        <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>{item.kategori}</p>
-                                        <BsDot fontSize={24} />
-                                        <div className="flex gap-2 items-center text-slate-500">
-                                            <FiClock fontSize={18} />
-                                            <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>
-                                                {new Date(item.tanggal).toLocaleDateString("id-ID", {
-                                                    weekday: "long",
-                                                    year: "numeric",
-                                                    month: "long",
-                                                    day: "numeric",
-                                                })}
-                                            </span>
+                {currentItems.length > 0 ? (
+                    <>
+                        <div className={`grid ${isMobile ? "grid-cols-1 gap-6" : "grid-cols-3 gap-16"}`}>
+                            {currentItems.map((item) => (
+                                <Link href={route("BeritaRead", { slug: item.slug })} key={item._id}>
+                                    <motion.div
+                                        className="bg-white rounded-3xl overflow-hidden shadow-2xl group cursor-pointer"
+                                        initial={{ y: 100, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                                        viewport={{ once: true }}
+                                    >
+                                        <div className={`w-full overflow-hidden rounded-3xl ${isMobile ? "h-[184px]" : "h-[288px]"}`}>
+                                            <img
+                                                src={"/storage/beritaImages/" + item.path_gambar}
+                                                alt="berita"
+                                                className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
+                                            />
                                         </div>
-                                    </div>
-                                    <div className="flex flex-col gap-3 mb-4">
-                                        <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>{item.judul}</h2>
-                                        <p className={`text-slate-800 ${isMobile && "text-sm"}`}>{convertContent(item.content)}</p>
-                                    </div>
-                                    <button type="button" className={`text-yellow-500 font-semibold flex items-center gap-2 ${isMobile ? "text-base" : "text-lg"}`}>
-                                        Baca Selengkapnya <IoIosArrowForward className="group-hover:translate-x-2 transition-all" />
-                                    </button>
-                                </div>
-                            </motion.div>
-                        </Link>
-                    ))}
-                </div>
-                <motion.div
-                    className={`flex items-center justify-center ${isMobile ? "mt-16" : "mt-24"}`}
-                    initial={{ y: 50, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
-                    viewport={{ once: true }}
-                >
-                    <div
-                        className={`flex items-center justify-between bg-yellow-200 rounded-2xl min-w-[328px] ${
-                            isMobile ? "px-4 py-2" : "px-6 py-3 gap-16"
-                        }`}
-                    >
-                        <IoIosArrowBack
-                            fontSize={isMobile ? 30 : 36}
-                            onClick={() => currentPage != 1 && setCurrentPage(currentPage - 1)}
-                            className="cursor-pointer text-yellow-500 hover:bg-white p-1 rounded-lg transition-colors"
-                        />
-                        <div className={`flex items-center justify-center ${isMobile ? "gap-2" : "gap-8"}`}>
-                            {pageNumbers.map((number) => (
-                                <div
-                                    key={number}
-                                    id={number}
-                                    onClick={handleClick}
-                                    className={`font-medium w-8 h-8 flex items-center justify-center cursor-pointer ${
-                                        currentPage === number
-                                            ? "bg-yellow-400 text-white"
-                                            : "text-slate-800 hover:bg-white hover:text-yellow-500 transition-colors"
-                                    } rounded-lg ${isMobile ? "text-xs" : "text-xl"}`}
-                                >
-                                    {number}
-                                </div>
+                                        <div className={`${isMobile ? "p-6" : "p-8"}`}>
+                                            <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
+                                                <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>{item.kategori}</p>
+                                                <BsDot fontSize={24} />
+                                                <div className="flex gap-2 items-center text-slate-500">
+                                                    <FiClock fontSize={18} />
+                                                    <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>
+                                                        {new Date(item.tanggal).toLocaleDateString("id-ID", {
+                                                            weekday: "long",
+                                                            year: "numeric",
+                                                            month: "long",
+                                                            day: "numeric",
+                                                        })}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-3 mb-4">
+                                                <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>{item.judul}</h2>
+                                                <p className={`text-slate-800 ${isMobile && "text-sm"}`}>{convertContent(item.content)}</p>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                className={`text-yellow-500 font-semibold flex items-center gap-2 ${
+                                                    isMobile ? "text-base" : "text-lg"
+                                                }`}
+                                            >
+                                                Baca Selengkapnya <IoIosArrowForward className="group-hover:translate-x-2 transition-all" />
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                </Link>
                             ))}
                         </div>
-                        <IoIosArrowForward
-                            fontSize={isMobile ? 30 : 36}
-                            onClick={() => currentPage != pageNumbers.length && setCurrentPage(currentPage + 1)}
-                            className="cursor-pointer text-yellow-500 hover:bg-white p-1 rounded-lg transition-colors"
-                        />
+
+                        <motion.div
+                            className={`flex items-center justify-center ${isMobile ? "mt-16" : "mt-24"}`}
+                            initial={{ y: 50, opacity: 0 }}
+                            whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5 } }}
+                            viewport={{ once: true }}
+                        >
+                            <div
+                                className={`flex items-center justify-between bg-yellow-200 rounded-2xl min-w-[328px] ${
+                                    isMobile ? "px-4 py-2" : "px-6 py-3 gap-16"
+                                }`}
+                            >
+                                <IoIosArrowBack
+                                    fontSize={isMobile ? 30 : 36}
+                                    onClick={() => currentPage != 1 && setCurrentPage(currentPage - 1)}
+                                    className="cursor-pointer text-yellow-500 hover:bg-white p-1 rounded-lg transition-colors"
+                                />
+                                <div className={`flex items-center justify-center ${isMobile ? "gap-2" : "gap-8"}`}>
+                                    {pageNumbers.map((number) => (
+                                        <div
+                                            key={number}
+                                            id={number}
+                                            onClick={handleClick}
+                                            className={`font-medium w-8 h-8 flex items-center justify-center cursor-pointer ${
+                                                currentPage === number
+                                                    ? "bg-yellow-400 text-white"
+                                                    : "text-slate-800 hover:bg-white hover:text-yellow-500 transition-colors"
+                                            } rounded-lg ${isMobile ? "text-xs" : "text-xl"}`}
+                                        >
+                                            {number}
+                                        </div>
+                                    ))}
+                                </div>
+                                <IoIosArrowForward
+                                    fontSize={isMobile ? 30 : 36}
+                                    onClick={() => currentPage != pageNumbers.length && setCurrentPage(currentPage + 1)}
+                                    className="cursor-pointer text-yellow-500 hover:bg-white p-1 rounded-lg transition-colors"
+                                />
+                            </div>
+                        </motion.div>
+                    </>
+                ) : (
+                    <div className="px-8 py-28 flex flex-col items-center justify-center min-h-[520px]">
+                        <FaRegNewspaper fontSize={124} className="text-slate-500 mb-4" />
+                        <div>
+                            <p className="text-slate-500 font-semibold text-2xl text-center">Belum Ada Berita yang Dibuat</p>
+                        </div>
                     </div>
-                </motion.div>
+                )}
             </section>
 
             {/* FOOTER */}

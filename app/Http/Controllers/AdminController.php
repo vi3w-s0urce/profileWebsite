@@ -27,7 +27,7 @@ class AdminController extends Controller
         $statsWeeks = Analytics::fetchTotalVisitorsAndPageViews(Period::days(7));
 
         $viewsToday = Analytics::fetchTotalVisitorsAndPageViews(Period::create($endDate, $endDate));
-        $viewsToday = $viewsToday[0]['screenPageViews'];
+        $viewsToday = count($viewsToday) > 0 ? $viewsToday[0]['screenPageViews'] : 0;
         $topViewsPages = Analytics::fetchMostVisitedPages(Period::create($startDate, $endDate), 5);
         $topViewsBerita = Berita::orderBy('pengunjung', 'asc')->limit(5)->get();
 

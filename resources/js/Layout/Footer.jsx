@@ -137,37 +137,9 @@ const Footer = () => {
                 <p className={`text-base text-white font-medium`} style={isMobile ? { fontSize: 10 } : { fontSize: 16 }}>
                     Ganefri
                 </p>
-                <div className="text-white font-semibold flex gap-2 items-center" style={isMobile ? { fontSize: 10 } : { fontSize: 16 }}>
-                    Made With{" "}
-                    <span className="flex gap-2 bg-black bg-opacity-20 p-2 rounded-xl">
-                        <img
-                            src="https://seeklogo.com/images/S/sampoerna-mild-logo-92AE43FE45-seeklogo.com.png"
-                            alt="sampoerna"
-                            className={`object-contain ${isMobile ? "w-4" : "w-8"}`}
-                        />
-                        <img
-                            src="https://seeklogo.com/images/C/camel-logo-08A6AE9608-seeklogo.com.png"
-                            alt="camel"
-                            className={`object-contain ${isMobile ? "w-4" : "w-8"}`}
-                        />
-                        <img
-                            src="https://seeklogo.com/images/G/gudang-garam-filter-logo-CB3A42FF9A-seeklogo.com.png"
-                            alt="surya"
-                            className={`object-contain ${isMobile ? "w-4" : "w-8"}`}
-                        />
-                        <img
-                            src="https://seeklogo.com/images/L/lucky-strike-logo-E087C394A4-seeklogo.com.png"
-                            alt="lucky_strike"
-                            className={`object-contain ${isMobile ? "w-4" : "w-8"}`}
-                        />
-                        <img
-                            src="https://seeklogo.com/images/D/djarum-super-logo-788BD92761-seeklogo.com.png"
-                            alt="djarum"
-                            className={`object-contain ${isMobile ? "w-4" : "w-8"}`}
-                        />
-                    </span>{" "}
-                    by Mike
-                </div>
+                <a href="https://github.com/vi3w-s0urce" className="text-white font-mono font-semibold flex gap-2 items-center hover:text-green-800" style={isMobile ? { fontSize: 10 } : { fontSize: 16 }}>
+                    Made by view_source
+                </a>
             </div>
         </footer>
     );

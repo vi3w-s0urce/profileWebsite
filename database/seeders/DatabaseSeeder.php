@@ -41,7 +41,9 @@ class DatabaseSeeder extends Seeder
                 'section' => 2,
                 'gambar' => null,
                 'deskripsi' => 'Ganefri terlahir sebagai anak ketiga dari empat bersaudara. Saat berusia 5 tahun, ia telah menjadi yatim. Beruntung saat itu, pepatah Minangkabau, "anak dipangku kamanakan dibimbiang" masih kental dijalankan di kampung halamannya, Payakumbuh.
+
 Saat kelas IV SD, ia meninggalkan Payakumbuh dan pergi merantau ke Tanjung Pinang, Kepulauan Riau untuk melanjutkan sekolah bersama etek-nya. Sedari dulu, orang tua di kampungnya telah menanamkan budaya pendidikan adalah hal utama bagi anak, “Biarlah kurang makan asal anak sekolah”.
+
 Ganefri menyelesaikan pendidikan SD (1976) dan SMP Belakang Padang (1980) di Batam. Ia lalu menyelesaikan pendidikan SLTA di Tanjung Pinang (1983). Ia menyelesaikan studi S1 Pendidikan Elektro dari IKIP Padang (1988) dan S2 Pendidikan Teknik dan Kejuruan dari IKIP Yogyakarta (1996). Ia berhasil menamatkan studi S3 Pendidikan Teknikal Vokational dari UKM Malaysia (2011).',
             ],
 
@@ -101,7 +103,7 @@ Ganefri menyelesaikan pendidikan SD (1976) dan SMP Belakang Padang (1980) di Bat
                 'media' => 'instagram',
                 'nama' => '@ganefri_instagram',
                 'link' => 'https://instagram.com/',
-                'isVisible' => false,
+                'isVisible' => true,
             ],
             [
                 'type' => 'MediaSocial',
@@ -114,7 +116,7 @@ Ganefri menyelesaikan pendidikan SD (1976) dan SMP Belakang Padang (1980) di Bat
                 'type' => 'MediaSocial',
                 'media' => 'email',
                 'email' => 'ganefri@gmail.com',
-                'isVisible' => false,
+                'isVisible' => true,
             ],
             [
                 'type' => 'MediaSocial',
