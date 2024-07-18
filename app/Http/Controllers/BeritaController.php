@@ -12,7 +12,7 @@ class BeritaController extends Controller
 {
     public function showBerita()
     {
-        $berita = Berita::all();
+        $berita = Berita::latest()->get();
 
         return Inertia::render('Berita', ['berita' => $berita]);
     }
