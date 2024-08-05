@@ -13,33 +13,22 @@ import route from "ziggy-js";
 import axios from "axios";
 
 const Footer = () => {
-    const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
+    const isDesktop = useMediaQuery({ query: "(min-width: 1280px)" });
+
     const media_social = useRef([]);
 
     useEffect(() => {
         setTimeout(() => {
-            if (isMobile) {
-                gsap.from(media_social.current, {
-                    scrollTrigger: {
-                        trigger: media_social.current,
-                    },
-                    y: 20,
-                    stagger: 0.1,
-                    opacity: 0,
-                    duration: 1,
-                });
-            } else {
-                gsap.from(media_social.current, {
-                    scrollTrigger: {
-                        trigger: media_social.current,
-                    },
-                    y: 50,
-                    stagger: 0.1,
-                    opacity: 0,
-                    duration: 1,
-                });
-            }
-        }, 100);
+            gsap.from(media_social.current, {
+                scrollTrigger: {
+                    trigger: media_social.current,
+                },
+                y: 50,
+                stagger: 0.1,
+                opacity: 0,
+                duration: 1,
+            });
+        }, 500);
     }, []);
 
     const [msDb, setMsDb] = useState(null);
@@ -58,72 +47,99 @@ const Footer = () => {
     }, []);
 
     return (
-        <footer
-            className={`relative bg-gradient-to-br from-yellow-400 to-yellow-600 flex flex-col items-center ${
-                isMobile ? "px-4 py-8 gap-8" : "px-32 py-8 gap-8"
-            }`}
-        >
+        <footer className="relative bg-gradient-to-br from-yellow-400 to-yellow-600 flex flex-col items-center px-4 py-8 gap-8 xl:px-32 xl:py-8 xl:gap-8">
             <div className="flex w-full justify-between items-center">
                 <Link href={route("Beranda")}>
                     <img src={logo_putih} />
                 </Link>
-                {!isMobile ? (
+                {isDesktop ? (
                     <div className="flex items-center gap-8">
-                        <a href={msDb && msDb[0].link} ref={(el) => (media_social.current[0] = el)} className={`${ msDb && !msDb[0].isVisible && "hidden"}`}>
+                        <a
+                            href={msDb && msDb[0].link}
+                            ref={(el) => (media_social.current[0] = el)}
+                            className={`${msDb && !msDb[0].isVisible && "hidden"}`}
+                        >
                             <FaFacebook fontSize={46} className="text-white hover:text-yellow-900 transition-colors" />
                         </a>
-                        <a href={msDb && msDb[1].link} ref={(el) => (media_social.current[1] = el)} className={`${ msDb && !msDb[1].isVisible && "hidden"}`}>
+                        <a
+                            href={msDb && msDb[1].link}
+                            ref={(el) => (media_social.current[1] = el)}
+                            className={`${msDb && !msDb[1].isVisible && "hidden"}`}
+                        >
                             <RiInstagramFill fontSize={46} className="text-white hover:text-yellow-900 transition-colors" />
                         </a>
-                        <a href={msDb && msDb[2].link} ref={(el) => (media_social.current[2] = el)} className={`${ msDb && !msDb[2].isVisible && "hidden"}`}>
+                        <a
+                            href={msDb && msDb[2].link}
+                            ref={(el) => (media_social.current[2] = el)}
+                            className={`${msDb && !msDb[2].isVisible && "hidden"}`}
+                        >
                             <BsTwitterX fontSize={46} className="text-white hover:text-yellow-900 transition-colors" />
                         </a>
-                        <a href={`mailto:${msDb && msDb[3].email}`} ref={(el) => (media_social.current[3] = el)} className={`${ msDb && !msDb[3].isVisible && "hidden"}`}>
+                        <a
+                            href={`mailto:${msDb && msDb[3].email}`}
+                            ref={(el) => (media_social.current[3] = el)}
+                            className={`${msDb && !msDb[3].isVisible && "hidden"}`}
+                        >
                             <MdEmail fontSize={46} className="text-white hover:text-yellow-900 transition-colors" />
                         </a>
-                        <a href={msDb && msDb[4].link} ref={(el) => (media_social.current[4] = el)} className={`${ msDb && !msDb[4].isVisible && "hidden"}`}>
+                        <a
+                            href={msDb && msDb[4].link}
+                            ref={(el) => (media_social.current[4] = el)}
+                            className={`${msDb && !msDb[4].isVisible && "hidden"}`}
+                        >
                             <FaYoutube fontSize={46} className="text-white hover:text-yellow-900 transition-colors" />
                         </a>
                     </div>
                 ) : null}
                 {/* MENU */}
                 <div className="flex flex-col items-end gap-2">
-                    <Link
-                        href={route("Beranda")}
-                        className={`font-semibold text-white hover:text-yellow-900 transition-colors ${isMobile ? "text-xs" : "text-xl"}`}
-                    >
+                    <Link href={route("Beranda")} className="font-semibold text-white hover:text-yellow-900 transition-colors text-xs xl:text-xl">
                         Beranda
                     </Link>
-                    <Link
-                        href={route("Profil")}
-                        className={`text-xl font-semibold text-white hover:text-yellow-900 transition-colors ${isMobile ? "text-xs" : "text-xl"}`}
-                    >
+                    <Link href={route("Profil")} className="font-semibold text-white hover:text-yellow-900 transition-colors text-xs xl:text-xl">
                         Profil
                     </Link>
-                    <Link
-                        href={route("Berita")}
-                        className={`text-xl font-semibold text-white hover:text-yellow-900 transition-colors ${isMobile ? "text-xs" : "text-xl"}`}
-                    >
+                    <Link href={route("Berita")} className="font-semibold text-white hover:text-yellow-900 transition-colors text-xs xl:text-xl">
                         Berita & Agenda
                     </Link>
                 </div>
             </div>
-            {isMobile ? (
+            {!isDesktop ? (
                 <div className="flex items-center w-full justify-center gap-8">
-                    <a href={msDb && msDb[0].link} ref={(el) => (media_social.current[0] = el)} className={`${ msDb && !msDb[0].isVisible && "hidden"}`}>
-                        <FaFacebook fontSize={16} className="text-white hover:text-yellow-900 transition-colors" />
+                    <a
+                        href={msDb && msDb[0].link}
+                        ref={(el) => (media_social.current[0] = el)}
+                        className={`${msDb && !msDb[0].isVisible && "hidden"}`}
+                    >
+                        <FaFacebook className="text-white hover:text-yellow-900 transition-colors text-[24px]" />
                     </a>
-                    <a href={msDb && msDb[1].link} ref={(el) => (media_social.current[1] = el)} className={`${ msDb && !msDb[1].isVisible && "hidden"}`}>
-                        <RiInstagramFill fontSize={16} className="text-white hover:text-yellow-900 transition-colors" />
+                    <a
+                        href={msDb && msDb[1].link}
+                        ref={(el) => (media_social.current[1] = el)}
+                        className={`${msDb && !msDb[1].isVisible && "hidden"}`}
+                    >
+                        <RiInstagramFill className="text-white hover:text-yellow-900 transition-colors text-[24px]" />
                     </a>
-                    <a href={msDb && msDb[2].link} ref={(el) => (media_social.current[2] = el)} className={`${ msDb && !msDb[2].isVisible && "hidden"}`}>
-                        <BsTwitterX fontSize={16} className="text-white hover:text-yellow-900 transition-colors" />
+                    <a
+                        href={msDb && msDb[2].link}
+                        ref={(el) => (media_social.current[2] = el)}
+                        className={`${msDb && !msDb[2].isVisible && "hidden"}`}
+                    >
+                        <BsTwitterX className="text-white hover:text-yellow-900 transition-colors text-[24px]" />
                     </a>
-                    <a href={`mailto:${msDb && msDb[3].email}`} ref={(el) => (media_social.current[3] = el)} className={`${ msDb && !msDb[3].isVisible && "hidden"}`}>
-                        <MdEmail fontSize={16} className="text-white hover:text-yellow-900 transition-colors" />
+                    <a
+                        href={`mailto:${msDb && msDb[3].email}`}
+                        ref={(el) => (media_social.current[3] = el)}
+                        className={`${msDb && !msDb[3].isVisible && "hidden"}`}
+                    >
+                        <MdEmail className="text-white hover:text-yellow-900 transition-colors text-[24px]" />
                     </a>
-                    <a href={msDb && msDb[4].link} ref={(el) => (media_social.current[4] = el)} className={`${ msDb && !msDb[4].isVisible && "hidden"}`}>
-                        <FaYoutube fontSize={16} className="text-white hover:text-yellow-900 transition-colors" />
+                    <a
+                        href={msDb && msDb[4].link}
+                        ref={(el) => (media_social.current[4] = el)}
+                        className={`${msDb && !msDb[4].isVisible && "hidden"}`}
+                    >
+                        <FaYoutube className="text-white hover:text-yellow-900 transition-colors text-[24px]" />
                     </a>
                 </div>
             ) : null}
@@ -134,10 +150,11 @@ const Footer = () => {
                 viewport={{ once: true }}
             ></motion.div>
             <div className="flex justify-between w-full items-center">
-                <p className={`text-base text-white font-medium`} style={isMobile ? { fontSize: 10 } : { fontSize: 16 }}>
-                    Ganefri
-                </p>
-                <a href="https://github.com/vi3w-s0urce" className="text-white font-mono font-semibold flex gap-2 items-center hover:text-green-800" style={isMobile ? { fontSize: 10 } : { fontSize: 16 }}>
+                <p className={`text-base text-white font-medium text-[10px] xl:text-[16px]`}>Ganefri</p>
+                <a
+                    href="https://github.com/vi3w-s0urce"
+                    className="text-white font-mono font-semibold flex gap-2 items-center hover:text-green-800 text-[10px] xl:text-[16px]"
+                >
                     Made by view_source
                 </a>
             </div>

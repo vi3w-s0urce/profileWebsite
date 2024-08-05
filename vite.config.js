@@ -7,13 +7,16 @@ import path from "path";
 export default defineConfig({
     plugins: [
         laravel({
-            input: "resources/js/app.jsx",
+            input: ['resources/css/app.css', 'resources/js/app.jsx'],
             refresh: true,
         }),
         react(),
     ],
     optimizeDeps: {
         exclude: ["@yoopta/headings"],
+    },
+    build: {
+        chunkSizeWarningLimit: 3200,
     },
     define: {
         global: "window",
@@ -30,5 +33,5 @@ export default defineConfig({
     //         // protocol: 'wss',
     //     },
     // },
-    // base: "https://192.168.14.65:8000/",
+    // base: "https://192.168.223.65:8000/",
 });

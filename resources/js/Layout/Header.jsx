@@ -11,7 +11,8 @@ import { TbX } from "react-icons/tb";
 import gsap from "gsap";
 
 const Header = () => {
-    const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
+    const isDesktop = useMediaQuery({ query: "(min-width: 1280px)" });
+
     const currentRoute = useSelector((state) => state.currentRoute);
 
     const [isNavbarOpen, setIsNavbarOpen] = useState(false);
@@ -22,36 +23,36 @@ const Header = () => {
             gsap.timeline()
                 .to("#closeIconMenu", {
                     rotate: "+=180",
-                    duration: 0.5,
+                    duration: 0.3,
                     ease: "power3.in",
                     onComplete: () => {
                         document.getElementById("closeIconMenu").classList.add("hidden");
                         document.getElementById("openIconMenu").classList.remove("hidden");
                     },
                 })
-                .to("#openIconMenu", { rotate: "+=180", duration: 0.5, ease: "power3.out" });
+                .to("#openIconMenu", { rotate: "+=180", duration: 0.3, ease: "power3.out" });
         } else {
             gsap.timeline()
                 .to("#openIconMenu", {
                     rotate: "+=180",
-                    duration: 0.5,
+                    duration: 0.3,
                     ease: "power3.in",
                     onComplete: () => {
                         document.getElementById("openIconMenu").classList.add("hidden");
                         document.getElementById("closeIconMenu").classList.remove("hidden");
                     },
                 })
-                .to("#closeIconMenu", { rotate: "+=180", duration: 0.5, ease: "power3.out" });
+                .to("#closeIconMenu", { rotate: "+=180", duration: 0.3, ease: "power3.out" });
             setIsNavbarOpen(true);
         }
     };
 
     return (
-        <div className={`relative z-50 bg-white flex justify-between items-center border-b-2 border-yellow-200 ${isMobile ? "p-4" : "px-32 py-8"}`}>
+        <div className="relative z-50 bg-white flex justify-between items-center border-b-2 border-yellow-200 p-4 xl:px-32 xl:py-8">
             <Link href={route("Beranda")} className="relative z-[60]">
                 <img src={logo_hitam}></img>
             </Link>
-            {isMobile ? (
+            {!isDesktop ? (
                 <>
                     <div
                         className="text-slate-800 cursor-pointer hover:bg-yellow-100 hover:text-yellow-500 p-1 box-content rounded-lg transition-colors relative z-[60]"

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Berita;
 use App\Models\HalamanBeranda;
 use App\Models\HalamanProfil;
 use App\Models\User;
@@ -16,6 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Berita::where([])->delete();
         User::where([])->delete();
 
         User::create([

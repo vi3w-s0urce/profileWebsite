@@ -21,6 +21,7 @@ import { useDispatch } from "react-redux";
 import { setCurrentRoute } from "../Redux/slice";
 import { useMediaQuery } from "react-responsive";
 import BackToTopButton from "../Components/BackToTopButton";
+import Main from "../Layout/Main";
 
 const Kontak = () => {
     const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
@@ -55,14 +56,11 @@ const Kontak = () => {
     }, []);
 
     return (
-        <main className="main overflow-hidden">
+        <Main>
             {/* TITLE */}
             <Head>
                 <title>Kontak</title>
             </Head>
-
-            {/* HEADER */}
-            <Header />
 
             {/* HERO */}
             <HeroSection text="Masukan & Kontak" />
@@ -242,13 +240,7 @@ const Kontak = () => {
 
             {/* MEDIA SOCIAL SECTION */}
             <MediaSocialSection />
-
-            {/* FOOTER */}
-            <Footer />
-
-            {/* BACK TO TOP BUTTON */}
-            <BackToTopButton />
-        </main>
+        </Main>
     );
 };
 

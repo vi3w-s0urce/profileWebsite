@@ -16,7 +16,7 @@ import { useMediaQuery } from "react-responsive";
 const HeroBackground = () => {
     gsap.registerPlugin(ScrollTrigger);
 
-    const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
+    const isDesktop = useMediaQuery({ query: "(min-width: 1280px)" });
 
     const ellipse = useRef();
     const ellipse_outline = useRef();
@@ -28,130 +28,134 @@ const HeroBackground = () => {
     const wave_line = useRef();
 
     useEffect(() => {
-        gsap.from(ellipse.current, {
-            top: "-500px",
-            left: "-500px",
-            duration: 1,
-            onComplete: () => {
-                gsap.to(ellipse.current, {
-                    scrollTrigger: {
-                        trigger: ellipse.current,
-                        scrub: 1,
-                        start: isMobile ? 'bottom 25%' : 'bottom 43%',
-                        end: "bottom top",
+        if (isDesktop) {
+            setTimeout(() => {
+                gsap.from(ellipse.current, {
+                    top: "-500px",
+                    left: "-500px",
+                    duration: 1,
+                    onComplete: () => {
+                        gsap.to(ellipse.current, {
+                            scrollTrigger: {
+                                trigger: ellipse.current,
+                                scrub: 1,
+                                start: "bottom 43%",
+                                end: "bottom top",
+                            },
+                            top: "+=25px",
+                            left: "+=25px",
+                            duration: 0.5,
+                        });
                     },
-                    top: "+=25px",
-                    left: "+=25px",
+                });
+
+                gsap.from(ellipse_outline.current, {
+                    height: 0,
+                    width: 0,
                     duration: 0.5,
-                });
-            },
-        });
-
-        gsap.from(ellipse_outline.current, {
-            height: 0,
-            width: 0,
-            duration: 0.5,
-            onComplete: () => {
-                gsap.to(ellipse_outline.current, {
-                    scrollTrigger: {
-                        trigger: ellipse_outline.current,
-                        scrub: 1,
-                        start: isMobile ? "bottom 26%" : "bottom 25%",
-                        end: "200 top",
-                    },
-                    top: "+=50px",
-                    duration: 0.5,
-                });
-            },
-        });
-
-        gsap.from(line_yellow.current, {
-            left: -200,
-            duration: 1,
-            delay: 0.5,
-            onComplete: () => {
-                gsap.to(line_yellow.current, {
-                    scrollTrigger: {
-                        trigger: line_yellow.current,
-                        scrub: 1,
-                        start: isMobile ? "top 37%" : "top 45%",
-                        end: "bottom top",
-                    },
-                    left: "+=100px",
-                    duration: 0.5,
-                });
-            },
-        });
-
-        gsap.from(dot_grid.current, {
-            top: -100,
-            duration: 1,
-            onComplete: () => {
-                gsap.to(dot_grid.current, {
-                    scrollTrigger: {
-                        trigger: dot_grid.current,
-                        scrub: 2,
-                        start: isMobile ? "bottom 15%" : "bottom 22%",
-                        end: "bottom top",
-                    },
-                    left: "-=50px",
-                });
-            },
-        });
-
-        gsap.from(blob.current, {
-            top: -400,
-            right: -400,
-            duration: 1.5,
-            onComplete: () => {
-                gsap.to(blob.current, {
-                    scrollTrigger: {
-                        trigger: blob.current,
-                        scrub: 1,
-                        start: isMobile ? "bottom 28%" : "bottom 51.35%",
-                        end: "bottom top",
-                    },
-                    top: "+=50px",
-                    right: "+=20px",
-                    duration: 0.5,
-                });
-            },
-        });
-
-        gsap.from(line_white.current, {
-            right: -300,
-            duration: 1,
-            onComplete: () => {
-                gsap.to(line_white.current, {
-                    scrollTrigger: {
-                        trigger: line_white.current,
-                        scrub: 1,
-                        start: "bottom 40.4%",
-                        end: "bottom top",
-                    },
-                    right: "+=100px",
-                    duration: 0.5,
-                });
-            },
-        });
-
-        gsap.from(wave_line.current, { width: 0, duration: 3, delay: 0.3 });
-
-        gsap.from(rectangle.current, {
-            height: 0,
-            width: 0,
-            rotate: -200,
-            duration: 2,
-            onComplete: function () {
-                ScrollTrigger.create({
-                    trigger: rectangle.current,
-                    scrub: 1,
-                    onUpdate: (self) => {
-                        gsap.to(rectangle.current, { rotate: self.scroll() * 0.5, duration: 0.5 });
+                    onComplete: () => {
+                        gsap.to(ellipse_outline.current, {
+                            scrollTrigger: {
+                                trigger: ellipse_outline.current,
+                                scrub: 1,
+                                start: "bottom 25%",
+                                end: "200 top",
+                            },
+                            top: "+=50px",
+                            duration: 0.5,
+                        });
                     },
                 });
-            },
-        });
+
+                gsap.from(line_yellow.current, {
+                    left: -200,
+                    duration: 1,
+                    delay: 0.5,
+                    onComplete: () => {
+                        gsap.to(line_yellow.current, {
+                            scrollTrigger: {
+                                trigger: line_yellow.current,
+                                scrub: 1,
+                                start: "top 45%",
+                                end: "bottom top",
+                            },
+                            left: "+=100px",
+                            duration: 0.5,
+                        });
+                    },
+                });
+
+                gsap.from(dot_grid.current, {
+                    top: -100,
+                    duration: 1,
+                    onComplete: () => {
+                        gsap.to(dot_grid.current, {
+                            scrollTrigger: {
+                                trigger: dot_grid.current,
+                                scrub: 2,
+                                start: "bottom 22%",
+                                end: "bottom top",
+                            },
+                            left: "-=50px",
+                        });
+                    },
+                });
+
+                gsap.from(blob.current, {
+                    top: -400,
+                    right: -400,
+                    duration: 1.5,
+                    onComplete: () => {
+                        gsap.to(blob.current, {
+                            scrollTrigger: {
+                                trigger: blob.current,
+                                scrub: 1,
+                                start: "bottom 51.35%",
+                                end: "bottom top",
+                            },
+                            top: "+=50px",
+                            right: "+=20px",
+                            duration: 0.5,
+                        });
+                    },
+                });
+
+                gsap.from(line_white.current, {
+                    right: -300,
+                    duration: 1,
+                    onComplete: () => {
+                        gsap.to(line_white.current, {
+                            scrollTrigger: {
+                                trigger: line_white.current,
+                                scrub: 1,
+                                start: "bottom 40.4%",
+                                end: "bottom top",
+                            },
+                            right: "+=100px",
+                            duration: 0.5,
+                        });
+                    },
+                });
+
+                gsap.from(wave_line.current, { width: 0, duration: 3, delay: 0.3 });
+
+                gsap.from(rectangle.current, {
+                    height: 0,
+                    width: 0,
+                    rotate: -200,
+                    duration: 2,
+                    onComplete: function () {
+                        ScrollTrigger.create({
+                            trigger: rectangle.current,
+                            scrub: 1,
+                            onUpdate: (self) => {
+                                gsap.to(rectangle.current, { rotate: self.scroll() * 0.5, duration: 0.5 });
+                            },
+                        });
+                    },
+                });
+            }, 800);
+        }
     }, []);
 
     return (
@@ -161,51 +165,46 @@ const HeroBackground = () => {
                 <div id="shape">
                     <img
                         src={hero_rectangle}
-                        className={`absolute ${
-                            isMobile ? "top-[205px] right-[61px] w-[32px] h-[32px]" : "top-[324px] right-[398px] w-[68px] h-[68px]"
-                        }`}
+                        className="absolute top-[205px] right-[61px] w-[32px] h-[32px] xl:top-[324px] xl:right-[398px] xl:w-[68px] xl:h-[68px]"
                         ref={rectangle}
                     ></img>
                     <img
                         src={hero_line_white}
-                        className={`absolute ${isMobile ? "w-[45px] h-[7px] top-[146px] right-[43px]" : "top-[221px] right-[300px]"} `}
+                        className="absolute w-[90px] h-auto top-[146px] right-[20px] xl:top-[221px] xl:right-[300px] xl:w-auto xl:h-auto"
                         ref={line_white}
                     ></img>
                     <img
                         src={hero_blob}
-                        className={`absolute ${isMobile ? "w-[199px] h-[199px] top-[-44px] right-[-90px]" : "top-[-84px] right-[-150px]"}`}
+                        className="absolute w-[199px] h-[199px] top-[-44px] right-[-90px] xl:top-[-84px] xl:right-[-150px] xl:w-auto xl:h-auto"
                         ref={blob}
                     ></img>
                     <img
                         src={hero_line_yellow}
-                        className={`absolute ${isMobile ? "w-[45px] h-[7px] top-[192px] left-[14px]" : " top-[289px] left-[289px]"}`}
+                        className="absolute w-[90px] h-auto top-[228px] left-[14px] xl:top-[289px] xl:left-[289px] xl:w-auto xl:h-auto"
                         ref={line_yellow}
                     ></img>
                     <img
                         src={hero_dot_grid}
-                        className={`absolute ${isMobile ? "w-[75px] h-[97px] object-cover top-[-63px] left-[151px]" : "top-[-22px] left-[557px]"}`}
+                        className="absolute w-[75px] h-[97px] object-cover top-[-63px] left-[151px] xl:top-[-22px] xl:left-[557px] xl:w-auto xl:h-auto"
                         ref={dot_grid}
                     ></img>
                     <img
                         src={hero_ellipse_outline}
-                        className={`absolute ${isMobile ? "w-[24px] h-[24px] top-[89px] left-[71px]" : "w-[61px] h-[61px] top-[52px] left-[337px]"}`}
+                        className="absolute w-[24px] h-[24px] top-[89px] left-[120px] xl:w-auto xl:h-auto xl:top-[52px] xl:left-[337px]"
                         ref={ellipse_outline}
                     ></img>
                     <img
                         src={hero_ellipse}
-                        className={`absolute ${isMobile ? "w-[240px] h-[240px] top-[-145px] left-[-139px]" : "top-[-150px] left-[-188px]"} `}
+                        className="absolute w-[240px] h-[240px] top-[-145px] left-[-139px] xl:top-[-150px] xl:left-[-188px] xl:w-auto xl:h-auto"
                         ref={ellipse}
                     ></img>
                 </div>
                 <div id="wave">
-                    <img
-                        src={hero_wave}
-                        className={`absolute -z-10 w-full ${isMobile ? "h-[81px] bottom-[-46px]" : "h-[121px] bottom-[-82px]"}`}
-                    ></img>
-                    {isMobile ? (
+                    <img src={hero_wave} className="absolute -z-10 w-full h-[81px] bottom-[-46px] xl:h-[121px] xl:bottom-[-82px]"></img>
+                    {!isDesktop ? (
                         <img
                             src={hero_wave_line_mobile}
-                            className="absolute bottom-[-46px] w-full h-[100px] overflow-hidden left-0 object-cover object-left"
+                            className="absolute bottom-[-46px] w-full h-[100px] sm:h-[200px] overflow-hidden left-0 object-cover object-left"
                             ref={wave_line}
                         ></img>
                     ) : (

@@ -40,9 +40,10 @@ import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { TbAward } from "react-icons/tb";
 import ReactGA from "react-ga4";
+import Main from "../Layout/Main";
 
 const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_pekerjaan_db, riwayat_organisasi_db, penghargaan_db }) => {
-    const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
+    const isDesktop = useMediaQuery({ query: "(min-width: 1280px)" });
 
     const profile_ellipse = useRef();
     const line_yellow = useRef();
@@ -62,8 +63,8 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
     const ellipse_gradient_yellow = useRef();
 
     const variants_riwayat_bar = {
-        open: isMobile ? { width: 64, height: 8, backgroundColor: "#facc15" } : { height: 64, width: 8, backgroundColor: "#facc15" },
-        closed: isMobile ? { width: 32, height: 8, backgroundColor: "#d6d3d1" } : { height: 32, width: 8, backgroundColor: "#d6d3d1" },
+        open: !isDesktop ? { width: 64, height: 8, backgroundColor: "#facc15" } : { height: 64, width: 8, backgroundColor: "#facc15" },
+        closed: !isDesktop ? { width: 32, height: 8, backgroundColor: "#d6d3d1" } : { height: 32, width: 8, backgroundColor: "#d6d3d1" },
     };
 
     const [riwayatSection, setRiwayatSection] = useState(0);
@@ -71,87 +72,90 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
     const dispatch = useDispatch();
 
     useEffect(() => {
-        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: 'Profil' });
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: "Profil" });
 
         dispatch(setCurrentRoute("Profil"));
 
-        gsap.to(profile_ellipse.current, {
-            scrollTrigger: {
-                trigger: profile_ellipse.current,
-                start: "top 76%",
-                end: "bottom top",
-                scrub: 1,
-            },
-            top: "-=180px",
-        });
+        if (isDesktop) {
+            setTimeout(() => {
+                gsap.to(profile_ellipse.current, {
+                    scrollTrigger: {
+                        trigger: profile_ellipse.current,
+                        start: "top 76%",
+                        end: "bottom top",
+                        scrub: 1,
+                    },
+                    top: "-=180px",
+                });
 
-        gsap.to(line_yellow.current, {
-            scrollTrigger: {
-                trigger: line_yellow.current,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1,
-            },
-            right: "+=200px",
-        });
+                gsap.to(line_yellow.current, {
+                    scrollTrigger: {
+                        trigger: line_yellow.current,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1,
+                    },
+                    right: "+=200px",
+                });
 
-        gsap.to(box_twin.current, {
-            scrollTrigger: {
-                trigger: box_twin.current,
-                start: "top 80%",
-                end: "bottom top",
-                scrub: 1,
-            },
-            top: "-=100px",
-            rotate: -40,
-        });
+                gsap.to(box_twin.current, {
+                    scrollTrigger: {
+                        trigger: box_twin.current,
+                        start: "top 80%",
+                        end: "bottom top",
+                        scrub: 1,
+                    },
+                    top: "-=100px",
+                    rotate: "-=40deg",
+                });
 
-        gsap.to(dot_brown.current, {
-            scrollTrigger: {
-                trigger: dot_brown.current,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1,
-            },
-            top: isMobile ? "-=100px" : "-=300px",
-        });
+                gsap.from(dot_brown.current, {
+                    scrollTrigger: {
+                        trigger: dot_brown.current,
+                        start: "top bottom",
+                        end: "-160% top",
+                        scrub: 1,
+                    },
+                    top: "+=220px",
+                });
 
-        gsap.to(line_pattern.current, {
-            scrollTrigger: {
-                trigger: line_pattern.current,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1,
-            },
-            left: isMobile ? "+=50px" : "-100px",
-        });
+                gsap.from(line_pattern.current, {
+                    scrollTrigger: {
+                        trigger: line_pattern.current,
+                        start: "top bottom",
+                        end: "-160% top",
+                        scrub: 1,
+                    },
+                    left: "-400px",
+                });
 
-        gsap.from(riwayat_background_pattern.current, {
-            scrollTrigger: {
-                trigger: riwayat_background_pattern.current,
-                start: "top 70%",
-            },
-            width: 0,
-            duration: 4,
-            ease: "power3.out",
-        });
+                gsap.from(riwayat_background_pattern.current, {
+                    scrollTrigger: {
+                        trigger: riwayat_background_pattern.current,
+                        start: "top 70%",
+                    },
+                    width: 0,
+                    duration: 4,
+                    ease: "power3.out",
+                });
 
+                gsap.from(ellipse_gradient_yellow.current, {
+                    scrollTrigger: {
+                        trigger: ellipse_gradient_yellow.current,
+                        start: "top bottom",
+                        end: "top top",
+                        scrub: 1,
+                    },
+                    bottom: "-400px",
+                    right: "-600px",
+                    ease: "power3.out",
+                });
+            }, 500);
+        }
+
+        // Riwayat Animation
         setTimeout(() => {
-            gsap.from(ellipse_gradient_yellow.current, {
-                scrollTrigger: {
-                    trigger: ellipse_gradient_yellow.current,
-                    start: isMobile ? "top bottom" : "top 70%",
-                    end: isMobile ? "bottom 30%" : "top 20%",
-                    scrub: 1,
-                },
-                bottom: isMobile ? "-100px" : "-400px",
-                right: isMobile ? "-200px" : "-600px",
-                ease: "power3.out",
-            });
-        }, 500);
-
-        setTimeout(() => {
-            if (isMobile) {
+            if (!isDesktop) {
                 const riwayat_timeline = gsap.timeline();
                 riwayat_timeline
                     .fromTo(riwayat_pendidikan.current, { opacity: 0, scale: 0.5, x: -100 }, { opacity: 1, scale: 1, x: 0, duration: 1 })
@@ -353,14 +357,11 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
     };
 
     return (
-        <main className="main overflow-hidden">
+        <Main>
             {/* TITLE */}
             <Head>
                 <title>Profil Lengkap</title>
             </Head>
-
-            {/* HEADER */}
-            <Header />
 
             {/* HERO */}
             <HeroSection type="profile" />
@@ -370,22 +371,22 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                 {/* SHAPES */}
                 <img
                     src={profile_ellipse_svg}
-                    className={`absolute -z-10 ${isMobile ? "w-[180px] h-[180px] top-[80px] right-[-64px]" : "top-[50px] right-[-79px]"}`}
+                    className="absolute -z-10 w-[180px] h-[180px] top-[-26px] right-[-64px] xl:top-[50px] xl:right-[-79px] xl:w-auto xl:h-auto"
                     ref={profile_ellipse}
                 ></img>
                 <img
                     src={line_yellow_svg}
-                    className={`absolute -z-10 ${isMobile ? "top-[360px] right-[-200px]" : "top-[497px] right-[196px]"}`}
+                    className="absolute -z-10 top-[360px] right-[-10px] xl:top-[497px] xl:right-[196px]"
                     ref={line_yellow}
                 ></img>
-                <img src={profile_title_svg} className={`absolute -z-10 ${isMobile ? "w-[186px] h-[59px] top-1 left-1" : "top-3 left-3"}`}></img>
+                <img src={profile_title_svg} className="absolute -z-10 w-[186px] h-[59px] top-1 left-1 xl:w-auto xl:h-auto xl:top-3 xl:left-3"></img>
 
                 {/* CONTENT */}
-                <div className={`flex items-center ${isMobile ? "px-4 py-8 flex-col gap-4" : "px-32 py-24 gap-44"}`}>
+                <div className="flex items-center px-4 py-8 flex-col gap-4 xl:flex-row xl:px-32 xl:py-24 xl:gap-44">
                     {profil_1_db.gambar ? (
                         <motion.img
                             src={"/storage/profilImages/" + profil_1_db.gambar}
-                            className={`object-cover rounded-2xl shadow-2xl ${isMobile ? "w-full h-[200px]" : "h-[433px] w-[679px]"}`}
+                            className="object-cover rounded-2xl shadow-2xl w-full h-[200px] xl:h-[433px] xl:w-[679px]"
                             initial={{ y: 100, opacity: 0 }}
                             whileInView={{ y: 0, opacity: 1, transition: { duration: 1, delay: 0.5 } }}
                             viewport={{ once: true }}
@@ -393,7 +394,7 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                     ) : (
                         <motion.img
                             src={"/storage/profilImages/default_1.svg"}
-                            className={`object-cover ${isMobile ? "w-[258px] h-[305px]" : "w-[366px] h-[433px]"}`}
+                            className="object-cover w-[258px] h-[305px] xl:w-[366px] xl:h-[433px]"
                             initial={{ scale: 0.8, opacity: 0 }}
                             whileInView={{ scale: 1, opacity: 1, transition: { duration: 0.5, delay: 0.5, ease: "backInOut" } }}
                             viewport={{ once: true }}
@@ -401,23 +402,18 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                     )}
                     <div className="flex flex-col">
                         <RevealText
-                            className={`font-semibold text-slate-400 ${isMobile ? "text-base mb-1" : "text-2xl mb-3"}`}
+                            className="font-semibold text-slate-400 text-base mb-1 xl:text-2xl xl:mb-3"
                             scroll={true}
                             type="words"
                             stagger={0.1}
                         >
                             Perkenalan Saya
                         </RevealText>
-                        <RevealText
-                            className={`font-bold text-yellow-900 ${!isMobile && "text-5xl mb-2"}`}
-                            style={isMobile ? { fontSize: 34 } : null}
-                            delay={0.5}
-                            scroll={true}
-                        >
+                        <RevealText className="font-bold text-yellow-900 text-[34px] mb-2 xl:text-5xl xl:mb-2" delay={0.5} scroll={true}>
                             Ganefri
                         </RevealText>
                         <RevealText
-                            className={`font-medium text-slate-800 ${isMobile ? "text-sm  mb-5" : "text-lg mb-8"}`}
+                            className="font-medium text-slate-800 text-sm mb-5 xl:text-lg xl:mb-8"
                             type="words"
                             scroll={true}
                             stagger={0.01}
@@ -433,27 +429,27 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                 <img
                     src={box_twin_svg}
                     alt="box_twin"
-                    className={`absolute -z-10 ${isMobile ? "w-[128px] h-[137px] top-[51px] left-[-39px]" : "top-[-137px] left-[-178px]"}`}
+                    className="absolute -z-10 w-[128px] h-[137px] top-[51px] left-[-39px] xl:w-auto xl:h-auto xl:top-[-137px] xl:left-[-178px]"
                     ref={box_twin}
                 />
                 <img
                     src={dot_brown_svg}
                     alt="dot_brown"
-                    className={`absolute -z-10 ${isMobile ? "w-[137px] h-[137px] top-[580px] right-0" : "top-[400px] right-0"}`}
+                    className="absolute -z-10 w-[137px] h-[137px] top-[580px] right-0 xl:h-auto xl:w-auto xl:top-[50px] xl:right-0"
                     ref={dot_brown}
                 />
                 <img
                     src={line_pattern_svg}
                     alt="dot_brown"
-                    className={`absolute -z-10 ${isMobile ? "w-[71px] h-[27px] bottom-[369px] left-[-50px]" : "bottom-[12px] left-[-200px]"}`}
+                    className="absolute -z-10 w-[71px] h-[27px] bottom-[369px] left-[-10px] xl:w-auto xl:h-auto xl:bottom-[12px] xl:left-[-41px]"
                     ref={line_pattern}
                 />
 
                 {/* CONTENT */}
-                <div className={`items-center gap-44 ${isMobile ? "px-4 py-8 flex-col" : "px-32 py-24 flex"}`}>
-                    <div>
+                <div className="items-center flex gap-2 px-4 py-8 flex-col xl:justify-between xl:px-32 xl:py-24 xl:gap-12 xl:flex-row">
+                    <div className="w-full">
                         <RevealText
-                            className={`font-medium text-slate-800 whitespace-pre-wrap ${isMobile ? "text-sm mb-5" : "text-lg mb-8"}`}
+                            className="font-medium text-slate-800 whitespace-pre-wrap text-sm mb-5 xl:text-lg xl:mb-8 w-full"
                             type="words"
                             scroll={true}
                             stagger={0.01}
@@ -464,7 +460,7 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                     </div>
                     <motion.img
                         src={profil_2_db.gambar ? "/storage/profilImages/" + profil_2_db.gambar : "/storage/profilImages/default_2.jpg"}
-                        className={`object-cover rounded-2xl shadow-2xl ${isMobile ? "w-full h-[200px]" : "h-[433px] w-[679px]"}`}
+                        className="object-cover rounded-2xl shadow-2xl max-w-[342px] w-full h-[200px] xl:h-[433px] xl:max-w-[50%]"
                         initial={{ y: 100, opacity: 0 }}
                         whileInView={{ y: 0, opacity: 1, transition: { duration: 1, delay: 0.5 } }}
                         viewport={{ once: true }}
@@ -475,7 +471,7 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
             {/* RIWAYAT */}
             <section className="relative overflow-hidden" ref={container}>
                 {/* SHAPES */}
-                {isMobile ? (
+                {!isDesktop ? (
                     <img
                         src={riwayat_background_pattern_mobile_svg}
                         className="absolute z-0 w-[120%] h-[800px] inset-1/2 transform -translate-x-1/2 -translate-y-1/2 object-cover"
@@ -491,73 +487,65 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                 <img
                     src={riwayat_title_filled_svg}
                     alt="riwayat"
-                    className={`absolute z-0 ${isMobile ? "w-[235px] h-[59px] top-1 left-1" : "top-3 left-3"}`}
+                    className="absolute z-0 w-[235px] h-[59px] top-1 left-1 xl:w-auto xl:h-auto xl:top-3 xl:left-3"
                 />
                 <img
                     src={riwayat_title_outline_svg}
                     alt="riwayat"
-                    className={`absolute z-30 ${isMobile ? "w-[235px] h-[59px] top-1 left-1" : "top-3 left-3"}`}
+                    className="absolute z-30 w-[235px] h-[59px] top-1 left-1 xl:w-auto xl:h-auto xl:top-3 xl:left-3"
                 />
 
                 {/* CONTENT */}
-                <div className={`h-screen w-full bg-yellow-400 ${isMobile ? "px-4 py-8" : "px-32 py-24"}`}>
-                    <div
-                        className={`relative z-20 bg-white w-full h-full rounded-[30px] bg-gradient-to-br from-white via-white via-30% to-yellow-200 flex justify-center items-center ${
-                            isMobile ? "flex-col px-4 py-8" : "gap-44"
-                        }`}
-                    >
-                        <div className={`flex items-center ${isMobile ? "flex-col gap-4" : "gap-12"}`}>
-                            <div className={`flex items-end gap-2 ${!isMobile && "flex-col"}`}>
-                                <div className={`flex items-center gap-3 ${isMobile ? "flex-col gap-2" : "gap-3"}`}>
+                <div className="h-screen w-full bg-yellow-400 px-4 py-8 xl:px-32 xl:py-24">
+                    <div className="relative z-20 bg-white w-full h-full rounded-[30px] bg-gradient-to-br from-white via-white via-30% to-yellow-200 flex justify-between items-center flex-col px-4 py-8 xl:flex-row xl:px-12 xl:py-0 xl:gap-12">
+                        <div className="flex items-center flex-col gap-4 xl:flex-row xl:gap-12">
+                            <div className="flex items-end gap-2 flex-row xl:flex-col">
+                                <div className="flex items-center flex-col gap-2 xl:flex-row xl:gap-3">
                                     <MdOutlineSchool
                                         fontSize={32}
                                         className={`text-yellow-400 ${riwayatSection == 0 ? "opacity-100" : "opacity-0"} transition-all`}
                                     />
                                     <motion.div
-                                        className={`bg-yellow-400 rounded-full ${isMobile ? "w-[64px] h-[8px]" : "w-[8px] h-[64px]"}`}
+                                        className="bg-yellow-400 rounded-full w-[64px] h-[8px] xl:w-[8px] xl:h-[64px]"
                                         variants={variants_riwayat_bar}
                                         animate={riwayatSection == 0 ? "open" : "closed"}
                                         transition={{ duration: 0.3 }}
                                     />
                                 </div>
-                                <div className={`flex items-center gap-3 ${isMobile ? "flex-col gap-2" : "gap-3"}`}>
+                                <div className="flex items-center flex-col gap-2 xl:flex-row xl:gap-3">
                                     <MdOutlineWorkOutline
                                         fontSize={32}
                                         className={`text-yellow-400 ${riwayatSection == 1 ? "opacity-100" : "opacity-0"} transition-all`}
                                     />
                                     <motion.div
-                                        className={`bg-slate-300 rounded-full ${isMobile ? "h-[8px] w-[32px]" : "w-[8px] h-[32px]"}`}
+                                        className="bg-slate-300 rounded-full h-[8px] w-[32px] xl:w-[8px] xl:h-[32px]"
                                         variants={variants_riwayat_bar}
                                         animate={riwayatSection == 1 ? "open" : "closed"}
                                         transition={{ duration: 0.3 }}
                                     />
                                 </div>
-                                <div className={`flex items-center gap-3 ${isMobile ? "flex-col gap-2" : "gap-3"}`}>
+                                <div className="flex items-center flex-col gap-2 xl:flex-row xl:gap-3">
                                     <MdPeopleOutline
                                         fontSize={32}
                                         className={`text-yellow-400 ${riwayatSection == 2 ? "opacity-100" : "opacity-0"} transition-all`}
                                     />
                                     <motion.div
-                                        className={`bg-slate-300 rounded-full ${isMobile ? "h-[8px] w-[32px]" : "w-[8px] h-[32px]"}`}
+                                        className="bg-slate-300 rounded-full h-[8px] w-[32px] xl:w-[8px] xl:h-[32px]"
                                         variants={variants_riwayat_bar}
                                         animate={riwayatSection == 2 ? "open" : "closed"}
                                         transition={{ duration: 0.3 }}
                                     />
                                 </div>
                             </div>
-                            <div className={`relative flex justify-center items-center ${isMobile ? "w-[292px] h-[318px]" : "w-[433px] h-[433px]"}`}>
+                            <div className="relative flex justify-center items-center w-[292px] h-[318px] xl:w-[433px] xl:h-[433px]">
                                 {/* SHAPES */}
                                 <div
-                                    className={`absolute left-[0px] top-[50px] bg-yellow-300 rotate-[25deg] ${
-                                        isMobile ? "w-[46px] h-[46px] rounded-xl" : "w-[82px] h-[82px] rounded-3xl"
-                                    }`}
+                                    className="absolute left-[0px] top-[50px] bg-yellow-300 rotate-[25deg] w-[46px] h-[46px] rounded-xl xl:w-[82px] xl:h-[82px] xl:rounded-3xl"
                                     ref={box_yellow}
                                 ></div>
                                 <img src={riwayat_blob_svg} alt="riwayat_blob" className="absolute left-1/2 -translate-x-1/2" ref={riwayat_blob} />
                                 <div
-                                    className={`absolute left-[24px] bottom-[24px] bg-yellow-400 rounded-full ${
-                                        isMobile ? " w-[22px] h-[22px]" : "w-[38px] h-[38px]"
-                                    }`}
+                                    className="absolute left-[24px] bottom-[24px] bg-yellow-400 rounded-full w-[22px] h-[22px] xl:w-[38px] xl:h-[38px]"
                                     ref={riwayat_ellipse}
                                 ></div>
                                 <div
@@ -576,7 +564,7 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                                 <img
                                     src={riwayat_organization_img}
                                     alt="organization"
-                                    className={`absolute z-10 object-cover ${isMobile ? "w-[250px]" : "w-[300px]"}`}
+                                    className="absolute z-10 object-cover w-[250px] xl:w-[300px]"
                                     ref={riwayat_organization}
                                 />
                             </div>
@@ -585,21 +573,19 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                             <AnimatePresence>
                                 {riwayatSection == 0 ? (
                                     <motion.div
-                                        className={`flex flex-col absolute ${isMobile ? "gap-2" : "gap-6"}`}
+                                        className="flex flex-col absolute gap-2 xl:gap-6"
                                         initial={{ opacity: 0, x: -200, scale: 0.8 }}
                                         whileInView={{ opacity: 1, x: 0, scale: 1 }}
                                         exit={{ opacity: 0, x: 200, scale: 0.8 }}
                                         transition={{ duration: 0.5 }}
                                     >
-                                        <h1 className={`flex items-center ${isMobile ? "gap-2" : "gap-4"}`}>
-                                            <MdOutlineSchool fontSize={isMobile ? 32 : 46} className="text-yellow-400" />
-                                            <span className={`font-bold text-4xl text-yellow-900 ${isMobile ? "text-xl" : "text-4xl"}`}>
-                                                Riwayat Pendidikan
-                                            </span>
+                                        <h1 className="flex items-center gap-2 xl:gap-4">
+                                            <MdOutlineSchool className="text-yellow-400 text-[32px] xl:text-[42px]" />
+                                            <span className="font-bold text-yellow-900 text-xl xl:text-3xl">Riwayat Pendidikan</span>
                                         </h1>
-                                        <ol className={`list-disc flex flex-col ${isMobile ? "ms-4 gap-1" : "ms-7 gap-2"}`}>
+                                        <ol className="list-disc flex flex-col ms-4 gap-1 xl:ms-7 xl:gap-2">
                                             {riwayat_pendidikan_db.list.map((item, index) => (
-                                                <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>{item}</li>
+                                                <li className="font-medium text-slate-800 text-xs xl:text-base">{item}</li>
                                             ))}
                                         </ol>
                                     </motion.div>
@@ -608,52 +594,44 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                             <AnimatePresence>
                                 {riwayatSection == 1 ? (
                                     <motion.div
-                                        className={`flex flex-col absolute ${isMobile ? "gap-2" : "gap-6"}`}
+                                        className="flex flex-col absolute gap-2 xl:gap-6"
                                         initial={{ opacity: 0, x: -200, scale: 0.8 }}
                                         whileInView={{ opacity: 1, x: 0, scale: 1 }}
                                         exit={{ opacity: 0, x: 200, scale: 0.8 }}
                                         transition={{ duration: 0.5 }}
                                     >
-                                        <h1 className={`flex items-center ${isMobile ? "gap-2" : "gap-4"}`}>
-                                            <MdOutlineWorkOutline fontSize={isMobile ? 32 : 46} className="text-yellow-400" />
-                                            <span className={`font-bold text-4xl text-yellow-900 ${isMobile ? "text-xl" : "text-4xl"}`}>
-                                                Riwayat Pekerjaan
-                                            </span>
+                                        <h1 className="flex items-center gap-2 xl:gap-4">
+                                            <MdOutlineWorkOutline className="text-yellow-400 text-[32px] xl:text-[42px]" />
+                                            <span className="font-bold text-yellow-900 text-xl xl:text-3xl">Riwayat Pekerjaan</span>
                                         </h1>
-                                        <ol className={`list-disc flex flex-col ${isMobile ? "ms-4 gap-1" : "ms-7 gap-2"}`}>
+                                        <ol className="list-disc flex flex-col ms-4 gap-1 xl:ms-7 xl:gap-2">
                                             {riwayat_pekerjaan_db.list.map((item, index) => (
-                                                <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>{item}</li>
+                                                <li className="font-medium text-slate-800 text-xs xl:text-base">{item}</li>
                                             ))}
                                         </ol>
                                     </motion.div>
                                 ) : null}
                             </AnimatePresence>
                             <AnimatePresence>
-                                {riwayatSection == 2 ? (
+                                {riwayatSection == 2 && (
                                     <motion.div
-                                        className={`flex flex-col absolute ${isMobile ? "gap-2" : "gap-6"}`}
+                                        className="flex flex-col absolute gap-2 xl:gap-6"
                                         initial={{ opacity: 0, x: -200, scale: 0.8 }}
                                         whileInView={{ opacity: 1, x: 0, scale: 1 }}
                                         exit={{ opacity: 0, x: 200, scale: 0.8 }}
                                         transition={{ duration: 0.5 }}
                                     >
-                                        <h1 className={`flex items-center ${isMobile ? "gap-2" : "gap-4"}`}>
-                                            <MdPeopleOutline fontSize={isMobile ? 32 : 46} className="text-yellow-400" />
-                                            <span className={`font-bold text-4xl text-yellow-900 ${isMobile ? "text-xl" : "text-4xl"}`}>
-                                                Riwayat Organisasi
-                                            </span>
+                                        <h1 className="flex items-center gap-2 xl:gap-4">
+                                            <MdPeopleOutline className="text-yellow-400 text-[32px] xl:text-[42px]" />
+                                            <span className="font-bold text-yellow-900 text-xl xl:text-3xl">Riwayat Organisasi</span>
                                         </h1>
-                                        <ol
-                                            className={`list-disc flex flex-col ${
-                                                isMobile ? "list-inside gap-1 overflow-y-auto max-h-[30vh]" : "ms-7 gap-2"
-                                            }`}
-                                        >
+                                        <ol className="list-disc flex flex-col list-inside gap-1 overflow-y-auto max-h-[30vh] xl:overflow-y-auto xl:ms-7 xl:gap-2 xl:max-h-[50vh]">
                                             {riwayat_organisasi_db.list.map((item, index) => (
-                                                <li className={`font-medium text-slate-800 ${isMobile ? "text-xs" : "text-xl"}`}>{item}</li>
+                                                <li className="font-medium text-slate-800 text-xs xl:text-base">{item}</li>
                                             ))}
                                         </ol>
                                     </motion.div>
-                                ) : null}
+                                )}
                             </AnimatePresence>
                         </div>
                     </div>
@@ -667,33 +645,31 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                 <img
                     src={penghargaan_title_filled_svg}
                     alt="wave"
-                    className={`absolute -z-20 ${isMobile ? "top-1 left-1 w-[337px] h-[49px]" : "top-3 left-3"}`}
+                    className="absolute -z-20 top-1 left-1 w-[337px] h-[49px] xl:top-3 xl:left-3 xl:w-auto xl:h-auto"
                 />
                 <img
                     src={penghargaan_title_outline_svg}
                     alt="wave"
-                    className={`absolute -z-10 ${isMobile ? "top-1 left-1 w-[337px] h-[49px]" : "top-3 left-3"}`}
+                    className="absolute -z-10 top-1 left-1 w-[337px] h-[49px] xl:top-3 xl:left-3 xl:w-auto xl:h-auto"
                 />
                 <img
                     src={ellipse_gradient_yellow_svg}
                     alt="wave"
-                    className={`absolute -z-10 ${isMobile ? "w-[214px] h-[214px] bottom-[-50px] right-[-50px]" : "bottom-[-255px] right-[-428px]"}`}
+                    className="absolute -z-10 w-[214px] h-[214px] bottom-[-50px] right-[-50px] xl:bottom-[-255px] xl:right-[-428px] xl:w-auto xl:h-auto"
                     ref={ellipse_gradient_yellow}
                 />
 
                 {/* CONTENT */}
-                <div className={`flex flex-col items-center ${isMobile ? "px-4 py-8 gap-8" : "px-32 py-24 gap-16"}`}>
+                <div className="flex flex-col items-center px-4 py-8 gap-8 xl:px-32 xl:py-24 xl:gap-16">
                     <div className="flex items-center justify-center flex-col gap-2">
-                        <h2 className={`font-bold text-center text-slate-800 ${isMobile ? "text-xl" : "text-3xl"}`}>
-                            Penghargaan Yang di Raih Ganefri
-                        </h2>
-                        <p className={`font-medium text-slate-500 max-w-[450px] text-center ${isMobile ? "text-sm" : "text-xl"}`}>
+                        <h2 className="font-bold text-center text-slate-800 text-xl xl:text-3xl">Penghargaan Yang di Raih Ganefri</h2>
+                        <p className="font-medium text-slate-500 max-w-[450px] text-center text-sm xl:text-xl">
                             Sejumlah penghargaan yang berhasil di Terima oleh Ganefri
                         </p>
                     </div>
                     <div
                         ref={penghargaanContainerRef}
-                        className={`flex flex-wrap items-center justify-center ${isMobile ? "gap-8 flex-col items-center" : "gap-16"}`}
+                        className="flex flex-wrap items-center justify-center gap-8 flex-col w-full xl:gap-16 xl:flex-row"
                     >
                         {penghargaan_db.list != 0 ? (
                             <>
@@ -701,41 +677,33 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                                     <motion.a
                                         data-fancybox="penghargaan"
                                         href={"/storage/penghargaanImages/" + item.gambar}
-                                        data-caption={item.judul + ': ' + item.deskripsi}
+                                        data-caption={item.judul + ": " + item.deskripsi}
                                         className="flex flex-col items-center gap-4 group"
                                         initial={{ y: 100, opacity: 0 }}
                                         whileInView={{ y: 0, opacity: 1, transition: { duration: 0.5, delay: 0.3 } }}
                                         viewport={{ once: true }}
                                     >
-                                        <div className={`rounded-3xl overflow-hidden ${isMobile ? "w-full h-[192px]" : "w-[597px] h-[336px]"}`}>
+                                        <div className="rounded-3xl overflow-hidden max-w-[342px] w-full h-[192px] xl:w-[597px] xl:h-[336px] xl:max-w-none">
                                             <img
                                                 src={"/storage/penghargaanImages/" + item.gambar}
                                                 alt="penghargaan"
                                                 className="w-full h-full object-cover group-hover:scale-[1.2] transition-all"
                                             />
                                         </div>
-                                        <p className={`text-center font-medium text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
-                                            {item.judul}
-                                        </p>
+                                        <p className="text-center font-medium text-slate-800 text-xl xl:text-2xl">{item.judul}</p>
                                     </motion.a>
                                 ))}
                             </>
                         ) : (
-                            <div className={`bg-slate-300 rounded-3xl flex flex-col items-center justify-center ${isMobile ? "w-full h-[192px]" : "w-[597px] h-[336px]"}`}>
-                                <TbAward fontSize={112} className="text-slate-500 text-center" />
-                                <p className="text-center text-xl mt-4 font-semibold text-slate-500">Penghargaan belum ditambahkan</p>
+                            <div className="bg-slate-300 rounded-3xl flex flex-col items-center justify-center max-w-[342px] w-full h-[192px] xl:w-[597px] xl:h-[336px] xl:max-w-none">
+                                <TbAward className="text-slate-500 text-center text-[48px] xl:text-[112px]" />
+                                <p className="text-center mt-4 font-semibold text-slate-500 text-base xl:text-xl">Penghargaan belum ditambahkan</p>
                             </div>
                         )}
                     </div>
                 </div>
             </section>
-
-            {/* FOOTER */}
-            <Footer />
-
-            {/* BACK TO TOP BUTTON */}
-            <BackToTopButton />
-        </main>
+        </Main>
     );
 };
 

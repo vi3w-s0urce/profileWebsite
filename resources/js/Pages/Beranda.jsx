@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import HeroBackground from "../Components/HeroBackground";
 import Header from "../Layout/Header";
 import { gsap } from "gsap";
@@ -11,7 +11,7 @@ import { IoIosArrowBack, IoIosArrowDown, IoIosArrowForward } from "react-icons/i
 import { BsDot } from "react-icons/bs";
 import { FiClock } from "react-icons/fi";
 import { FaRegNewspaper, FaYoutube } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import foto_utama from "../../assets/svg/profil/main.svg";
 import profile_ellipse_svg from "../../assets/svg/shapes/profile_ellipse.svg";
 import profile_title_svg from "../../assets/svg/shapes/profile_title.svg";
@@ -37,9 +37,12 @@ import BackToTopButton from "../Components/BackToTopButton";
 import route from "ziggy-js";
 import { TbCarouselHorizontal } from "react-icons/tb";
 import ReactGA from "react-ga4";
+import { Inertia } from "@inertiajs/inertia";
+import Main from "../Layout/Main";
 
 const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, youtube_db, media_social_db }) => {
-    const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
+    const isDesktop = useMediaQuery({ query: "(min-width: 1280px)" });
+
     const profile_ellipse = useRef();
     const line_yellow = useRef();
     const berita_text_round = useRef();
@@ -58,57 +61,59 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
 
         dispatch(setCurrentRoute("Beranda"));
 
-        gsap.to(profile_ellipse.current, {
-            scrollTrigger: {
-                trigger: profile_ellipse.current,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1,
-            },
-            top: "-=180px",
-        });
+        if (isDesktop) {
+            setTimeout(() => {
+                gsap.to(profile_ellipse.current, {
+                    scrollTrigger: {
+                        trigger: profile_ellipse.current,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1,
+                    },
+                    top: "-=180px",
+                });
 
-        gsap.to(line_yellow.current, {
-            scrollTrigger: {
-                trigger: line_yellow.current,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1,
-            },
-            right: "+=200px",
-        });
+                gsap.to(line_yellow.current, {
+                    scrollTrigger: {
+                        trigger: line_yellow.current,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1,
+                    },
+                    right: "+=200px",
+                });
 
-        gsap.to(dot_brown.current, {
-            scrollTrigger: {
-                trigger: dot_brown.current,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1,
-            },
-            bottom: "+=300px",
-        });
+                gsap.to(dot_brown.current, {
+                    scrollTrigger: {
+                        trigger: dot_brown.current,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1,
+                    },
+                    bottom: "+=300px",
+                });
 
-        gsap.from(berita_background_pattern.current, {
-            scrollTrigger: {
-                trigger: berita_background_pattern.current,
-                start: "top 70%",
-            },
-            width: 0,
-            duration: 4,
-            ease: "power3.out",
-        });
+                gsap.from(berita_background_pattern.current, {
+                    scrollTrigger: {
+                        trigger: berita_background_pattern.current,
+                        start: "top 70%",
+                    },
+                    width: 0,
+                    duration: 4,
+                    ease: "power3.out",
+                });
 
-        setTimeout(() => {
-            gsap.to(berita_text_round.current, {
-                scrollTrigger: {
-                    trigger: berita_text_round.current,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: 1,
-                },
-                rotate: "+=250",
-            });
-        }, 500);
+                gsap.to(berita_text_round.current, {
+                    scrollTrigger: {
+                        trigger: berita_text_round.current,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1,
+                    },
+                    rotate: "+=250",
+                });
+            }, 500);
+        }
     }, []);
 
     const formatText = (text) => {
@@ -141,58 +146,51 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
     };
 
     return (
-        <main className="main overflow-hidden">
+        <Main>
             {/* TITLE */}
             <Head>
                 <title>Ganefri</title>
             </Head>
 
-            {/* HEADER */}
-            <Header />
-
             {/* HERO */}
-            <section className="relative">
+            <section className="relative flex justify-center">
                 <HeroBackground />
-                <div className={`relative flex flex-col w-full ${isMobile ? "px-4 py-8 gap-8" : "px-32 py-24 gap-16"}`}>
+                <div className="relative flex flex-col w-full px-4 py-8 gap-8 xl:max-w-[1800px] xl:px-12 xl:py-24 xl:gap-16">
                     <div className="flex flex-col gap-2 items-center">
-                        <RevealText
-                            className={`font-semibold text-slate-400 text-center ${isMobile ? "text-base" : "text-2xl"}`}
-                            type="words"
-                            stagger={0.1}
-                        >
+                        <RevealText className="font-semibold text-slate-400 text-center text-base xl:text-2xl" type="words" stagger={0.1} delay={1}>
                             {hero_section_db.subJudul}
                         </RevealText>
-                        {isMobile ? (
+                        {!isDesktop ? (
                             <div className="flex flex-col items-center">
                                 <RevealText
                                     className="font-bold text-yellow-900 text-center"
                                     type="words"
                                     stagger={0.1}
                                     style={{ fontSize: 32 }}
-                                    delay={1}
+                                    delay={1.8}
                                 >
                                     {hero_section_db.judul}
                                 </RevealText>
                             </div>
                         ) : (
-                            <RevealText className="text-5xl font-bold text-yellow-900" delay={1}>
+                            <RevealText className="text-5xl font-bold text-yellow-900" delay={1.8}>
                                 {hero_section_db.judul}
                             </RevealText>
                         )}
                     </div>
                     <div className="flex items-center justify-between">
-                        {!isMobile && (
+                        {isDesktop && (
                             <motion.div
                                 className="swiper-button-prev text-slate-400 hover:text-yellow-500 hover:bg-yellow-100 rounded-2xl cursor-pointer transition-colors"
                                 initial={{ x: 50, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 1, duration: 0.5, ease: "backInOut" }}
+                                transition={{ delay: 1, duration: 0.8, ease: "backInOut" }}
                             >
                                 <IoIosArrowBack style={{ fontSize: "96px" }} />
                             </motion.div>
                         )}
                         <motion.div
-                            className={`relative ${isMobile ? "w-full" : "w-[80%]"}`}
+                            className="relative w-full xl:w-[80%]"
                             initial={{ y: 100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 1, duration: 1, ease: "backInOut" }}
@@ -202,7 +200,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                 slidesPerView={1}
                                 modules={[Navigation, Pagination, Scrollbar, Autoplay]}
                                 autoplay={{ delay: 5000 }}
-                                navigation={!isMobile && { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }}
+                                navigation={isDesktop && { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }}
                                 pagination={{
                                     el: ".custom-pagination",
                                     clickable: true,
@@ -210,21 +208,15 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                         return `<span class="${className} custom-bullet w-[16px] h-[16px] rounded-full bg-slate-400 hover:bg-yellow-400 cursor-pointer transition-all"></span>`;
                                     },
                                 }}
-                                className={`w-full rounded-3xl ${isMobile ? "h-[222px]" : "h-[777px]"}`}
+                                className="w-full rounded-3xl h-[222px] max-w-[396px] xl:max-w-none xl:h-[777px]"
                             >
                                 {carousel_berita_db.length > 0 ? (
                                     <>
                                         {carousel_berita_db.map((item, index) => (
                                             <SwiperSlide className="relative group" key={index}>
                                                 <Link href={route("BeritaRead", { slug: item.berita.slug })}>
-                                                    <div
-                                                        className={`w-full h-full bg-gradient-to-t from-[#0000007c] via-transparent to-transparent absolute z-10 flex items-end ${
-                                                            isMobile ? "p-4" : "p-12"
-                                                        }`}
-                                                    >
-                                                        <h1 className={`text-5xl text-white font-bold ${isMobile ? "text-base" : "text-5xl"}`}>
-                                                            {item.berita.judul}
-                                                        </h1>
+                                                    <div className="w-full h-full bg-gradient-to-t from-[#0000007c] via-transparent to-transparent absolute z-10 flex items-end p-4 xl:p-12">
+                                                        <h1 className="text-white font-bold text-base xl:text-5xl">{item.berita.judul}</h1>
                                                     </div>
                                                     <img
                                                         src={"/storage/beritaImages/" + item.berita.path_gambar}
@@ -238,8 +230,8 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                 ) : (
                                     <SwiperSlide className="relative bg-slate-300">
                                         <div className="w-full h-full flex flex-col items-center justify-center">
-                                            <TbCarouselHorizontal fontSize={isMobile ? 64 : 124} className="text-slate-500" />
-                                            <p className={`text-center mt-4 font-semibold text-slate-500 ${isMobile ? "text-sm" : "text-xl"}`}>
+                                            <TbCarouselHorizontal className="text-slate-500 text-[64px] xl:text-[124px]" />
+                                            <p className="text-center mt-4 font-semibold text-slate-500 text-sm xl:text-xl">
                                                 Carousel Berita Belum Ditambahkan
                                             </p>
                                         </div>
@@ -248,7 +240,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                             </Swiper>
                             <div className="custom-pagination flex justify-center gap-3 mt-7"></div>
                         </motion.div>
-                        {!isMobile && (
+                        {isDesktop && (
                             <motion.div
                                 className="swiper-button-next text-slate-400 hover:text-yellow-500 hover:bg-yellow-100 rounded-2xl cursor-pointer transition-colors"
                                 initial={{ x: -50, opacity: 0 }}
@@ -267,22 +259,22 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                 {/* SHAPES */}
                 <img
                     src={profile_ellipse_svg}
-                    className={`absolute -z-10 ${isMobile ? "w-[180px] h-[180px] top-[80px] right-[-64px]" : "top-[50px] right-[-79px]"}`}
+                    className="absolute -z-10 w-[180px] h-[180px] top-[0px] right-[-64px] xl:w-auto xl:h-auto xl:top-[50px] xl:right-[-79px]"
                     ref={profile_ellipse}
                 ></img>
                 <img
                     src={line_yellow_svg}
-                    className={`absolute -z-10 ${isMobile ? "top-[360px] right-[-200px]" : "top-[497px] right-[196px]"}`}
+                    className="absolute -z-10 top-[360px] right-[20px] xl:top-[497px] xl:right-[196px]"
                     ref={line_yellow}
                 ></img>
-                <img src={profile_title_svg} className={`absolute -z-10 ${isMobile ? "w-[186px] h-[59px] top-1 left-1" : "top-3 left-3"}`}></img>
+                <img src={profile_title_svg} className="absolute -z-10 w-[186px] h-[59px] top-1 left-1 xl:w-auto xl:h-auto xl:top-3 xl:left-3"></img>
 
                 {/* CONTENT */}
-                <div className={`flex items-center ${isMobile ? "px-4 py-8 flex-col gap-4" : "px-32 py-24 gap-44"}`}>
+                <div className="flex items-center px-4 py-8 flex-col gap-4 xl:px-32 xl:py-24 xl:flex-row xl:gap-44">
                     {profil_1_db.gambar ? (
                         <motion.img
                             src={"/storage/profilImages/" + profil_1_db.gambar}
-                            className={`object-cover rounded-2xl shadow-2xl ${isMobile ? "w-full h-[200px]" : "h-[433px] w-[679px]"}`}
+                            className="object-cover rounded-2xl shadow-2xl w-full h-[200px] xl:h-[433px] xl:w-[679px]"
                             initial={{ y: 100, opacity: 0 }}
                             whileInView={{ y: 0, opacity: 1, transition: { duration: 1, delay: 0.5 } }}
                             viewport={{ once: true }}
@@ -290,7 +282,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                     ) : (
                         <motion.img
                             src={"/storage/profilImages/default_1.svg"}
-                            className={`object-cover ${isMobile ? "w-[258px] h-[305px]" : "w-[366px] h-[433px]"}`}
+                            className="object-cover w-[258px] h-[305px] xl:w-[366px] xl:h-[433px]"
                             initial={{ scale: 0.8, opacity: 0 }}
                             whileInView={{ scale: 1, opacity: 1, transition: { duration: 0.5, delay: 0.5, ease: "backInOut" } }}
                             viewport={{ once: true }}
@@ -298,23 +290,18 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                     )}
                     <div className="flex flex-col">
                         <RevealText
-                            className={`font-semibold text-slate-400 ${isMobile ? "text-base mb-1" : "text-2xl mb-3"}`}
+                            className="font-semibold text-slate-400 text-base mb-1 xl:text-2xl xl:mb-3"
                             scroll={true}
                             type="words"
                             stagger={0.1}
                         >
                             Perkenalan Saya
                         </RevealText>
-                        <RevealText
-                            className={`font-bold text-yellow-900 ${!isMobile && "text-5xl mb-2"}`}
-                            style={isMobile ? { fontSize: 34 } : null}
-                            delay={0.5}
-                            scroll={true}
-                        >
+                        <RevealText className="font-bold text-yellow-900 text-[34px] mb-0 xl:text-5xl xl:mb-2" delay={0.5} scroll={true}>
                             Ganefri
                         </RevealText>
                         <RevealText
-                            className={`font-medium text-slate-800 ${isMobile ? "text-sm  mb-5" : "text-lg mb-8"}`}
+                            className="font-medium text-slate-800 text-sm mb-5 xl:text-lg xl:mb-8"
                             type="words"
                             scroll={true}
                             stagger={0.01}
@@ -330,8 +317,8 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <span className={`font-bold ${isMobile ? "text-sm" : "text-lg"}`}>Selengkapnya</span>
-                                <IoIosArrowForward style={{ fontSize: "24px" }} className="group-hover:translate-x-2 transition-all" />
+                                <span className="font-bold text-sm xl:text-lg">Selengkapnya</span>
+                                <IoIosArrowForward className="group-hover:translate-x-2 transition-all text-[24px]" />
                             </motion.div>
                         </Link>
                     </div>
@@ -341,9 +328,9 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
             {/* BERITA SECTION */}
             <section className="relative mb-20 mt-8">
                 {/* SHAPES */}
-                {isMobile ? (
+                {!isDesktop ? (
                     <>
-                        <img src={berita_section_wave_mobile_svg} className={`absolute -z-10 w-full top-0`} />
+                        <img src={berita_section_wave_mobile_svg} className="absolute -z-10 w-full top-0" />
                         <img
                             src={berita_background_pattern_mobile_svg}
                             className="absolute -z-10 w-[120%] h-[800px] inset-1/2 transform -translate-x-1/2 -translate-y-1/2 object-cover"
@@ -352,7 +339,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                     </>
                 ) : (
                     <>
-                        <img src={berita_section_wave_svg} className={`absolute -z-10 w-full top-0`} />
+                        <img src={berita_section_wave_svg} className="absolute -z-10 w-full" />
                         <img
                             src={berita_background_pattern_svg}
                             className="absolute -z-10 w-screen h-[1091px] inset-1/2 transform -translate-x-1/2 -translate-y-1/2 object-cover"
@@ -360,9 +347,15 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                         />
                     </>
                 )}
-                <div className="absolute h-5/6 bg-yellow-400 rounded-es-[36px] rounded-ee-[36px] -z-20 w-full bottom-0"></div>
-                <img src={berita_title_outline_svg} className={`absolute -z-10 ${isMobile ? "top-1 left-1 w-[258px] h-[112px]" : "top-3 left-3"}`} />
-                <img src={berita_title_filled_svg} className={`absolute -z-30 ${isMobile ? "top-1 left-1 w-[258px] h-[112px]" : "top-3 left-3"}`} />
+                <div className="absolute h-[84.5%] bg-yellow-400 rounded-es-[36px] rounded-ee-[36px] -z-20 w-full bottom-0"></div>
+                <img
+                    src={berita_title_outline_svg}
+                    className="absolute -z-10 top-1 left-1 w-[258px] h-[112px] xl:top-3 xl:left-3 xl:w-auto xl:h-auto"
+                />
+                <img
+                    src={berita_title_filled_svg}
+                    className="absolute -z-30 top-1 left-1 w-[258px] h-[112px] xl:top-3 xl:left-3 xl:w-auto xl:h-auto"
+                />
                 <Link
                     href={route("Berita")}
                     preserveScroll={false}
@@ -382,26 +375,26 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                 </Link>
 
                 {/* CONTENT */}
-                <div className={`flex flex-col items-center ${isMobile ? "px-4 py-8 gap-8 pb-16" : "px-32 py-24 gap-16"}`}>
+                <div className="flex flex-col items-center px-4 py-8 gap-8 pb-16 xl:px-32 xl:py-24 xl:gap-16">
                     <div className="flex items-center justify-center flex-col gap-2">
-                        <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-3xl"}`}>Berita dan Agenda Terakhir</h2>
-                        <p className={`font-medium text-slate-500 max-w-[537px] text-center ${isMobile ? "text-sm" : "text-xl"}`}>
+                        <h2 className="font-bold text-slate-800 text-xl xl:text-3xl">Berita dan Agenda Terakhir</h2>
+                        <p className="font-medium text-slate-500 max-w-[537px] text-center text-sm xl:text-xl">
                             Kumpulan berita beserta beserta agenda terakhir tentang Ganefri
                         </p>
                     </div>
                     {berita_db.length > 0 ? (
                         <div
                             className={`w-full grid ${
-                                !isMobile && berita_length == 1
+                                isDesktop && berita_length == 1
                                     ? "grid-cols-1"
-                                    : !isMobile && berita_length > 1
+                                    : isDesktop && berita_length > 1
                                     ? "grid-cols-2"
-                                    : isMobile
+                                    : !isDesktop
                                     ? "grid-cols-1"
                                     : null
                             } gap-6`}
                         >
-                            {!isMobile && berita_length == 1 ? (
+                            {isDesktop && berita_length == 1 ? (
                                 <Link href={route("BeritaRead", { slug: berita_db[0].slug })}>
                                     <motion.div
                                         className="group cursor-pointer"
@@ -438,7 +431,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                         </div>
                                     </motion.div>
                                 </Link>
-                            ) : !isMobile && berita_length == 2 ? (
+                            ) : isDesktop && berita_length == 2 ? (
                                 <>
                                     <Link href={route("BeritaRead", { slug: berita_db[0].slug })}>
                                         <motion.div
@@ -513,7 +506,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                         </motion.div>
                                     </Link>
                                 </>
-                            ) : !isMobile && berita_length === 3 ? (
+                            ) : isDesktop && berita_length === 3 ? (
                                 <>
                                     <Link href={route("BeritaRead", { slug: berita_db[0].slug })}>
                                         <motion.div
@@ -624,7 +617,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                         </Link>
                                     </div>
                                 </>
-                            ) : !isMobile && berita_length === 4 ? (
+                            ) : isDesktop && berita_length === 4 ? (
                                 <>
                                     <Link href={route("BeritaRead", { slug: berita_db[0].slug })}>
                                         <motion.div
@@ -772,8 +765,8 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                         </div>
                                     </div>
                                 </>
-                            ) : isMobile ? (
-                                <Swiper spaceBetween={50} slidesPerView={1} modules={[Autoplay]} autoplay={{ delay: 5000 }} className="h-fit w-full">
+                            ) : !isDesktop ? (
+                                <Swiper spaceBetween={50} slidesPerView={1} modules={[Autoplay]} autoplay={{ delay: 5000 }} className="h-fit w-full max-w-[512px]">
                                     {berita_db.map((item, index) => (
                                         <SwiperSlide key={index}>
                                             <Link href={route("BeritaRead", { slug: item.slug })}>
@@ -790,14 +783,12 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                         />
                                                     </div>
                                                     <div className="flex flex-col gap-3">
-                                                        <div className={`flex items-center mb-3 ${isMobile ? "gap-1" : "gap-2"}`}>
-                                                            <p className={`font-semibold text-yellow-800 ${isMobile ? "text-xs" : "text-sm"}`}>
-                                                                {item.kategori}
-                                                            </p>
+                                                        <div className="flex items-center mb-3 gap-1 xl:gap-2">
+                                                            <p className="font-semibold text-yellow-800 text-xs xl:text-sm">{item.kategori}</p>
                                                             <BsDot fontSize={24} />
                                                             <div className="flex gap-2 items-center text-slate-500">
                                                                 <FiClock fontSize={18} />
-                                                                <span className={`font-medium ${isMobile ? "text-xs" : "text-sm"}`}>
+                                                                <span className="font-medium text-xs xl:text-sm">
                                                                     {new Date(item.tanggal).toLocaleDateString("id-ID", {
                                                                         weekday: "long",
                                                                         year: "numeric",
@@ -808,12 +799,8 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col gap-1 mb-4">
-                                                            <h2 className={`font-bold text-slate-800 ${isMobile ? "text-xl" : "text-2xl"}`}>
-                                                                {item.judul}
-                                                            </h2>
-                                                            <p className={`text-slate-800 ${isMobile && "text-sm"}`}>
-                                                                {convertContent(item.content)}
-                                                            </p>
+                                                            <h2 className="font-bold text-slate-800 text-xl xl:text-2xl">{item.judul}</h2>
+                                                            <p className="text-slate-800 text-sm xl:text-base">{convertContent(item.content)}</p>
                                                         </div>
                                                     </div>
                                                 </motion.div>
@@ -835,53 +822,55 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
             </section>
 
             {/* YOUTUBE OVERLAY */}
-            <section className="relative">
+            <section className="relative flex justify-center">
                 {/* SHAPES */}
                 <img
                     src={dot_brown_svg}
                     alt="dot_brown"
-                    className={`absolute -z-10 ${isMobile ? "w-[146px] h-[120px] bottom-[-50px] right-[-11px]" : "bottom-[8px] right-[-11px]"}`}
+                    className="absolute -z-10 w-[146px] h-[120px] bottom-[-10px] right-[-11px] xl:bottom-[8px] xl:right-[-11px] xl:w-auto xl:h-auto"
                     ref={dot_brown}
                 />
                 <img
                     src={youtube_title_filled}
                     alt="dot_brown"
-                    className={`absolute -z-10 ${isMobile ? "w-[245px] h-[59px] top-1 left-1" : "top-3 left-3"}`}
+                    className="absolute -z-10 w-[245px] h-[59px] top-1 left-1 xl:top-3 xl:left-3 xl:w-auto xl:h-auto"
                 />
                 <img
                     src={youtube_title_outline}
                     alt="dot_brown"
-                    className={`absolute ${isMobile ? "w-[245px] h-[59px] top-1 left-1" : "top-3 left-3"}`}
+                    className="absolute w-[245px] h-[59px] top-1 left-1 xl:top-3 xl:left-3 xl:w-auto xl:h-auto"
                 />
 
                 {/* CONTENT */}
-                <div className={`${isMobile ? "px-4 py-8" : "px-32 py-24"}`}>
+                <div className="px-4 py-8 xl:px-32 xl:py-24 max-w-[512px] xl:max-w-none">
                     {youtube_db.videoUtama ? (
-                        <div className={`bg-yellow-400 w-full flex rounded-3xl ${isMobile ? "flex-col p-6 gap-3" : "p-16 gap-6"}`}>
-                            <div className={`overflow-hidden border-yellow-600 rounded-2xl border-2 ${isMobile ? "w-full" : "w-1/2"}`}>
+                        <div className="bg-yellow-400 w-full flex rounded-3xl flex-col p-6 gap-3 xl:flex-row xl:p-16 xl:gap-6">
+                            <div className="overflow-hidden border-yellow-600 rounded-2xl border-2 w-full xl:w-1/2">
                                 <iframe
                                     src={convertIframeLink(youtube_db.videoUtama)}
                                     title="YouTube video player"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                     referrerPolicy="strict-origin-when-cross-origin"
                                     allowFullScreen
-                                    className={`w-full ${isMobile ? "h-[200px]" : "h-[425px]"}`}
+                                    className="w-full h-[200px] xl:h-[425px]"
                                 ></iframe>
                             </div>
-                            <div className={`w-1/2 flex flex-col ${isMobile ? "w-full" : "w-1/2"}`}>
+                            <div className="flex flex-col w-full xl:w-1/2">
                                 {youtube_db.videoLainnya.map((item, index) => (
                                     <motion.a
                                         key={index}
                                         href={item.link}
-                                        className={`text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors ${
-                                            isMobile ? "py-2" : "py-4"
-                                        }`}
+                                        className="text-slate-800 flex gap-3 items-center border-b-2 border-yellow-500 hover:text-white transition-colors py-2 xl:py-4"
                                         initial={{ x: 100, opacity: 0 }}
                                         whileInView={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.5 } }}
                                         viewport={{ once: true }}
                                     >
-                                        <FaYoutube fontSize={isMobile ? 32 : 48} />
-                                        <span className={`font-bold ${isMobile ? "text-xs" : "text-xl"}`}>{item.nama}</span>
+                                        <div className="w-[32px] xl:w-[48px]">
+                                            <FaYoutube className="text-[32px] xl:text-[48px]" />
+                                        </div>
+                                        <div className="w-full">
+                                            <span className="font-bold text-xs xl:text-xl">{item.nama}</span>
+                                        </div>
                                     </motion.a>
                                 ))}
                             </div>
@@ -897,13 +886,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
 
             {/* MEDIA SOCTIAL SECTION */}
             <MediaSocialSection ms_db={media_social_db} />
-
-            {/* FOOTER */}
-            <Footer />
-
-            {/* BACK TO TOP BUTTON */}
-            <BackToTopButton />
-        </main>
+        </Main>
     );
 };
 
