@@ -286,7 +286,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                     {profil_1_db.gambar ? (
                         <motion.img
                             src={"/storage/profilImages/" + profil_1_db.gambar}
-                            className="object-cover rounded-2xl shadow-2xl w-full h-[200px] xl:h-[433px] xl:w-[679px] max-w-[512px] xl:max-w-none"
+                            className="object-cover rounded-2xl w-full h-[200px] xl:h-[433px] xl:w-[679px] max-w-[512px] xl:max-w-none"
                             initial={{ y: 100, opacity: 0 }}
                             whileInView={{ y: 0, opacity: 1, transition: { duration: 1, delay: 0.5 } }}
                             viewport={{ once: true }}

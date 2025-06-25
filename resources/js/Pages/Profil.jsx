@@ -386,7 +386,7 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                     {profil_1_db.gambar ? (
                         <motion.img
                             src={"/storage/profilImages/" + profil_1_db.gambar}
-                            className="object-cover rounded-2xl shadow-2xl w-full h-[200px] xl:h-[433px] xl:w-[679px]"
+                            className="object-cover rounded-2xl w-full h-[200px] xl:h-[433px] xl:w-[679px]"
                             initial={{ y: 100, opacity: 0 }}
                             whileInView={{ y: 0, opacity: 1, transition: { duration: 1, delay: 0.5 } }}
                             viewport={{ once: true }}
