@@ -5,7 +5,7 @@ import { FiSave } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setCurrentRoute } from "../../Redux/slice";
-import { Link, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { FaRegNewspaper } from "react-icons/fa6";
 import route from "ziggy-js";
 import toast, { Toaster } from "react-hot-toast";
@@ -26,22 +26,31 @@ const HalamanBeranda = ({ dataHerosection, dataCarouselBerita, dataYoutube, data
         dispatch(setCurrentRoute("HalamanBeranda"));
     }, []);
 
+    const db_judul = dataHerosection ? dataHerosection.find((item) => item.type == "judulBeranda").content : '';
+    const db_subJudul = dataHerosection ? dataHerosection.find((item) => item.type == "subJudulBeranda").content : '';
+    const db_youtubeUtama = dataYoutube ? dataYoutube.find((item) => item.type == "utama").link : '';
+    const db_youtubeLainnya = dataYoutube.filter((item) => item.type == "lainnya");
+    const db_carouselBerita = dataCarouselBerita.map((item) => item.berita_id);
+
     const formHalamanBeranda = useForm({
         hero_section: {
-            judul: dataHerosection.judul,
-            subJudul: dataHerosection.subJudul,
-            carouselBerita: dataCarouselBerita,
+            judul: db_judul,
+            subJudul: db_subJudul,
+            carouselBerita: db_carouselBerita,
         },
         youtube: {
-            videoUtama: dataYoutube.videoUtama,
-            videoLainnya: dataYoutube.videoLainnya,
+            videoUtama: db_youtubeUtama,
+            videoLainnya: db_youtubeLainnya,
         },
         media_social: dataMediaSocial,
     });
 
+    console.log(formHalamanBeranda.data);
+    
+
     let carouselBeritaOption = [];
     dataBerita.forEach((berita) => {
-        carouselBeritaOption.push({ value: berita._id, label: berita.judul, gambar: berita.path_gambar });
+        carouselBeritaOption.push({ value: berita.id, label: berita.judul, gambar: berita.gambar });
     });
 
     const carouselBeritaSelectFormat = ({ label, gambar }) => (
@@ -74,6 +83,11 @@ const HalamanBeranda = ({ dataHerosection, dataCarouselBerita, dataYoutube, data
         <main className="ml-[300px] bg-slate-100 min-h-screen p-12">
             {/* SIDEBAR */}
             <AdminSidebar />
+
+            {/* TITLE */}
+            <Head>
+                <title>Halaman Beranda</title>
+            </Head>
 
             <Toaster />
 
@@ -571,13 +585,13 @@ const HalamanBeranda = ({ dataHerosection, dataCarouselBerita, dataYoutube, data
                                 className={`px-4 py-3 border-2 border-slate-200 bg-slate-100 rounded-xl disabled:text-slate-400 h-fit w-full ${
                                     !formHalamanBeranda.data.media_social[3].isVisible ? "border-slate-200" : "border-slate-400"
                                 }`}
-                                value={formHalamanBeranda.data.media_social[3].email}
+                                value={formHalamanBeranda.data.media_social[3].link}
                                 onChange={(e) =>
                                     formHalamanBeranda.setData("media_social", [
                                         ...formHalamanBeranda.data.media_social.slice(0, 3),
                                         {
                                             ...formHalamanBeranda.data.media_social[3],
-                                            email: e.target.value,
+                                            link: e.target.value,
                                         },
                                         ...formHalamanBeranda.data.media_social.slice(4),
                                     ])

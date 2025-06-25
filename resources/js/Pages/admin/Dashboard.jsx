@@ -10,7 +10,7 @@ import { GoPeople } from "react-icons/go";
 import { LuClock4 } from "react-icons/lu";
 import { setCurrentRoute } from "../../Redux/slice";
 import { useDispatch } from "react-redux";
-import { usePage } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import toast, { Toaster } from "react-hot-toast";
 import { MdToday } from "react-icons/md";
 
@@ -65,11 +65,10 @@ const Dashboard = ({ viewsToday, uniqueVisitors, totalVisitors, topViewsPages, t
         }
     }
 
-    console.log(dataStatsBulanIni);
-
     let dataStatsMingguIni = [0, 0, 0, 0, 0, 0, 0];
-    for (let i = 0; i < statsWeeks.length; i++) {
-        dataStatsMingguIni[dataStatsMingguIni.length - statsWeeks.length + i] = statsWeeks[i].screenPageViews;
+    let reversedStatsWeeks = statsWeeks.slice().reverse();
+    for (let i = 0; i < reversedStatsWeeks.length; i++) {
+        dataStatsMingguIni[dataStatsMingguIni.length - reversedStatsWeeks.length + i - 1] = reversedStatsWeeks[i].screenPageViews;
     }
     
     const setDateInWeek = (decreement) => {
@@ -139,6 +138,11 @@ const Dashboard = ({ viewsToday, uniqueVisitors, totalVisitors, topViewsPages, t
     return (
         <main className="ml-[300px] bg-slate-100 min-h-screen p-12">
             <Toaster />
+
+            {/* TITLE */}
+            <Head>
+                <title>Dashboard</title>
+            </Head>
 
             {/* SIDEBAR */}
             <AdminSidebar />

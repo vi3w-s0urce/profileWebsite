@@ -2,7 +2,7 @@ import { TbEditCircle, TbPlus, TbSearch, TbTrash } from "react-icons/tb";
 import AdminSidebar from "../../Layout/AdminSidebar";
 import Select from "react-select";
 import { FiSave } from "react-icons/fi";
-import { Link, router, usePage } from "@inertiajs/react";
+import { Head, Link, router, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCurrentRoute } from "../../Redux/slice";
@@ -44,13 +44,18 @@ const Pengaturan = ({ akunAdmin }) => {
     const data = { nodes };
 
     const handleDeleteAkun = () => {
-        router.delete(route("AkunAdminDelete", { id: deleteAkun }));
+        router.post(route("AkunAdminDelete", { id: deleteAkun }));
         setDeleteAkun(null);
     };
 
     return (
         <main className="ml-[300px] bg-slate-100 min-h-screen p-12">
             <Toaster />
+
+            {/* TITLE */}
+            <Head>
+                <title>Pengaturan</title>
+            </Head>
 
             {/* SIDEBAR */}
             <AdminSidebar />
@@ -109,7 +114,7 @@ const Pengaturan = ({ akunAdmin }) => {
 
                                     <Body>
                                         {tableList.map((item, index) => (
-                                            <Row key={item._id} item={item} className="!text-lg !font-medium !text-slate-800">
+                                            <Row key={item.id} item={item} className="!text-lg !font-medium !text-slate-800">
                                                 <Cell className="!pl-4 !py-4 !border-b-2 !border-slate-300">{index + 1}.</Cell>
                                                 <Cell className="!py-4 !border-b-2 !border-slate-300">
                                                     {index == 0 ? (
@@ -118,11 +123,11 @@ const Pengaturan = ({ akunAdmin }) => {
                                                                 {item.name}
                                                                 <span className="text-slate-500 text-xs">(Akun Utama)</span>
                                                             </div>
-                                                            {item.defaultPassword && (
+                                                            {item.defaultPassword ? (
                                                                 <span className="text-xs text-red-500 font-semibold">
                                                                     *Sangat disarankan untuk mengganti password bawaan!
                                                                 </span>
-                                                            )}
+                                                            ) : null}
                                                         </div>
                                                     ) : (
                                                         <>{item.name}</>
@@ -135,7 +140,7 @@ const Pengaturan = ({ akunAdmin }) => {
                                                 <Cell className="!py-4 !pr-4 !border-b-2 !border-slate-300">
                                                     <div className="!flex !items-center !justify-center !gap-1">
                                                         <Link
-                                                            href={route("AkunAdminEdit", { id: item._id })}
+                                                            href={route("AkunAdminEdit", { id: item.id })}
                                                             className="p-2 rounded-lg hover:bg-yellow-100 text-yellow-500 transition-colors cursor-pointer"
                                                         >
                                                             <TbEditCircle fontSize={32} />
@@ -143,7 +148,7 @@ const Pengaturan = ({ akunAdmin }) => {
                                                         {!index == 0 && (
                                                             <div
                                                                 className="p-2 rounded-lg hover:bg-red-100 text-red-400 transition-colors cursor-pointer"
-                                                                onClick={() => setDeleteAkun(item._id)}
+                                                                onClick={() => setDeleteAkun(item.id)}
                                                             >
                                                                 <TbTrash fontSize={32} />
                                                             </div>

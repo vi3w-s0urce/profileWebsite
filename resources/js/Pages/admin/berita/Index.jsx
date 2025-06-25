@@ -2,7 +2,7 @@ import { TbEditCircle, TbPlus, TbSearch, TbTrash } from "react-icons/tb";
 import AdminSidebar from "../../../Layout/AdminSidebar";
 import Select from "react-select";
 import { FiSave } from "react-icons/fi";
-import { Link, router, usePage } from "@inertiajs/react";
+import { Head, Link, router, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCurrentRoute } from "../../../Redux/slice";
@@ -56,13 +56,18 @@ const BeritaIndexAdmin = ({ berita }) => {
     });
 
     const handleDeleteBerita = () => {
-        router.delete(route("BeritaDeleteAdmin", { id: deleteBerita }));
+        router.post(route("BeritaDeleteAdmin", { id: deleteBerita }));
         setDeleteBerita(null);
     };
 
     return (
         <main className="ml-[300px] bg-slate-100 min-h-screen p-12">
             <Toaster />
+
+            {/* TITLE */}
+            <Head>
+                <title>Berita & Agenda</title>
+            </Head>
 
             {/* SIDEBAR */}
             <AdminSidebar />
@@ -129,14 +134,14 @@ const BeritaIndexAdmin = ({ berita }) => {
 
                                         <Body>
                                             {tableList.map((item, index) => (
-                                                <Row key={item._id} className="!text-lg !font-medium !text-slate-800">
+                                                <Row key={item.id} className="!text-lg !font-medium !text-slate-800">
                                                     <Cell className="!pl-4 !py-4 !border-b-2 !border-slate-300">
                                                         {index + 1 + pagination.state.page * 10}.
                                                     </Cell>
                                                     <Cell className="!py-4 !border-b-2 !border-slate-300">
                                                         <div className="!flex !items-center !gap-3">
                                                             <div className="!w-[144px] !h-[81px] !rounded-lg !overflow-hidden">
-                                                                <img src={"/storage/beritaImages/" + item.path_gambar} alt="gambar" />
+                                                                <img src={"/storage/beritaImages/" + item.gambar} alt="gambar" />
                                                             </div>
                                                             <span className="!max-w-[380px] !whitespace-normal">{item.judul}</span>
                                                         </div>
@@ -148,7 +153,7 @@ const BeritaIndexAdmin = ({ berita }) => {
                                                     </Cell>
                                                     <Cell className="!py-4 !border-b-2 !border-slate-300">
                                                         <div className="px-4 py-2 bg-slate-100 w-fit rounded-xl !text-slate-500">
-                                                            {new Date(item.tanggal).toLocaleDateString("id-ID", {
+                                                            {new Date(item.created_at).toLocaleDateString("id-ID", {
                                                                 year: "numeric",
                                                                 month: "2-digit",
                                                                 day: "2-digit",
@@ -160,11 +165,11 @@ const BeritaIndexAdmin = ({ berita }) => {
                                                     </Cell>
                                                     <Cell className="!py-4 !pr-4 !border-b-2 !border-slate-300">
                                                         <div className="!flex !items-center !gap-1">
-                                                            <Link href={route('BeritaEditAdmin', { id: item._id})} className="p-2 rounded-lg hover:bg-yellow-100 text-yellow-500 transition-colors cursor-pointer">
+                                                            <Link href={route('BeritaEditAdmin', { id: item.id})} className="p-2 rounded-lg hover:bg-yellow-100 text-yellow-500 transition-colors cursor-pointer">
                                                                 <TbEditCircle fontSize={32} />
                                                             </Link>
                                                             <div
-                                                                onClick={() => setDeleteBerita(item._id)}
+                                                                onClick={() => setDeleteBerita(item.id)}
                                                                 className="p-2 rounded-lg hover:bg-red-100 text-red-400 transition-colors cursor-pointer"
                                                             >
                                                                 <TbTrash fontSize={32} />

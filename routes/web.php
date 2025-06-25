@@ -10,9 +10,11 @@ use App\Http\Controllers\AnalyticsController;
 use Inertia\Inertia;
 
 Route::controller(LandingPageController::class)->group(function () {
-    Route::get('/', 'beranda')->name('Beranda');
+    Route::get('/', 'index')->name('Beranda');
+    Route::get('/welcome', 'welcome')->name('Welcome');
     Route::get('/profil', 'profil')->name('Profil');
     Route::get('/get_ms_db', 'get_ms_db')->name('getMsDb');
+    Route::get('/kontak', 'kontak')->name('Kontak');
 });
 
 Route::controller(BeritaController::class)->group(function () {
@@ -40,7 +42,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::get('/berita', 'showAdmin')->name('BeritaIndexAdmin');
         Route::get('/berita/buat', 'create')->name('BeritaCreateAdmin');
         Route::post('/berita/buat', 'store')->name('BeritaStoreAdmin');
-        Route::delete('/berita/delete/{id}', 'destroy')->name('BeritaDeleteAdmin');
+        Route::post('/berita/delete/{id}', 'destroy')->name('BeritaDeleteAdmin');
         Route::get('/berita/edit/{id}', 'edit')->name('BeritaEditAdmin');
         Route::post('/berita/edit/{id}', 'update')->name('BeritaUpdateAdmin');
     });
@@ -48,7 +50,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::get('/pengaturan', 'show')->name('PengaturanAdmin');
         Route::get('/akun/create', 'akunCreate')->name('AkunAdminCreate');
         Route::post('/akun/create', 'akunStore')->name('AkunAdminStore');
-        Route::delete('/akun/{id}', 'akunDelete')->name('AkunAdminDelete');
+        Route::post('/akun/{id}', 'akunDelete')->name('AkunAdminDelete');
         Route::get('/akun/edit/{id}', 'akunEdit')->name('AkunAdminEdit');
         Route::put('/akun/edit/{id}', 'akunUpdate')->name('AkunAdminUpdate');
     });

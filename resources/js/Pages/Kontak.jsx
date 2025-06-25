@@ -23,7 +23,7 @@ import { useMediaQuery } from "react-responsive";
 import BackToTopButton from "../Components/BackToTopButton";
 import Main from "../Layout/Main";
 
-const Kontak = () => {
+const Kontak = ({ media_social_db }) => {
     const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
 
     const blob_yellow_line = useRef();
@@ -68,10 +68,28 @@ const Kontak = () => {
             {/* MASUKAN FORM */}
             <section className="relative">
                 {/* SHAPES */}
-                <img src={kontak_title_outline_svg} alt="kontak_title" className={`absolute ${isMobile ? 'w-[263px] h-[118px] top-1 left-1' : 'top-3 left-3'}`} />
-                <img src={kontak_title_filled_svg} alt="kontak_title" className={`absolute -z-10 ${isMobile ? 'w-[263px] h-[118px] top-1 left-1' : 'top-3 left-3'}`} />
-                <img src={blob_yellow_line_svg} alt="blob_yellow" className={`absolute -z-10 ${isMobile ? 'w-[148px] h-[128px] right-[-24px] top-[200px]' : 'right-[-179px] top-[200px]'}`} ref={blob_yellow_line} />
-                <img src={dot_yellow_svg} alt="dot_yellow" className={`absolute -z-10 ${isMobile ? 'w-[134px] h-[115px] bottom-[10px] left-[400px]' : 'top-[650px] left-[500px]'}`} ref={dot_yellow} />
+                <img
+                    src={kontak_title_outline_svg}
+                    alt="kontak_title"
+                    className={`absolute ${isMobile ? "w-[263px] h-[118px] top-1 left-1" : "top-3 left-3"}`}
+                />
+                <img
+                    src={kontak_title_filled_svg}
+                    alt="kontak_title"
+                    className={`absolute -z-10 ${isMobile ? "w-[263px] h-[118px] top-1 left-1" : "top-3 left-3"}`}
+                />
+                <img
+                    src={blob_yellow_line_svg}
+                    alt="blob_yellow"
+                    className={`absolute -z-10 ${isMobile ? "w-[148px] h-[128px] right-[-24px] top-[200px]" : "right-[-179px] top-[200px]"}`}
+                    ref={blob_yellow_line}
+                />
+                <img
+                    src={dot_yellow_svg}
+                    alt="dot_yellow"
+                    className={`absolute -z-10 ${isMobile ? "w-[134px] h-[115px] bottom-[10px] left-[400px]" : "top-[650px] left-[500px]"}`}
+                    ref={dot_yellow}
+                />
 
                 {/* CONTENT */}
                 <div className={`relative flex flex-col items-center z-20 ${isMobile ? "px-4 py-8 gap-8" : "px-32 py-24 gap-16"} `}>
@@ -239,7 +257,7 @@ const Kontak = () => {
             </section>
 
             {/* MEDIA SOCIAL SECTION */}
-            <MediaSocialSection />
+            <MediaSocialSection ms_db={media_social_db} />
         </Main>
     );
 };

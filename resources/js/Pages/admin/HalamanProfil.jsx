@@ -6,7 +6,7 @@ import { GoImage } from "react-icons/go";
 import { useDispatch } from "react-redux";
 import { setCurrentRoute } from "../../Redux/slice";
 import { useEffect, useState } from "react";
-import { useForm, usePage } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import route from "ziggy-js";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -29,26 +29,26 @@ const HalamanProfil = ({ dataProfil, dataRiwayat, dataPenghargaan }) => {
     const [selectedImageProfil_1, setSelectedImageProfil_1] = useState();
     const [selectedImageProfil_2, setSelectedImageProfil_2] = useState();
     const [selectedPenghargaanImage, setSelectedPenghargaanImage] = useState([]);
-
-    const dataProfil_1 = dataProfil.find((item) => item.section === 1);
-    const dataProfil_2 = dataProfil.find((item) => item.section === 2);
-    const dataRiwayatPendidikan = dataRiwayat.find((item) => item.section === "pendidikan");
-    const dataRiwayatPekerjaan = dataRiwayat.find((item) => item.section === "pekerjaan");
-    const dataRiwayatOrganisasi = dataRiwayat.find((item) => item.section === "organisasi");
+    
+    const dataProfil_1 = dataProfil.find((item) => item.type === "profil_1");
+    const dataProfil_2 = dataProfil.find((item) => item.type === "profil_2");
+    const dataRiwayatPendidikan = dataRiwayat.filter((item) => item.type === "pendidikan").map(item => item.list);
+    const dataRiwayatPekerjaan = dataRiwayat.filter((item) => item.type === "pekerjaan").map(item => item.list);
+    const dataRiwayatOrganisasi = dataRiwayat.filter((item) => item.type === "organisasi").map(item => item.list);
 
     const formHalamanProfil = useForm({
         profil_1: {
             gambar: dataProfil_1.gambar,
-            deskripsi: dataProfil_1.deskripsi,
+            content: dataProfil_1.content,
         },
         profil_2: {
             gambar: dataProfil_2.gambar,
-            deskripsi: dataProfil_2.deskripsi,
+            content: dataProfil_2.content,
         },
-        riwayat_pendidikan: dataRiwayatPendidikan.list,
-        riwayat_pekerjaan: dataRiwayatPekerjaan.list,
-        riwayat_organisasi: dataRiwayatOrganisasi.list,
-        penghargaan: dataPenghargaan.list,
+        riwayat_pendidikan: dataRiwayatPendidikan,
+        riwayat_pekerjaan: dataRiwayatPekerjaan,
+        riwayat_organisasi: dataRiwayatOrganisasi,
+        penghargaan: dataPenghargaan,
     });
 
     const checkSelectedPenghargaanImage = (index) => {
@@ -74,6 +74,11 @@ const HalamanProfil = ({ dataProfil, dataRiwayat, dataPenghargaan }) => {
         <main className="ml-[300px] bg-slate-100 min-h-screen p-12">
             {/* SIDEBAR */}
             <AdminSidebar />
+
+            {/* TITLE */}
+            <Head>
+                <title>Halaman Profil</title>
+            </Head>
 
             <Toaster />
 
@@ -146,10 +151,10 @@ const HalamanProfil = ({ dataProfil, dataRiwayat, dataPenghargaan }) => {
                                 onChange={(e) =>
                                     formHalamanProfil.setData("profil_1", {
                                         ...formHalamanProfil.data.profil_1,
-                                        deskripsi: e.target.value,
+                                        content: e.target.value,
                                     })
                                 }
-                                value={formHalamanProfil.data.profil_1.deskripsi}
+                                value={formHalamanProfil.data.profil_1.content}
                                 required
                             ></textarea>
                         </div>
@@ -215,10 +220,10 @@ const HalamanProfil = ({ dataProfil, dataRiwayat, dataPenghargaan }) => {
                                 onChange={(e) =>
                                     formHalamanProfil.setData("profil_2", {
                                         ...formHalamanProfil.data.profil_2,
-                                        deskripsi: e.target.value,
+                                        content: e.target.value,
                                     })
                                 }
-                                value={formHalamanProfil.data.profil_2.deskripsi}
+                                value={formHalamanProfil.data.profil_2.content}
                                 required
                             ></textarea>
                         </div>

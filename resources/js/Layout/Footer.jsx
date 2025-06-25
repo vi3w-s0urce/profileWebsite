@@ -76,7 +76,7 @@ const Footer = () => {
                             <BsTwitterX fontSize={46} className="text-white hover:text-yellow-900 transition-colors" />
                         </a>
                         <a
-                            href={`mailto:${msDb && msDb[3].email}`}
+                            href={`mailto:${msDb && msDb[3].link}`}
                             ref={(el) => (media_social.current[3] = el)}
                             className={`${msDb && !msDb[3].isVisible && "hidden"}`}
                         >
@@ -101,6 +101,9 @@ const Footer = () => {
                     </Link>
                     <Link href={route("Berita")} className="font-semibold text-white hover:text-yellow-900 transition-colors text-xs xl:text-xl">
                         Berita & Agenda
+                    </Link>
+                    <Link href={route("Kontak")} className="font-semibold text-white hover:text-yellow-900 transition-colors text-xs xl:text-xl">
+                        Kontak
                     </Link>
                 </div>
             </div>
@@ -128,7 +131,7 @@ const Footer = () => {
                         <BsTwitterX className="text-white hover:text-yellow-900 transition-colors text-[24px]" />
                     </a>
                     <a
-                        href={`mailto:${msDb && msDb[3].email}`}
+                        href={`mailto:${msDb && msDb[3].link}`}
                         ref={(el) => (media_social.current[3] = el)}
                         className={`${msDb && !msDb[3].isVisible && "hidden"}`}
                     >

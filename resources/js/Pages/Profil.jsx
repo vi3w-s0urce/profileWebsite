@@ -419,7 +419,7 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                             stagger={0.01}
                             bottom={50}
                         >
-                            {formatText(profil_1_db.deskripsi)}
+                            {formatText(profil_1_db.content)}
                         </RevealText>
                     </div>
                 </div>
@@ -455,7 +455,7 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                             stagger={0.01}
                             bottom={50}
                         >
-                            {formatText(profil_2_db.deskripsi)}
+                            {formatText(profil_2_db.content)}
                         </RevealText>
                     </div>
                     <motion.img
@@ -584,8 +584,8 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                                             <span className="font-bold text-yellow-900 text-xl xl:text-3xl">Riwayat Pendidikan</span>
                                         </h1>
                                         <ol className="list-disc flex flex-col ms-4 gap-1 xl:ms-7 xl:gap-2">
-                                            {riwayat_pendidikan_db.list.map((item, index) => (
-                                                <li className="font-medium text-slate-800 text-xs xl:text-base">{item}</li>
+                                            {riwayat_pendidikan_db.map((item, index) => (
+                                                <li className="font-medium text-slate-800 text-xs xl:text-base">{item.list}</li>
                                             ))}
                                         </ol>
                                     </motion.div>
@@ -605,8 +605,8 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                                             <span className="font-bold text-yellow-900 text-xl xl:text-3xl">Riwayat Pekerjaan</span>
                                         </h1>
                                         <ol className="list-disc flex flex-col ms-4 gap-1 xl:ms-7 xl:gap-2">
-                                            {riwayat_pekerjaan_db.list.map((item, index) => (
-                                                <li className="font-medium text-slate-800 text-xs xl:text-base">{item}</li>
+                                            {riwayat_pekerjaan_db.map((item, index) => (
+                                                <li className="font-medium text-slate-800 text-xs xl:text-base">{item.list}</li>
                                             ))}
                                         </ol>
                                     </motion.div>
@@ -626,8 +626,8 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                                             <span className="font-bold text-yellow-900 text-xl xl:text-3xl">Riwayat Organisasi</span>
                                         </h1>
                                         <ol className="list-disc flex flex-col list-inside gap-1 overflow-y-auto max-h-[30vh] xl:overflow-y-auto xl:ms-7 xl:gap-2 xl:max-h-[50vh]">
-                                            {riwayat_organisasi_db.list.map((item, index) => (
-                                                <li className="font-medium text-slate-800 text-xs xl:text-base">{item}</li>
+                                            {riwayat_organisasi_db.map((item, index) => (
+                                                <li className="font-medium text-slate-800 text-xs xl:text-base">{item.list}</li>
                                             ))}
                                         </ol>
                                     </motion.div>
@@ -671,9 +671,9 @@ const Profil = ({ profil_1_db, profil_2_db, riwayat_pendidikan_db, riwayat_peker
                         ref={penghargaanContainerRef}
                         className="flex flex-wrap items-center justify-center gap-8 flex-col w-full xl:gap-16 xl:flex-row"
                     >
-                        {penghargaan_db.list != 0 ? (
+                        {penghargaan_db != 0 ? (
                             <>
-                                {penghargaan_db.list.map((item, index) => (
+                                {penghargaan_db.map((item, index) => (
                                     <motion.a
                                         data-fancybox="penghargaan"
                                         href={"/storage/penghargaanImages/" + item.gambar}

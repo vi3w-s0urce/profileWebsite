@@ -12,14 +12,14 @@ class BeritaController extends Controller
 {
     public function showBerita()
     {
-        $berita = Berita::latest()->get();
+        $berita = Berita::orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Berita', ['berita' => $berita]);
     }
 
     public function showAdmin()
     {
-        $berita = Berita::all();
+        $berita = Berita::orderBy('created_at', 'desc')->get();
 
         return Inertia::render('admin/berita/Index', ['berita' => $berita]);
     }
@@ -27,8 +27,8 @@ class BeritaController extends Controller
     public function create()
     {
         return Inertia::render('admin/berita/Create');
+        
     }
-
     public function store(Request $request)
     {
         $dataBerita = $request->validate([
@@ -43,12 +43,11 @@ class BeritaController extends Controller
         $moveFile = $request->file('gambar')->storeAs('public/beritaImages', $imageName);
 
         if ($moveFile) {
-            $dataBerita["path_gambar"] = $imageName;
+            $dataBerita["gambar"] = $imageName;
         } else {
             return redirect()->back()->with('error', 'Sever Error');
         }
 
-        $dataBerita["tanggal"] = date(Carbon::now()->setTimezone('Asia/Jakarta'));
         $dataBerita["pengunjung"] = 0;
 
         $slug = $dataBerita['judul'];
@@ -77,7 +76,7 @@ class BeritaController extends Controller
     {
         $berita = Berita::findOrFail($id);
 
-        $gambarPath = 'public/beritaImages/' . $berita->path_gambar;
+        $gambarPath = 'public/beritaImages/' . $berita->gambar;
 
         if (Storage::exists($gambarPath)) {
             Storage::delete($gambarPath);
@@ -98,14 +97,14 @@ class BeritaController extends Controller
 
         $berita->increment('pengunjung', 1);
 
-        $beritaLainnya = Berita::where('_id', '!=', $berita->id)->limit(3)->get();
+        $beritaLainnya = Berita::where('id', '!=', $berita->id)->limit(3)->get();
 
         return Inertia::render('ShowBerita', ['berita' => $berita, 'beritaLainnya' => $beritaLainnya]);
     }
 
     public function edit($id)
     {
-        $berita = Berita::where('_id', $id)->first();
+        $berita = Berita::where('id', $id)->first();
 
         return Inertia::render('admin/berita/Edit', ['berita' => $berita]);
     }
@@ -119,8 +118,6 @@ class BeritaController extends Controller
             'kategori' => 'required',
             'content' => 'required|json',
         ]);
-
-        $dataBerita["tanggal"] = date(Carbon::now()->setTimezone('Asia/Jakarta'));
 
         $slug = $dataBerita['judul'];
         $slug = strtolower(implode('-', explode(' ', $slug)));
@@ -141,9 +138,9 @@ class BeritaController extends Controller
             $moveFile = $request->file('gambar')->storeAs('public/beritaImages', $imageName);
 
             if ($moveFile) {
-                $dataBerita["path_gambar"] = $imageName;
+                $dataBerita["gambar"] = $imageName;
 
-                $gambarPath = 'public/beritaImages/' . $berita->path_gambar;
+                $gambarPath = 'public/beritaImages/' . $berita->gambar;
 
                 if (Storage::exists($gambarPath)) {
                     Storage::delete($gambarPath);

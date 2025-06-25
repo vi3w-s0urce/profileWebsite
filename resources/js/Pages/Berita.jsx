@@ -99,6 +99,7 @@ const Berita = ({ berita }) => {
 
     const handleClick = (event) => {
         setCurrentPage(Number(event.target.id));
+        window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     };
 
     return (
@@ -145,7 +146,7 @@ const Berita = ({ berita }) => {
                                     >
                                         <div className="w-full overflow-hidden rounded-3xl h-[184px] xl:h-[288px]">
                                             <img
-                                                src={"/storage/beritaImages/" + item.path_gambar}
+                                                src={"/storage/beritaImages/" + item.gambar}
                                                 alt="berita"
                                                 className="w-full h-full object-cover group-hover:scale-[1.1] transition-all"
                                             />
@@ -157,7 +158,7 @@ const Berita = ({ berita }) => {
                                                 <div className="flex gap-2 items-center text-slate-500">
                                                     <FiClock fontSize={18} />
                                                     <span className="font-medium text-xs xl:text-sm">
-                                                        {new Date(item.tanggal).toLocaleDateString("id-ID", {
+                                                        {new Date(item.created_at).toLocaleDateString("id-ID", {
                                                             weekday: "long",
                                                             year: "numeric",
                                                             month: "long",

@@ -1,6 +1,6 @@
 import { IoIosArrowBack } from "react-icons/io";
 import AdminSidebar from "../../../Layout/AdminSidebar";
-import { Link as InertiaLink, useForm, usePage } from "@inertiajs/react";
+import { Head, Link as InertiaLink, useForm, usePage } from "@inertiajs/react";
 import Select from "react-select";
 import { GoImage } from "react-icons/go";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -109,6 +109,11 @@ const BeritaCreateAdmin = () => {
     return (
         <main className="ml-[300px] bg-slate-100 min-h-screen p-12">
             <Toaster />
+
+            {/* TITLE */}
+            <Head>
+                <title>Berita & Agenda Create</title>
+            </Head>
 
             {/* SIDEBAR */}
             <AdminSidebar />

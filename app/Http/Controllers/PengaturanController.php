@@ -37,6 +37,8 @@ class PengaturanController extends Controller
         ]);
 
         $dataUser['password'] = Hash::make($dataUser['password']);
+        $dataUser['isMainAccount'] = false;
+        $dataUser['defaultPassword'] = false;
 
         $createdUser = User::create($dataUser);
 

@@ -47,7 +47,7 @@ const Main = ({ children }) => {
                             initial={{ height: 0, width: 0 }}
                             animate={{ height: 5000, width: 5000, transitionTimingFunction: easeOut }}
                             exit={{ height: 0, width: 0 }}
-                            transition={{ duration: 1 }}
+                            transition={{ duration: 0.8 }}
                             id="loading_screen"
                         >
                             <div className="flex gap-4">

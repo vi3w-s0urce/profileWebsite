@@ -3,8 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
+use App\Models\CarouselBerita;
 use App\Models\HalamanBeranda;
 use App\Models\HalamanProfil;
+use App\Models\MediaSocial;
+use App\Models\Penghargaan;
+use App\Models\Riwayat;
+use App\Models\SectionContent;
+use App\Models\Youtube;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +31,7 @@ class AdminController extends Controller
         $analyticsData = Analytics::fetchTotalVisitorsAndPageViews(Period::create($startDate, $endDate));
 
         $statsWeeks = Analytics::fetchTotalVisitorsAndPageViews(Period::days(7));
+        // dd($statsWeeks);
 
         $viewsToday = Analytics::fetchTotalVisitorsAndPageViews(Period::create($endDate, $endDate));
         $viewsToday = count($viewsToday) > 0 ? $viewsToday[0]['screenPageViews'] : 0;
@@ -65,9 +72,9 @@ class AdminController extends Controller
 
     public function halamanProfil()
     {
-        $dataProfil = HalamanProfil::where('type', 'Profil')->get();
-        $dataRiwayat = HalamanProfil::where('type', 'Riwayat')->get();
-        $dataPenghargaan = HalamanProfil::where('type', 'Penghargaan')->first();
+        $dataProfil = SectionContent::whereIn('type', ['profil_1', 'profil_2'])->get();
+        $dataRiwayat = Riwayat::all();
+        $dataPenghargaan = Penghargaan::all();
 
         return Inertia::render('admin/HalamanProfil', ['dataProfil' => $dataProfil, 'dataRiwayat' => $dataRiwayat, 'dataPenghargaan' => $dataPenghargaan]);
     }
@@ -83,12 +90,8 @@ class AdminController extends Controller
             'penghargaan' => 'required|array',
         ]);
 
-        $profil_1_db = HalamanProfil::where('type', 'Profil')->where('section', 1)->first();
-        $profil_2_db = HalamanProfil::where('type', 'Profil')->where('section', 2)->first();
-        $riwayat_pendidikan_db = HalamanProfil::where('type', 'Riwayat')->where('section', 'pendidikan')->first();
-        $riwayat_pekerjaan_db = HalamanProfil::where('type', 'Riwayat')->where('section', 'pekerjaan')->first();
-        $riwayat_organisasi_db = HalamanProfil::where('type', 'Riwayat')->where('section', 'organisasi')->first();
-        $penghargaan_db = HalamanProfil::where('type', 'Penghargaan')->first();
+        $profil_1_db = SectionContent::where('type', 'profil_1')->first();
+        $profil_2_db = SectionContent::where('type', 'profil_2')->first();
 
         // PROFIL_1
         if ($data['profil_1']['gambar']) {
@@ -113,7 +116,7 @@ class AdminController extends Controller
             }
         };
 
-        $profil_1_db->update(['deskripsi' => $data['profil_1']['deskripsi']]);
+        $profil_1_db->update(['content' => $data['profil_1']['content']]);
 
         // PROFIL_2
         if ($data['profil_2']['gambar']) {
@@ -138,20 +141,36 @@ class AdminController extends Controller
             }
         };
 
-        $profil_2_db->update(['deskripsi' => $data['profil_2']['deskripsi']]);
+        $profil_2_db->update(['content' => $data['profil_2']['content']]);
 
         // RIWAYAT
-        $riwayat_pendidikan_db->update(['list' => $data['riwayat_pendidikan']]);
-        $riwayat_pekerjaan_db->update(['list' => $data['riwayat_pekerjaan']]);
-        $riwayat_organisasi_db->update(['list' => $data['riwayat_organisasi']]);
+        Riwayat::truncate();
+        foreach ($data['riwayat_pendidikan'] as $key => $value) {
+            Riwayat::create([
+                'type' => 'pendidikan',
+                'list' => $value,
+            ]);
+        }
+        foreach ($data['riwayat_pekerjaan'] as $key => $value) {
+            Riwayat::create([
+                'type' => 'pekerjaan',
+                'list' => $value,
+            ]);
+        }
+        foreach ($data['riwayat_organisasi'] as $key => $value) {
+            Riwayat::create([
+                'type' => 'organisasi',
+                'list' => $value,
+            ]);
+        }
 
         // PENGHARGAAN
         $dataPenghargaan = $data['penghargaan'];
-        $penghargaanList = $penghargaan_db->list ?? [];
-
-        $newPenghargaanList = [];
+        $newIds = collect($dataPenghargaan)->pluck('id')->filter()->all();
+        Penghargaan::whereNotIn('id', $newIds)->delete();
 
         foreach ($dataPenghargaan as $index => $item) {
+
             $newItem = [
                 'judul' => $item['judul'],
                 'deskripsi' => $item['deskripsi'],
@@ -164,33 +183,26 @@ class AdminController extends Controller
                     $newItem['gambar'] = $imageName;
                 }
             } else {
-                $newItem['gambar'] = $item['gambar'];
+                $newItem['gambar'] = $item['gambar']; 
             }
 
-            $newPenghargaanList[] = $newItem;
+            if (isset($item['id'])) {
+                Penghargaan::where('id', $item['id'])->update($newItem);
+            } else {
+                Penghargaan::create($newItem);
+            }
         }
-
-        $penghargaan_db->update(['list' => $newPenghargaanList]);
 
         return redirect()->back()->with('success', 'Berhasil menyimpan pembaharauan');
     }
 
     public function halamanBeranda()
     {
-        $dataHerosection = HalamanBeranda::where('type', 'HeroSection')->first();
-        $dataYoutube = HalamanBeranda::where('type', 'Youtube')->first();
-        $dataMediaSocial = HalamanBeranda::where('type', 'MediaSocial')->get();
-        $dataBerita = Berita::all();
-        $dataCarouselBerita = HalamanBeranda::where('type', 'CarouselBerita')->pluck('berita_id');
-        $dataCarouselBerita = $dataCarouselBerita->map(function ($beritaId) {
-            if ($beritaId instanceof ObjectId) {
-                return (string) $beritaId;
-            } elseif (is_array($beritaId) && isset($beritaId['$oid'])) {
-                return $beritaId['$oid'];
-            } else {
-                return null;
-            }
-        });
+        $dataHerosection = SectionContent::whereIn('type', ['judulBeranda', 'subJudulBeranda'])->get();
+        $dataYoutube = Youtube::all();
+        $dataMediaSocial = MediaSocial::all();
+        $dataBerita = Berita::orderBy('created_at', 'desc')->get();
+        $dataCarouselBerita = CarouselBerita::with('Berita')->get();
 
         return Inertia::render('admin/HalamanBeranda', [
             'dataHerosection' => $dataHerosection,
@@ -209,36 +221,50 @@ class AdminController extends Controller
             'media_social' => 'required|array',
         ]);
 
-        $hero_section_db = HalamanBeranda::where('type', 'HeroSection')->first();
-        $youtube_db = HalamanBeranda::where('type', 'Youtube')->first();
-        $ms_facebook_db = HalamanBeranda::where('type', 'MediaSocial')->where('media', 'facebook')->first();
-        $ms_instagram_db = HalamanBeranda::where('type', 'MediaSocial')->where('media', 'instagram')->first();
-        $ms_twitter_db = HalamanBeranda::where('type', 'MediaSocial')->where('media', 'twitter')->first();
-        $ms_email_db = HalamanBeranda::where('type', 'MediaSocial')->where('media', 'email')->first();
-        $ms_youtube_db = HalamanBeranda::where('type', 'MediaSocial')->where('media', 'youtube')->first();
-
         // Hero Section
-        $hero_section_db->update([
-            'judul' => $data['hero_section']['judul'],
-            'subJudul' => $data['hero_section']['subJudul']
-        ]);
+        $subJudul = $data['hero_section']['subJudul'];
+        $judul = $data['hero_section']['judul'];
+        $db_subJudul = SectionContent::where('type', 'subJudulBeranda')->first();
+        $db_judul = SectionContent::where('type', 'judulBeranda')->first();
+
+        $db_subJudul->update(['content' => $subJudul]);
+        $db_judul->update(['content' => $judul]);
 
         // Carousel Berita
-        HalamanBeranda::where('type', 'CarouselBerita')->delete();
-        foreach ($data['hero_section']['carouselBerita'] as $item) {
-            HalamanBeranda::create([
-                'type' => 'CarouselBerita',
-                'berita_id' => new ObjectId($item),
+        $carouselBerita = $data['hero_section']['carouselBerita'];
+
+        CarouselBerita::truncate();
+        foreach ($carouselBerita as $key => $value) {
+            CarouselBerita::create([
+                'berita_id' => $value
             ]);
         }
 
         // Youtube
-        $youtube_db->update([
-            'videoUtama' => $data['youtube']['videoUtama'],
-            'videoLainnya' => $data['youtube']['videoLainnya']
+        $videoUtama = $data['youtube']['videoUtama'];
+        $videoLainnya = $data['youtube']['videoLainnya'];
+        
+        Youtube::truncate();
+        Youtube::create([
+            'type' => 'utama',
+            'nama' => 'Video Utama',
+            'link' => $videoUtama
         ]);
+        foreach ($videoLainnya as $key => $value) {
+            Youtube::create([
+                'type' => 'lainnya',
+                'nama' => $value['nama'],
+                'link' => $value['link']
+            ]);
+        }
 
         // Media Social
+        $ms_facebook_db = MediaSocial::where('media', 'facebook')->first();
+        $ms_instagram_db = MediaSocial::where('media', 'instagram')->first();
+        $ms_twitter_db = MediaSocial::where('media', 'twitter')->first();
+        $ms_email_db = MediaSocial::where('media', 'email')->first();
+        $ms_youtube_db = MediaSocial::where('media', 'youtube')->first();
+        
         $ms_facebook_db->update([
             'nama' => $data['media_social'][0]['nama'],
             'link' => $data['media_social'][0]['link'],
@@ -258,7 +284,7 @@ class AdminController extends Controller
         ]);
 
         $ms_email_db->update([
-            'email' => $data['media_social'][3]['email'],
+            'link' => $data['media_social'][3]['link'],
             'isVisible' => $data['media_social'][3]['isVisible']
         ]);
 

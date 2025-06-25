@@ -95,6 +95,14 @@ const Header = () => {
                                     >
                                         Berita & Agenda
                                     </Link>
+                                    <Link
+                                        href={route("Kontak")}
+                                        className={`text-xl font-semibold ${
+                                            currentRoute == "Kontak" ? "text-yellow-400" : "text-slate-400 hover:text-yellow-800 transition-colors"
+                                        }`}
+                                    >
+                                        Berita & Agenda
+                                    </Link>
                                 </div>
                             </motion.div>
                         ) : null}
@@ -126,6 +134,14 @@ const Header = () => {
                             }`}
                         >
                             Berita & Agenda
+                        </Link>
+                        <Link
+                            href={route("Kontak")}
+                            className={`text-xl font-semibold ${
+                                currentRoute == "Kontak" ? "text-yellow-400" : "text-slate-400 hover:text-yellow-800 transition-colors"
+                            }`}
+                        >
+                            Kontak
                         </Link>
                     </div>
                 </>

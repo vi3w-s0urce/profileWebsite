@@ -16,6 +16,7 @@ export default defineConfig({
         exclude: ["@yoopta/headings"],
     },
     build: {
+        outDir: 'public/build',
         chunkSizeWarningLimit: 3200,
     },
     define: {

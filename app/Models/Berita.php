@@ -3,25 +3,28 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use MongoDB\Laravel\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Eloquent\Model;
 
-class Berita extends EloquentModel
+class Berita extends Model
 {
     use HasFactory;
-
-    protected $connection = 'mongodb';
-    protected $collection = 'berita';
-
     protected $fillable = [
-        'judul', 'kategori', 'path_gambar', 'tanggal', 'content', 'pengunjung', 'slug'
+        'judul',
+        'kategori',
+        'gambar',
+        'tanggal',
+        'content',
+        'pengunjung',
+        'slug'
     ];
 
     protected $casts = [
         'content' => 'json'
     ];
 
-    public function halamanberanda()
+    public function carouselBerita()
     {
-        return $this->hasOne(HalamanBeranda::class);
+        return $this->hasOne(CarouselBerita::class);
     }
+
 }

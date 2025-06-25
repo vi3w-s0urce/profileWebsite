@@ -29,7 +29,7 @@ const AkunEdit = ({ dataUser }) => {
             if (formUser.data.password.length < 8 || formUser.data.confirmPassword.length < 8) {
                 toast.error("Password minimal 8 karakter!");
             } else {
-                formUser.put(route("AkunAdminUpdate", { id: dataUser._id }));
+                formUser.post(route("AkunAdminUpdate", { id: dataUser.id }));
             }
         } else {
             toast.error("Konfirmasi password tidak cocok!");

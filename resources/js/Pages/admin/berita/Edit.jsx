@@ -1,6 +1,6 @@
 import { IoIosArrowBack } from "react-icons/io";
 import AdminSidebar from "../../../Layout/AdminSidebar";
-import { Link as InertiaLink, useForm, usePage } from "@inertiajs/react";
+import { Head, Link as InertiaLink, useForm, usePage } from "@inertiajs/react";
 import Select from "react-select";
 import { GoImage } from "react-icons/go";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -103,13 +103,18 @@ const BeritaEditAdmin = ({ berita }) => {
         if (contentLine < 2) {
             toast.error("Isi Berita Minimal 2 block!");
         } else {
-            formBerita.post(route("BeritaUpdateAdmin", { id: berita._id }));
+            formBerita.post(route("BeritaUpdateAdmin", { id: berita.id }));
         }
     };
     
     return (
         <main className="ml-[300px] bg-slate-100 min-h-screen p-12">
             <Toaster />
+
+            {/* TITLE */}
+            <Head>
+                <title>Berita & Agenda Edit</title>
+            </Head>
 
             {/* SIDEBAR */}
             <AdminSidebar />
@@ -173,7 +178,7 @@ const BeritaEditAdmin = ({ berita }) => {
                                 <div className="absolute h-full w-full bg-white bg-opacity-20 hidden place-content-center group-hover:grid">
                                     <TbEditCircle className="text-yellow-500 cursor-pointer p-2 hover:bg-yellow-200 rounded-xl" fontSize={82} />
                                 </div>
-                                <img src={"/storage/beritaImages/" + berita.path_gambar} alt="gambar" className="h-full object-cover" />
+                                <img src={"/storage/beritaImages/" + berita.gambar} alt="gambar" className="h-full object-cover" />
 
                                 <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                             </label>

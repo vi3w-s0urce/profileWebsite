@@ -1,6 +1,6 @@
 import { TbLogin2 } from "react-icons/tb";
 import login_svg from "../../../assets/svg/admin/login.svg";
-import { useForm, usePage } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -27,6 +27,11 @@ const Login = () => {
     return (
         <main className="relative flex justify-center min-h-screen bg-yellow-50 overflow-hidden">
             <Toaster />
+
+            {/* TITLE */}
+            <Head>
+                <title>Login Admin</title>
+            </Head>
 
             {/* SHAPES */}
             <img src={login_svg} alt="login" className="absolute w-[70vh] bottom-[-40px] left-[15%]" />

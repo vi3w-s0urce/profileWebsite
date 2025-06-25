@@ -17,11 +17,11 @@ const HeroSection = ({ text = null, type = null }) => {
                                 className={`font-bold translate-y-[20px] text-center text-[32px] xl:text-5xl text-yellow-900 mb-5`}
                                 delay={1}
                             >
-                                Profile Lengkap <br /> Ganferi
+                                Profil Lengkap <br /> Ganferi
                             </RevealText>
                         ) : (
                             <RevealText className={`font-bold translate-y-[20px] text-[32px] xl:text-5xl text-yellow-900 mb-5`} delay={1}>
-                                Profile Lengkap Ganefri
+                                Profil Lengkap Ganefri
                             </RevealText>
                         )}
                     </>

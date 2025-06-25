@@ -145,6 +145,18 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
         return iframeLink;
     };
 
+    const subJudul = hero_section_db.find((item) => item.type === "subJudulBeranda");
+    const judul = hero_section_db.find((item) => item.type === "judulBeranda");
+    const videoUtama = youtube_db.find((item) => item.type === "utama");
+    const videoLainnya = youtube_db.filter((item) => item.type === "lainnya");
+
+    useEffect(() => {
+        if (!sessionStorage.getItem("has_visited")) {
+            sessionStorage.setItem("has_visited", "true");
+            window.location.href = "/welcome";
+        }
+    }, []);
+
     return (
         <Main>
             {/* TITLE */}
@@ -158,7 +170,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                 <div className="relative flex flex-col w-full px-4 py-8 gap-8 xl:max-w-[1800px] xl:px-12 xl:py-24 xl:gap-16">
                     <div className="flex flex-col gap-2 items-center">
                         <RevealText className="font-semibold text-slate-400 text-center text-base xl:text-2xl" type="words" stagger={0.1} delay={1}>
-                            {hero_section_db.subJudul}
+                            {subJudul.content}
                         </RevealText>
                         {!isDesktop ? (
                             <div className="flex flex-col items-center">
@@ -169,12 +181,12 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                     style={{ fontSize: 32 }}
                                     delay={1.8}
                                 >
-                                    {hero_section_db.judul}
+                                    {judul.content}
                                 </RevealText>
                             </div>
                         ) : (
                             <RevealText className="text-5xl font-bold text-yellow-900" delay={1.8}>
-                                {hero_section_db.judul}
+                                {judul.content}
                             </RevealText>
                         )}
                     </div>
@@ -219,7 +231,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                         <h1 className="text-white font-bold text-base xl:text-5xl">{item.berita.judul}</h1>
                                                     </div>
                                                     <img
-                                                        src={"/storage/beritaImages/" + item.berita.path_gambar}
+                                                        src={"/storage/beritaImages/" + item.berita.gambar}
                                                         alt="Slide 1"
                                                         className="w-full h-full object-cover rounded-3xl group-hover:scale-[1.1] transition-all"
                                                     />
@@ -274,7 +286,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                     {profil_1_db.gambar ? (
                         <motion.img
                             src={"/storage/profilImages/" + profil_1_db.gambar}
-                            className="object-cover rounded-2xl shadow-2xl w-full h-[200px] xl:h-[433px] xl:w-[679px]"
+                            className="object-cover rounded-2xl shadow-2xl w-full h-[200px] xl:h-[433px] xl:w-[679px] max-w-[512px] xl:max-w-none"
                             initial={{ y: 100, opacity: 0 }}
                             whileInView={{ y: 0, opacity: 1, transition: { duration: 1, delay: 0.5 } }}
                             viewport={{ once: true }}
@@ -282,7 +294,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                     ) : (
                         <motion.img
                             src={"/storage/profilImages/default_1.svg"}
-                            className="object-cover w-[258px] h-[305px] xl:w-[366px] xl:h-[433px]"
+                            className="object-cover w-[258px] h-[305px] xl:w-[366px] xl:h-[433px] max-w-[512px] xl:max-w-none"
                             initial={{ scale: 0.8, opacity: 0 }}
                             whileInView={{ scale: 1, opacity: 1, transition: { duration: 0.5, delay: 0.5, ease: "backInOut" } }}
                             viewport={{ once: true }}
@@ -307,7 +319,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                             stagger={0.01}
                             bottom={50}
                         >
-                            {formatText(profil_1_db.deskripsi)}
+                            {formatText(profil_1_db.content)}
                         </RevealText>
                         <Link href={route("Profil")} preserveScroll={false}>
                             <motion.div
@@ -379,7 +391,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                     <div className="flex items-center justify-center flex-col gap-2">
                         <h2 className="font-bold text-slate-800 text-xl xl:text-3xl">Berita dan Agenda Terakhir</h2>
                         <p className="font-medium text-slate-500 max-w-[537px] text-center text-sm xl:text-xl">
-                            Kumpulan berita beserta beserta agenda terakhir tentang Ganefri
+                            Kumpulan berita beserta agenda terakhir tentang Ganefri
                         </p>
                     </div>
                     {berita_db.length > 0 ? (
@@ -404,7 +416,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                     >
                                         <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
                                             <img
-                                                src={"/storage/beritaImages/" + berita_db[0].path_gambar}
+                                                src={"/storage/beritaImages/" + berita_db[0].gambar}
                                                 className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                             />
                                         </div>
@@ -415,7 +427,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                 <div className="flex gap-2 items-center text-slate-500">
                                                     <FiClock fontSize={24} />
                                                     <span className="font-medium text-lg">
-                                                        {new Date(berita_db[0].tanggal).toLocaleDateString("id-ID", {
+                                                        {new Date(berita_db[0].created_at).toLocaleDateString("id-ID", {
                                                             weekday: "long",
                                                             year: "numeric",
                                                             month: "long",
@@ -442,7 +454,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                         >
                                             <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
                                                 <img
-                                                    src={"/storage/beritaImages/" + berita_db[0].path_gambar}
+                                                    src={"/storage/beritaImages/" + berita_db[0].gambar}
                                                     className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                 />
                                             </div>
@@ -453,7 +465,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                     <div className="flex gap-2 items-center text-slate-500">
                                                         <FiClock fontSize={24} />
                                                         <span className="font-medium text-lg">
-                                                            {new Date(berita_db[0].tanggal).toLocaleDateString("id-ID", {
+                                                            {new Date(berita_db[0].created_at).toLocaleDateString("id-ID", {
                                                                 weekday: "long",
                                                                 year: "numeric",
                                                                 month: "long",
@@ -478,7 +490,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                         >
                                             <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
                                                 <img
-                                                    src={"/storage/beritaImages/" + berita_db[1].path_gambar}
+                                                    src={"/storage/beritaImages/" + berita_db[1].gambar}
                                                     className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                 />
                                             </div>
@@ -489,7 +501,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                     <div className="flex gap-2 items-center text-slate-500">
                                                         <FiClock fontSize={24} />
                                                         <span className="font-medium text-lg">
-                                                            {new Date(berita_db[1].tanggal).toLocaleDateString("id-ID", {
+                                                            {new Date(berita_db[1].created_at).toLocaleDateString("id-ID", {
                                                                 weekday: "long",
                                                                 year: "numeric",
                                                                 month: "long",
@@ -517,7 +529,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                         >
                                             <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
                                                 <img
-                                                    src={"/storage/beritaImages/" + berita_db[0].path_gambar}
+                                                    src={"/storage/beritaImages/" + berita_db[0].gambar}
                                                     className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                 />
                                             </div>
@@ -528,7 +540,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                     <div className="flex gap-2 items-center text-slate-500">
                                                         <FiClock fontSize={24} />
                                                         <span className="font-medium text-lg">
-                                                            {new Date(berita_db[0].tanggal).toLocaleDateString("id-ID", {
+                                                            {new Date(berita_db[0].created_at).toLocaleDateString("id-ID", {
                                                                 weekday: "long",
                                                                 year: "numeric",
                                                                 month: "long",
@@ -554,7 +566,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                             >
                                                 <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
                                                     <img
-                                                        src={"/storage/beritaImages/" + berita_db[1].path_gambar}
+                                                        src={"/storage/beritaImages/" + berita_db[1].gambar}
                                                         className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                     />
                                                 </div>
@@ -565,7 +577,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                         <div className="flex gap-2 items-center text-slate-500">
                                                             <FiClock fontSize={24} />
                                                             <span className="font-medium text-lg">
-                                                                {new Date(berita_db[1].tanggal).toLocaleDateString("id-ID", {
+                                                                {new Date(berita_db[1].created_at).toLocaleDateString("id-ID", {
                                                                     weekday: "long",
                                                                     year: "numeric",
                                                                     month: "long",
@@ -589,7 +601,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                             >
                                                 <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
                                                     <img
-                                                        src={"/storage/beritaImages/" + berita_db[2].path_gambar}
+                                                        src={"/storage/beritaImages/" + berita_db[2].gambar}
                                                         className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                     />
                                                 </div>
@@ -600,7 +612,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                         <div className="flex gap-2 items-center text-slate-500">
                                                             <FiClock fontSize={24} />
                                                             <span className="font-medium text-lg">
-                                                                {new Date(berita_db[1].tanggal).toLocaleDateString("id-ID", {
+                                                                {new Date(berita_db[1].created_at).toLocaleDateString("id-ID", {
                                                                     weekday: "long",
                                                                     year: "numeric",
                                                                     month: "long",
@@ -628,7 +640,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                         >
                                             <div className="w-full h-[720px] rounded-3xl overflow-hidden mb-6">
                                                 <img
-                                                    src={"/storage/beritaImages/" + berita_db[0].path_gambar}
+                                                    src={"/storage/beritaImages/" + berita_db[0].gambar}
                                                     className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                 />
                                             </div>
@@ -639,7 +651,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                     <div className="flex gap-2 items-center text-slate-500">
                                                         <FiClock fontSize={24} />
                                                         <span className="font-medium text-lg">
-                                                            {new Date(berita_db[0].tanggal).toLocaleDateString("id-ID", {
+                                                            {new Date(berita_db[0].created_at).toLocaleDateString("id-ID", {
                                                                 weekday: "long",
                                                                 year: "numeric",
                                                                 month: "long",
@@ -665,7 +677,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                             >
                                                 <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
                                                     <img
-                                                        src={"/storage/beritaImages/" + berita_db[1].path_gambar}
+                                                        src={"/storage/beritaImages/" + berita_db[1].gambar}
                                                         className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                     />
                                                 </div>
@@ -676,7 +688,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                         <div className="flex gap-2 items-center text-slate-500">
                                                             <FiClock fontSize={24} />
                                                             <span className="font-medium text-lg">
-                                                                {new Date(berita_db[1].tanggal).toLocaleDateString("id-ID", {
+                                                                {new Date(berita_db[1].created_at).toLocaleDateString("id-ID", {
                                                                     weekday: "long",
                                                                     year: "numeric",
                                                                     month: "long",
@@ -701,7 +713,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                 >
                                                     <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
                                                         <img
-                                                            src={"/storage/beritaImages/" + berita_db[2].path_gambar}
+                                                            src={"/storage/beritaImages/" + berita_db[2].gambar}
                                                             className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                         />
                                                     </div>
@@ -712,7 +724,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                             <div className="flex gap-2 items-center text-slate-500">
                                                                 <FiClock fontSize={24} />
                                                                 <span className="font-medium text-lg">
-                                                                    {new Date(berita_db[2].tanggal).toLocaleDateString("id-ID", {
+                                                                    {new Date(berita_db[2].created_at).toLocaleDateString("id-ID", {
                                                                         weekday: "long",
                                                                         year: "numeric",
                                                                         month: "long",
@@ -736,7 +748,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                 >
                                                     <div className="w-full h-[334px] rounded-3xl overflow-hidden mb-6">
                                                         <img
-                                                            src={"/storage/beritaImages/" + berita_db[3].path_gambar}
+                                                            src={"/storage/beritaImages/" + berita_db[3].gambar}
                                                             className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                         />
                                                     </div>
@@ -747,7 +759,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                             <div className="flex gap-2 items-center text-slate-500">
                                                                 <FiClock fontSize={24} />
                                                                 <span className="font-medium text-lg">
-                                                                    {new Date(berita_db[3].tanggal).toLocaleDateString("id-ID", {
+                                                                    {new Date(berita_db[3].created_at).toLocaleDateString("id-ID", {
                                                                         weekday: "long",
                                                                         year: "numeric",
                                                                         month: "long",
@@ -766,7 +778,13 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                     </div>
                                 </>
                             ) : !isDesktop ? (
-                                <Swiper spaceBetween={50} slidesPerView={1} modules={[Autoplay]} autoplay={{ delay: 5000 }} className="h-fit w-full max-w-[512px]">
+                                <Swiper
+                                    spaceBetween={50}
+                                    slidesPerView={1}
+                                    modules={[Autoplay]}
+                                    autoplay={{ delay: 5000 }}
+                                    className="h-fit w-full max-w-[512px]"
+                                >
                                     {berita_db.map((item, index) => (
                                         <SwiperSlide key={index}>
                                             <Link href={route("BeritaRead", { slug: item.slug })}>
@@ -778,7 +796,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                 >
                                                     <div className="w-full h-[328px] rounded-3xl overflow-hidden mb-4">
                                                         <img
-                                                            src={"/storage/beritaImages/" + item.path_gambar}
+                                                            src={"/storage/beritaImages/" + item.gambar}
                                                             className="object-cover w-full h-full group-hover:scale-[1.1] transition-all"
                                                         />
                                                     </div>
@@ -789,7 +807,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                                             <div className="flex gap-2 items-center text-slate-500">
                                                                 <FiClock fontSize={18} />
                                                                 <span className="font-medium text-xs xl:text-sm">
-                                                                    {new Date(item.tanggal).toLocaleDateString("id-ID", {
+                                                                    {new Date(item.created_at).toLocaleDateString("id-ID", {
                                                                         weekday: "long",
                                                                         year: "numeric",
                                                                         month: "long",
@@ -842,12 +860,12 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                 />
 
                 {/* CONTENT */}
-                <div className="px-4 py-8 xl:px-32 xl:py-24 max-w-[512px] xl:max-w-none">
-                    {youtube_db.videoUtama ? (
+                <div className="px-4 py-8 xl:px-32 xl:py-24 max-w-[512px] xl:max-w-none w-full">
+                    {videoUtama ? (
                         <div className="bg-yellow-400 w-full flex rounded-3xl flex-col p-6 gap-3 xl:flex-row xl:p-16 xl:gap-6">
                             <div className="overflow-hidden border-yellow-600 rounded-2xl border-2 w-full xl:w-1/2">
                                 <iframe
-                                    src={convertIframeLink(youtube_db.videoUtama)}
+                                    src={convertIframeLink(videoUtama.link)}
                                     title="YouTube video player"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                     referrerPolicy="strict-origin-when-cross-origin"
@@ -856,7 +874,7 @@ const Beranda = ({ hero_section_db, carousel_berita_db, profil_1_db, berita_db, 
                                 ></iframe>
                             </div>
                             <div className="flex flex-col w-full xl:w-1/2">
-                                {youtube_db.videoLainnya.map((item, index) => (
+                                {videoLainnya.map((item, index) => (
                                     <motion.a
                                         key={index}
                                         href={item.link}

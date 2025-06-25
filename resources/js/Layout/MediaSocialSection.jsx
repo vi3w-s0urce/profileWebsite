@@ -125,7 +125,7 @@ const MediaSocialSection = ({ ms_db }) => {
                     </motion.a>
                     <motion.a
                         className={`flex items-center group mx-auto xl:mx-6" ${!ms_db[3].isVisible ? "hidden" : "flex"}`}
-                        href={"mailto:" + ms_db[3].email}
+                        href={"mailto:" + ms_db[3].link}
                     >
                         <MdEmail className="text-slate-300 group-hover:text-yellow-400 transition-all -mx-6 group-hover:mx-2 text-[52px] xl:text-[112px] xl:-mx-12 xl:group-hover:mx-4" />
                         <div className="flex flex-col gap-0 xl:gap-1">
@@ -133,7 +133,7 @@ const MediaSocialSection = ({ ms_db }) => {
                                 Email
                             </RevealText>
                             <RevealText className="font-medium text-slate-500 text-xs xl:text-2xl" type="words" scroll={true} delay={0.2}>
-                                {ms_db[3].email}
+                                {ms_db[3].link}
                             </RevealText>
                         </div>
                     </motion.a>
